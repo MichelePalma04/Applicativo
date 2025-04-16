@@ -1,8 +1,9 @@
 package model;
 
 public class Team {
-    private String data;
-    private int documento;
+    private String nome;
 
-
+    public Team (String nome) {
+        this.nome = nome;
+    }
 }
