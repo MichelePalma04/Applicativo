@@ -13,8 +13,9 @@ public class Main {
         System.out.println(u1.getLogin());
         System.out.println(u1.getPassword());
 
-        Giudice g1 = new Giudice(u1);
+        Giudice g1 = new Giudice("micheleoalma@gmail.com", "mike");
         Team team1 = new Team("Sport");
         Voto v1 = new Voto(g1, team1, 9);
+        System.out.println(v1.getGiudice());
     }
 }

@@ -10,4 +10,6 @@ public class Voto {
         this.team = team;
         this.votazione = votazione;
     }
+
+    public Giudice getGiudice() {return giudice;}
 }
