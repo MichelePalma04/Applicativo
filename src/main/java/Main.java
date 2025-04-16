@@ -4,7 +4,7 @@ import model.Utente;
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
     public static void main(String[] args) {
-        
+
         Utente u1 = new Utente("mike@gmail.com", "mikemike");
 
         System.out.println(u1.getLogin());
