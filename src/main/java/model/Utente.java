@@ -26,5 +26,7 @@ public class Utente {
     public String getLogin() {
         return login;
     }
-    public String getPassword() {return password;}
+    public String getPassword() {
+        return password;
+    }
 }
