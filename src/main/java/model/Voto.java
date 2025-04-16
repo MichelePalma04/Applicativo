@@ -11,5 +11,5 @@ public class Voto {
         this.votazione = votazione;
     }
 
-    public Giudice getGiudice() {return giudice;}
+
 }

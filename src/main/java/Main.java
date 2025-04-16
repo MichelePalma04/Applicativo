@@ -16,6 +16,6 @@ public class Main {
         Giudice g1 = new Giudice("micheleoalma@gmail.com", "mike");
         Team team1 = new Team("Sport");
         Voto v1 = new Voto(g1, team1, 9);
-        System.out.println(v1.getGiudice());
+
     }
 }
