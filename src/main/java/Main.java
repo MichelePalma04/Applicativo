@@ -18,7 +18,6 @@ public class Main {
         */
         ArrayList<Evento> eventi = new ArrayList<>();
 
-        eventi.addEventi();
 
         Organizzatore o = new Organizzatore("mike@mail", "0906", new ArrayList<>());
         Evento e = new Evento("hackathon", "Milano", 9/6/2025, 11/6/2025, 20, 5, 1/6/2025, 7/6/2025, o );

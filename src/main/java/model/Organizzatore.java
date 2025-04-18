@@ -22,6 +22,9 @@ public class Organizzatore extends Utente {
         }
     }
 
+    public ArrayList<Evento> getEventi() {
+        return eventi;
+    }
 
 
     public void invitoGiudici(){}
