@@ -22,10 +22,15 @@ public class Organizzatore extends Utente {
         }
     }
 
+
     public ArrayList<Evento> getEventi() {
-        return eventi;
+        return this.eventi;
     }
 
+    @Override
+    public String toString() {
+        return getLogin();
+    }
 
     public void invitoGiudici(){}
     public void aperturaRegistrazione(){}
