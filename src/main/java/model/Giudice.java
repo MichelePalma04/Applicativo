@@ -40,6 +40,10 @@ public class Giudice extends Utente {
         return this.voti;
    }
 
+   @Override
+   public String toString(){
+        return getLogin();
+   }
     public void esaminaDocumento() {}
 
     public void pubblicaProblema() {}

@@ -81,4 +81,8 @@ public class Evento {
     public void setProblema (String problema){
         this.problema = problema;
     }
+
+    public String toString() {
+        return  getTitolo()+ " "+ getSede() + " "+ getDataInizio()+ " "+ getDataFine() ;
+    }
 }

@@ -11,5 +11,10 @@ public class Voto {
         this.votazione = votazione;
     }
 
+    @Override
+    public String toString () {
+        return "Voto{giudice= "+giudice.getLogin()+" team= "+ team.getNomeTeam()+" votazione= "+votazione+"}";
+    }
+
 
 }

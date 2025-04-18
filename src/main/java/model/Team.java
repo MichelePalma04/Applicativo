@@ -57,4 +57,9 @@ public class Team {
     public ArrayList<Documento> getDocumenti() {
         return documenti;
     }
+
+    @Override
+    public String toString(){
+        return "Team: " + getNomeTeam() + "n partecipanti= " +partecipanti.size()+ "n_voti= "+voti.size();
+    }
 }
