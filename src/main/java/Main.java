@@ -1,7 +1,6 @@
-import model.Giudice;
-import model.Utente;
-import model.Team;
-import model.Voto;
+import model.*;
+
+import java.util.ArrayList;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
@@ -13,9 +12,17 @@ public class Main {
         System.out.println(u1.getLogin());
         System.out.println(u1.getPassword());
 
-        Giudice g1 = new Giudice("micheleoalma@gmail.com", "mike");
+        /*Giudice g1 = new Giudice("micheleoalma@gmail.com", "mike");
         Team team1 = new Team("Sport");
         Voto v1 = new Voto(g1, team1, 9);
+        */
+        ArrayList<Evento> eventi = new ArrayList<>();
 
+        eventi.addEventi();
+
+        Organizzatore o = new Organizzatore("mike@mail", "0906", new ArrayList<>());
+        Evento e = new Evento("hackathon", "Milano", 9/6/2025, 11/6/2025, 20, 5, 1/6/2025, 7/6/2025, o );
+
+        o.addEventi(e);
     }
 }

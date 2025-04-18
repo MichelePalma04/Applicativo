@@ -1,16 +1,28 @@
 package model;
 
-public class Organizzatore extends Utente {
+import java.util.ArrayList;
 
-    /**
-     * Instantiates a new Utente.
-     *
-     * @param login    the login
-     * @param password the password
-     */
-    public Organizzatore(String login, String password) {
+public class Organizzatore extends Utente {
+    private ArrayList<Evento> eventi;
+
+    public Organizzatore(String login, String password, ArrayList<Evento> eventi) {
         super(login, password);
+        this.eventi = eventi;
     }
+
+    public Organizzatore (String login, String password, Evento e){
+        super(login, password);
+        eventi = new ArrayList<>();
+        eventi.add(e);
+    }
+
+    public void addEventi (Evento newE){
+        if(!this.eventi.contains(newE)){
+            this.eventi.add(newE);
+        }
+    }
+
+
 
     public void invitoGiudici(){}
     public void aperturaRegistrazione(){}
