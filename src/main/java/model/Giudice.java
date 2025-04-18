@@ -6,7 +6,7 @@ public class Giudice extends Utente {
     private ArrayList<Evento> eventi;
     private ArrayList<Voto> voti;
 
-    public Giudice(String login, String password,ArrayList<Evento> eventi, ArrayList<Voto> voti) {
+    public Giudice(String login, String password, ArrayList<Evento> eventi, ArrayList<Voto> voti) {
         super(login, password);
         this.eventi = eventi;
         this.voti = voti;
