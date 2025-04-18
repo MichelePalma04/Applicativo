@@ -6,19 +6,32 @@ public class Team {
     private String nomeTeam;
     private ArrayList<Documento> documenti;
     private ArrayList<Partecipante> partecipanti;
+    private ArrayList<Voto> voti;
 
-    public Team (String nomeTeam, ArrayList<Partecipante> partecipanti) {
+    public Team (String nomeTeam, ArrayList<Partecipante> partecipanti, ArrayList<Voto> voti) {
         this.nomeTeam = nomeTeam;
         this.partecipanti = partecipanti;
         this.documenti = new ArrayList<>();
+        this.voti = voti;
     }
 
-    public Team (String nomeTeam, Partecipante p) {
+    public Team (String nomeTeam, Partecipante p, Voto v) {
         this.nomeTeam = nomeTeam;
         partecipanti = new ArrayList<>();
         partecipanti.add(p);
         this.documenti = new ArrayList<>();
+        voti = new ArrayList<>();
+        voti.add(v);
+    }
 
+    public void addVoto (Voto newV) {
+        if (!voti.contains(newV)) {
+            voti.add(newV);
+        }
+    }
+
+    public ArrayList<Voto> getVoti() {
+        return voti;
     }
 
     public void addPartecipanti(Partecipante newP) {
