@@ -1,9 +1,9 @@
 package model;
 
 public class Team {
-    private String nome;
+    private String nomeTeam;
 
-    public Team (String nome) {
-        this.nome = nome;
+    public Team (String nomeTeam) {
+        this.nomeTeam = nomeTeam;
     }
 }

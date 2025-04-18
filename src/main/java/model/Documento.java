@@ -1,8 +1,10 @@
 
 package model;
 
+import java.util.Date;
+
 public class Documento {
-    private String data;
+    private Date data;
     private int documento;
 
 }
