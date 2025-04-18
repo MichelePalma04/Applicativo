@@ -1,6 +1,7 @@
 package model;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 
 public class Evento {
     private String titolo;
@@ -13,10 +14,10 @@ public class Evento {
     private LocalDate fine_registrazioni;
     private String problema;
     private Organizzatore organizzatore;
-    //private List<Giudice> giudiceList;
-    //private List<Partecipante> partecipanteList;
+    private ArrayList<Giudice> giudici;
+    private ArrayList<Partecipante> partecipanti;
 
-    public Evento (String titolo, String sede, LocalDate dataInizio, LocalDate dataFine, int n_Max_Iscritti, int dim_max_team, LocalDate inizio_registrazioni, LocalDate fine_registrazioni, Organizzatore organizzatore) {
+    public Evento (String titolo, String sede, LocalDate dataInizio, LocalDate dataFine, int n_Max_Iscritti, int dim_max_team, LocalDate inizio_registrazioni, LocalDate fine_registrazioni, Organizzatore organizzatore, ArrayList<Giudice> giudici, ArrayList<Partecipante> partecipanti) {
         this.titolo = titolo;
         this.sede = sede;
         this.dataInizio = dataInizio;
@@ -26,7 +27,44 @@ public class Evento {
         this.inizio_registrazioni = inizio_registrazioni;
         this.fine_registrazioni = fine_registrazioni;
         this.organizzatore = organizzatore;
+        this.giudici = giudici;
+        this.partecipanti = partecipanti;
+    }
 
+    public Evento (String titolo, String sede, LocalDate dataInizio, LocalDate dataFine, int n_Max_Iscritti, int dim_max_team, LocalDate inizio_registrazioni, LocalDate fine_registrazioni, Organizzatore organizzatore, Giudice g, Partecipante p) {
+        this.titolo = titolo;
+        this.sede = sede;
+        this.dataInizio = dataInizio;
+        this.dataFine = dataFine;
+        this.n_Max_Iscritti = n_Max_Iscritti;
+        this.dim_max_team = dim_max_team;
+        this.inizio_registrazioni = inizio_registrazioni;
+        this.fine_registrazioni = fine_registrazioni;
+        this.organizzatore = organizzatore;
+        giudici = new ArrayList<>();
+        giudici.add(g);
+        partecipanti = new ArrayList<>();
+        partecipanti.add(p);
+    }
+
+    public void addGiudici (Giudice newG){
+        if(!this.giudici.contains(newG)){
+            this.giudici.add(newG);
+        }
+    }
+
+    public void addPartecipanti (Partecipante newP){
+        if(!this.partecipanti.contains(newP)){
+            this.partecipanti.add(newP);
+        }
+    }
+
+    public ArrayList<Giudice> getGiudici() {
+        return giudici;
+    }
+
+    public ArrayList<Partecipante> getPartecipanti() {
+        return partecipanti;
     }
 
     public String getTitolo() {return titolo;}
