@@ -22,7 +22,7 @@ public class Main {
         Team team1 = new Team("Sport");
         Voto v1 = new Voto(g1, team1, 9);
         */
-        
+
 
 
         Organizzatore o = new Organizzatore("mike@mail", "0906", new ArrayList<>());
