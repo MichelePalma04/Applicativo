@@ -26,16 +26,15 @@ public class Organizzatore extends Utente {
         }
     }
 
-    public ArrayList<Giudice> getGiudici() {
-        return this.giudici;
-    }
-
     public void addEventi (Evento newE){
         if(!this.eventi.contains(newE)){
             this.eventi.add(newE);
         }
     }
 
+    public ArrayList<Giudice> getGiudici() {
+        return this.giudici;
+    }
 
     public ArrayList<Evento> getEventi() {
         return this.eventi;

@@ -8,8 +8,8 @@ import java.time.LocalDate;
 public class Main {
     public static void main(String[] args) {
 
-
-        LocalDate dataInizio = LocalDate.of(2025, 6, 9);
+//prove generali stampa
+ /*     LocalDate dataInizio = LocalDate.of(2025, 6, 9);
         LocalDate dataFine = LocalDate.of(2025, 6, 11);
         LocalDate inizioReg = LocalDate.of(2025, 6, 1);
         LocalDate fineReg = LocalDate.of(2025, 6, 7);
@@ -53,7 +53,7 @@ public class Main {
         System.out.println("L'organizzatore del/degli evento/i: "+o1.getEventi() + " è " + e1.getOrganizzatore());
         System.out.println("L'evento "+ g1.getEventi() +" ha come giudici "+ e1.getGiudici());
         System.out.println("L'evento "+ g2.getEventi() +" ha come giudici "+ e2.getGiudici());
-        /*System.out.println(e2.getOrganizzatore() + " è l'organizzatore dell'evento " + o2.getEventi()+ " e ha scelto come giudici " +e2.getGiudici());
+        System.out.println(e2.getOrganizzatore() + " è l'organizzatore dell'evento " + o2.getEventi()+ " e ha scelto come giudici " +e2.getGiudici());
         System.out.println(t1 + " "+t1.getPartecipanti());
         System.out.println(t2 + " "+t2.getPartecipanti());
         System.out.println(g1.getVoti());

@@ -67,16 +67,41 @@ public class Evento {
         return partecipanti;
     }
 
-    public String getTitolo() {return titolo;}
-    public String getSede() {return sede;}
-    public LocalDate getDataInizio() {return dataInizio;}
-    public LocalDate getDataFine() {return dataFine;}
-    public int getN_Max_Iscritti() {return n_Max_Iscritti;}
-    public int getDim_max_team() {return dim_max_team;}
-    public LocalDate getInizio_registrazioni() { return inizio_registrazioni;}
-    public LocalDate getFine_registrazioni() { return fine_registrazioni;}
-    public Organizzatore getOrganizzatore() { return organizzatore;}
+    public String getTitolo() {
+        return titolo;
+    }
 
+    public String getSede() {
+        return sede;
+    }
+
+    public LocalDate getDataInizio() {
+        return dataInizio;
+    }
+
+    public LocalDate getDataFine() {
+        return dataFine;
+    }
+
+    public int getN_Max_Iscritti() {
+        return n_Max_Iscritti;
+    }
+
+    public int getDim_max_team() {
+        return dim_max_team;
+    }
+
+    public LocalDate getInizio_registrazioni() {
+        return inizio_registrazioni;
+    }
+
+    public LocalDate getFine_registrazioni() {
+        return fine_registrazioni;
+    }
+
+    public Organizzatore getOrganizzatore() {
+        return organizzatore;
+    }
 
     public void setProblema (String problema){
         this.problema = problema;
