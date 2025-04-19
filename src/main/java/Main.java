@@ -15,10 +15,15 @@ public class Main {
         LocalDate fineReg = LocalDate.of(2025, 6, 7);
 
         Team t1 = new Team ("Sport",new ArrayList<>(), new ArrayList<>());
+        Team t2= new Team ("Acqua", new ArrayList<>(), new ArrayList<>());
         Organizzatore o1 = new Organizzatore("mike@mail", "0906", new ArrayList<>(), new ArrayList<>());
         Organizzatore o2 = new Organizzatore("fra@mail", "cane", new ArrayList<>(), new ArrayList<>());
         Partecipante p1 = new Partecipante("carlacasa", "pallina", t1, new ArrayList<>());
+        Partecipante p2 = new Partecipante ("paolo63", "bombetta", t1, new ArrayList<>());
+        Partecipante p3 = new Partecipante ("cat45", "capriola", t2, new ArrayList<>());
         t1.addPartecipanti(p1);
+        t1.addPartecipanti(p3);
+        t2.addPartecipanti(p1);
         Giudice g1 = new Giudice("saretta", "0611", new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
         o1.addGiudici(g1);
         o2.addGiudici(g1);
@@ -26,9 +31,12 @@ public class Main {
         Voto v1 = new Voto (g1, t1, 9);
         g1.addVoti(v1);
         t1.addVoto(v1);
+        t2.addVoto(v1);
         Evento e1 = new Evento("hackathon", "Milano", dataInizio, dataFine, 20, 5, inizioReg, fineReg, o1, g1, p1 );
         Evento e2 = new Evento ("sport", "roma", dataInizio, dataFine, 20, 5, inizioReg, fineReg, o2, g1, p1 );
         p1.addEventi(e1);
+        p2.addEventi(e1);
+        p3.addEventi(e2);
         //g1.addEventi(e2);
         g1.addEventi(e1);
         o1.addEventi(e1);
@@ -36,8 +44,8 @@ public class Main {
 
         System.out.println(e1.getOrganizzatore() +" è l'organizzatore dell'evento: "+o1.getEventi()+ " e ha scelto come giudici "+ e1.getGiudici());
         System.out.println(e2.getOrganizzatore() + " è l'organizzatore dell'evento " + o2.getEventi()+ " e ha scelto come giudici " +e2.getGiudici());
-        System.out.println(t1);
-        System.out.println(t1.getPartecipanti());
+        System.out.println(t1 + " "+t1.getPartecipanti());
+        System.out.println(t2 + " "+t2.getPartecipanti());
         System.out.println(g1.getVoti());
         System.out.println(o1.getEventi());
         System.out.println(o2.getEventi());
