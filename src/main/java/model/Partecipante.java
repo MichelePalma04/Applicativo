@@ -26,7 +26,8 @@ public class Partecipante extends Utente {
 
     @Override
     public String toString(){
-        return "Partecipanti: "+getLogin() + "di eventi= "+eventi.size();
+
+        return "Partecipanti: "+getLogin();
     }
     public ArrayList<Evento> getEventi(){
         return this.eventi;

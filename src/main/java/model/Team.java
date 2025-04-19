@@ -60,6 +60,6 @@ public class Team {
 
     @Override
     public String toString(){
-        return "Team: " + getNomeTeam() + "n partecipanti= " +partecipanti.size()+ "n_voti= "+voti.size();
+        return "Team: " + getNomeTeam() + " formato da " +partecipanti.size() +" partecipanti";
     }
 }
