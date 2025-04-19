@@ -32,10 +32,10 @@ public class Main {
         //g1.addEventi(e2);
         g1.addEventi(e1);
         o1.addEventi(e1);
-        o1.addEventi(e2);
+        o2.addEventi(e2);
 
-        System.out.println(e1.getOrganizzatore() +""+o1.getEventi()+ " i cui giudici sono: "+ e1.getGiudici());
-        System.out.println(e2.getOrganizzatore() + "" + o2.getEventi()+ " i cui giudici sono: " +e2.getGiudici());
+        System.out.println(e1.getOrganizzatore() +" è l'organizzatore dell'evento: "+o1.getEventi()+ " e ha scelto come giudici "+ e1.getGiudici());
+        System.out.println(e2.getOrganizzatore() + " è l'organizzatore dell'evento " + o2.getEventi()+ " e ha scelto come giudici " +e2.getGiudici());
         System.out.println(t1);
         System.out.println(t1.getPartecipanti());
         System.out.println(g1.getVoti());

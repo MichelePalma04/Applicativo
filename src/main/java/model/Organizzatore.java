@@ -43,7 +43,7 @@ public class Organizzatore extends Utente {
 
     @Override
     public String toString() {
-        return getLogin()+" è l'organizzatore dell'evento: ";
+        return getLogin();
     }
 
     public void invitoGiudici(){}
