@@ -29,7 +29,7 @@ public class Main {
         o1.addGiudici(g1);
         o2.addGiudici(g2);
         g1.addOrganizzatore(o1);
-        g2.addOrganizzatore(o2);
+        g2.addOrganizzatore(o1);
         Voto v1 = new Voto (g1, t1, 9);
         Voto v2 = new Voto (g2, t1, 8);
         g2.addVoti(v2);
@@ -37,10 +37,11 @@ public class Main {
         t1.addVoto(v1);
         t2.addVoto(v1);
         Evento e1 = new Evento("hackathon", "Milano", dataInizio, dataFine, 20, 5, inizioReg, fineReg, o1, g1, p1 );
-        Evento e2 = new Evento ("sport", "roma", dataInizio, dataFine, 20, 5, inizioReg, fineReg, o2, g1, p1 );
+        Evento e2 = new Evento ("sport", "roma", dataInizio, dataFine, 20, 5, inizioReg, fineReg, o2, g2, p1 );
         p1.addEventi(e1);
         g1.addEventi(e2);
         g2.addEventi(e2);
+        g2.addEventi(e1);
         p2.addEventi(e1);
         p3.addEventi(e2);
         //g1.addEventi(e2);
@@ -50,6 +51,7 @@ public class Main {
         o1.addEventi(e2);
 
         System.out.println("L'organizzatore del/degli evento/i: "+o1.getEventi() + " è " + e1.getOrganizzatore());
+        System.out.println("L'evento "+ g1.getEventi() +" ha come giudici "+ e1.getGiudici());
         System.out.println("L'evento "+ g2.getEventi() +" ha come giudici "+ e2.getGiudici());
         /*System.out.println(e2.getOrganizzatore() + " è l'organizzatore dell'evento " + o2.getEventi()+ " e ha scelto come giudici " +e2.getGiudici());
         System.out.println(t1 + " "+t1.getPartecipanti());
