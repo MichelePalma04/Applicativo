@@ -13,7 +13,7 @@ public class Voto {
 
     @Override
     public String toString () {
-        return "Voto{giudice= "+giudice.getLogin()+" team= "+ team.getNomeTeam()+" votazione= "+votazione+"}";
+        return "Il giudice "+giudice.getLogin()+" dà " + votazione + " al team " + team.getNomeTeam();
     }
 
 
