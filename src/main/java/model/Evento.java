@@ -107,7 +107,8 @@ public class Evento {
         this.problema = problema;
     }
 
+    /*@Override
     public String toString() {
         return  getTitolo()+ " "+ getSede() + " "+ getDataInizio()+ " "+ getDataFine() ;
-    }
+    }*/
 }

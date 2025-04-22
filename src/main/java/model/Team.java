@@ -58,8 +58,8 @@ public class Team {
         return documenti;
     }
 
-    @Override
+    /*@Override
     public String toString(){
         return "Team: " + getNomeTeam() + " formato da " +partecipanti.size() +" partecipanti";
-    }
+    }*/
 }

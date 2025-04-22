@@ -40,10 +40,10 @@ public class Organizzatore extends Utente {
         return this.eventi;
     }
 
-    @Override
+    /*@Override
     public String toString() {
         return getLogin();
-    }
+    }*/
 
     public void invitoGiudici(){}
     public void aperturaRegistrazione(){}

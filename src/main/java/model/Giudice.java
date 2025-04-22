@@ -53,10 +53,10 @@ public class Giudice extends Utente {
         return this.organizzatori;
     }
 
-    @Override
+    /*@Override
     public String toString(){
         return getLogin();
-    }
+    }*/
 
     public void esaminaDocumento() {}
 

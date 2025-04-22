@@ -24,11 +24,11 @@ public class Partecipante extends Utente {
         }
     }
 
-    @Override
+    /*@Override
     public String toString(){
-
         return "Partecipanti: "+getLogin();
-    }
+    }*/
+
     public ArrayList<Evento> getEventi(){
         return this.eventi;
     }
