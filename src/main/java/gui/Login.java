@@ -30,7 +30,7 @@ public class Login {
                     JOptionPane.showMessageDialog(frame, "Login effettuato.");
                     frame.dispose();
                 } else {
-                    JOptionPane.showMessageDialog(frame, "Credenziali non valide.");
+                    JOptionPane.showMessageDialog(frame, "Nessun utente trovatto, effettua prima la registrazione se non ancora lo hai fatto.");
                 }
             }
         });
