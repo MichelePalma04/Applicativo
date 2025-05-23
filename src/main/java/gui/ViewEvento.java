@@ -12,10 +12,20 @@ public class ViewEvento {
     private JPanel panelEventi;
     private Controller controller;
 
-    public static JFrame frameEventi;
+    public static JFrame frameEventi, frameAccedi;
 
-    public ViewEvento() {
+    public ViewEvento(Controller controller, JFrame frame) {
+
+        frameAccedi = frame;
+        this.controller = controller;
+        Controller.initEventi();
         ArrayList<Evento> eventi = Controller.getEventiDisponibili();
+        System.out.println(eventi.size());
+
+        frameEventi = new JFrame("Eventi");
+        ViewEvento eventiForm = new ViewEvento(controller, frame);
+        frameEventi.setContentPane(eventiForm.ViewEvento);
+        frameEventi.pack();
 
         panelEventi.setLayout(new BoxLayout(panelEventi, BoxLayout.Y_AXIS));
 
@@ -28,18 +38,13 @@ public class ViewEvento {
             eventoPanel.add(new JLabel("Data Fine: " + e.getDataFine()));
             eventoPanel.add(new JLabel("Data apertura registrazione: " +e.getInizio_registrazioni()));
             eventoPanel.add(new JLabel("Data fine registrazione: " +e.getFine_registrazioni()));
-            eventoPanel.add(new JLabel("Organizzatore: " + e.getOrganizzatore()));
+            eventoPanel.add(new JLabel("Organizzatore: " + e.getOrganizzatore().getLogin()));
 
             panelEventi.add(eventoPanel);
         }
+
+        panelEventi.revalidate();
+        panelEventi.repaint();
     }
 
-    public static void main(String[] args) {
-        frameEventi = new JFrame("ViewEvento");
-        ViewEvento eventiForm = new ViewEvento();
-        frameEventi.setContentPane(eventiForm.ViewEvento);
-        frameEventi.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        frameEventi.pack();
-        frameEventi.setVisible(true);
-    }
 }

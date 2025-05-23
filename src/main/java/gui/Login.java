@@ -27,7 +27,7 @@ public class Login {
                 String password = new String(passwordField.getText());
                 Utente u = Controller.loginUtente(mail, password);
                 if (u != null) {
-                    JOptionPane.showMessageDialog(frame, "Login effettuato.");
+                    ViewEvento tezaGUI = new ViewEvento(controller, frame);
                     frame.dispose();
                 } else {
                     JOptionPane.showMessageDialog(frame, "Nessun utente trovatto, effettua prima la registrazione se non ancora lo hai fatto.");

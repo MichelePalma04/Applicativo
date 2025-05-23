@@ -10,9 +10,6 @@ public class Controller {
     private static final ArrayList<Evento> eventiDisponibili = new ArrayList();
 
 
-
-    LocalDate dataFine = LocalDate.of(2025, 6, 11);
-
     public static void initEventi() {
         ArrayList<Giudice> giudici = new ArrayList<>();
         ArrayList<Evento> eventiOrganizzati = new ArrayList<>();
