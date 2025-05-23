@@ -8,6 +8,7 @@ import java.util.List;
 public class Controller {
     private static final List<Utente> utentiRegistrati = new ArrayList<Utente>();
     private static final ArrayList<Evento> eventiDisponibili = new ArrayList();
+    private static Utente utenteCorrente = null;
 
 
     public static void initEventi() {
@@ -15,7 +16,7 @@ public class Controller {
         ArrayList<Evento> eventiOrganizzati = new ArrayList<>();
         ArrayList<Partecipante> partecipanti = new ArrayList<>();
 
-        Organizzatore o =new Organizzatore("admin", "admin", eventiOrganizzati, giudici);
+        Organizzatore o =new Organizzatore("miki&sara", "sara&miki", eventiOrganizzati, giudici);
 
         Evento e = new Evento("Hackathon", "Faggiano",
                                 LocalDate.of(2025, 6, 9), LocalDate.of(2025, 6, 11),
@@ -25,7 +26,7 @@ public class Controller {
                                 LocalDate.of(2025, 11, 20), LocalDate.of(2025, 11, 22),
                                  30, 5, LocalDate.of(2025, 11, 10), LocalDate.of(2025, 11, 18),
                                 o, giudici, partecipanti);
-        Evento e2 = new Evento("Hackaton-Speed", "Roma",
+        Evento e2 = new Evento("Hackaton-Go", "Roma",
                 LocalDate.of(2025, 11, 20), LocalDate.of(2025, 11, 22),
                 30, 5, LocalDate.of(2025, 11, 10), LocalDate.of(2025, 11, 18),
                 o, giudici,  partecipanti);
@@ -55,9 +56,15 @@ public class Controller {
     public static Utente loginUtente (String email, String password) {
         for (Utente u : utentiRegistrati) {
             if (u.getLogin().equals(email) && u.getPassword().equals(password)) {
+                utenteCorrente = u;
                 return u;
             }
         }
         return null;
     }
+
+    public static Utente getUtenteCorrente() {
+        return utenteCorrente;
+    }
+
 }

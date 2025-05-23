@@ -16,7 +16,7 @@ public class Login {
     private JButton accediButton;
     private JButton registratiButton;
     private JPanel panel;
-    public static JFrame frame;
+    public static JFrame frame, frameEventi;
     private Controller controller;
 
     public Login() {
@@ -27,10 +27,11 @@ public class Login {
                 String password = new String(passwordField.getText());
                 Utente u = Controller.loginUtente(mail, password);
                 if (u != null) {
-                    ViewEvento tezaGUI = new ViewEvento(controller, frame);
+                    ViewEvento terzaGUI = new ViewEvento(controller, frame);
+                    terzaGUI.frameEventi.setVisible (true);
                     frame.dispose();
                 } else {
-                    JOptionPane.showMessageDialog(frame, "Nessun utente trovatto, effettua prima la registrazione se non ancora lo hai fatto.");
+                    JOptionPane.showMessageDialog(frame, "Nessun utente trovato, effettua prima la registrazione se non ancora lo hai fatto.");
                 }
             }
         });
