@@ -16,11 +16,11 @@ public class Registrazione {
     private JButton registrazione;
     private JPasswordField passwordField;
     public static JFrame frameRegistrazione;
-    public static JFrame frame;
+    public static JFrame frameAccedi;
     private Controller controller;
 
     public Registrazione(Controller controller, JFrame frame) {
-        this.frame = frame;
+        this.frameAccedi = frame;
         this.controller = controller;
 
         frameRegistrazione = new JFrame("Registrazione");
@@ -32,7 +32,7 @@ public class Registrazione {
         frameRegistrazione.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent windowEvent) {
-                frame.setVisible(true);
+                frameAccedi.setVisible(true);
                 frameRegistrazione.setVisible(false);
                 frameRegistrazione.dispose();
             }
@@ -47,8 +47,11 @@ public class Registrazione {
                 if(successo) {
                     JOptionPane.showMessageDialog(frameRegistrazione, "Registrazione completata.");
                     frameRegistrazione.dispose();
+                    frameAccedi.setVisible(true);
                 }else{
                     JOptionPane.showMessageDialog(frameRegistrazione, "Utente già esistente");
+                    frameRegistrazione.dispose();
+                    frameAccedi.setVisible(true);
                 }
             }
         });
