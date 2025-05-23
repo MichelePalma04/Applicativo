@@ -1,6 +1,10 @@
 package gui;
 
+import model .*;
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import controller.Controller;
 
 public class Login {
     private JPanel Login;
@@ -9,11 +13,39 @@ public class Login {
     private JLabel passwordLabel;
     private JTextField mailField;
     private JPasswordField passwordField;
-    private JButton button1;
-    private JButton button2;
+    private JButton accediButton;
+    private JButton registratiButton;
+    private JPanel panel;
+    public static JFrame frame;
+    private Controller controller;
 
-    public static void main(String[] args) {
-        JFrame frame = new JFrame("Login");
+    public Login() {
+        accediButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String mail = new String(mailField.getText());
+                String password = new String(passwordField.getText());
+                Utente u = Controller.loginUtente(mail, password);
+                if (u != null) {
+                    JOptionPane.showMessageDialog(frame, "Login effettuato.");
+                    frame.dispose();
+                } else {
+                    JOptionPane.showMessageDialog(frame, "Credenziali non valide.");
+                }
+            }
+        });
+
+        registratiButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Registrazione secondGUI = new Registrazione(controller, frame);
+                secondGUI.frameRegistrazione.setVisible(true);
+                frame.setVisible(false);
+            }
+        });
+    }
+    public static void main (String[]args){
+        frame = new JFrame("Login");
         frame.setContentPane(new Login().Login);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();

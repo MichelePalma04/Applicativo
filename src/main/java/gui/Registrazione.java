@@ -5,22 +5,40 @@ import controller.Controller;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
-public class registrazione {
+public class Registrazione {
     private JPanel panel;
     private JLabel email;
     private JTextField emailField;
     private JLabel password;
     private JButton registrazione;
     private JPasswordField passwordField;
-    private JFrame frameRegistrazione;
+    public static JFrame frameRegistrazione;
+    public static JFrame frame;
+    private Controller controller;
 
+    public Registrazione(Controller controller, JFrame frame) {
+        this.frame = frame;
+        this.controller = controller;
 
-    public registrazione() {
+        frameRegistrazione = new JFrame("Registrazione");
+        frameRegistrazione.setContentPane(panel);
+        frameRegistrazione.pack();
+
+        frameRegistrazione.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent windowEvent) {
+                frame.setVisible(true);
+                frameRegistrazione.setVisible(false);
+                frameRegistrazione.dispose();
+            }
+        });
         registrazione.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String email = emailField.getText();
+                String email = new String (emailField.getText());
                 String password = new String (passwordField.getPassword());
 
                 boolean successo = Controller.registraUtente(email, password);
@@ -34,15 +52,5 @@ public class registrazione {
         });
     }
 
-
-    public static void main(String[] args) {
-        JFrame frame = new JFrame("Registrazione");
-        frame.setContentPane(new registrazione().panel);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.pack();
-        frame.setSize(500,500);
-        frame.setLocationRelativeTo(null);
-        frame.setVisible(true);
-    }
 
 }

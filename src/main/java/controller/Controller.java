@@ -16,4 +16,13 @@ public class Controller {
         utentiRegistrati.add(new Utente(email, password));
         return true;
     }
+
+    public static Utente loginUtente (String email, String password) {
+        for (Utente u : utentiRegistrati) {
+            if (u.getLogin().equals(email) && u.getPassword().equals(password)) {
+                return u;
+            }
+        }
+        return null;
+    }
 }
