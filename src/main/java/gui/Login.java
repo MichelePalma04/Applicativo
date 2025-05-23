@@ -4,14 +4,21 @@ import javax.swing.*;
 
 public class Login {
     private JPanel Login;
-    private JLabel mail;
+    private JPanel PanneloMail;
+    private JLabel mailLabel;
+    private JLabel passwordLabel;
     private JTextField mailField;
-    private JLabel password;
-    private JTextField passwordField;
-    private JButton accedi;
-    private JButton registrati;
+    private JPasswordField passwordField;
+    private JButton button1;
+    private JButton button2;
 
-    
-
-
+    public static void main(String[] args) {
+        JFrame frame = new JFrame("Login");
+        frame.setContentPane(new Login().Login);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.pack();
+        frame.setSize(500, 500);
+        frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
+    }
 }
