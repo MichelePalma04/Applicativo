@@ -26,6 +26,8 @@ public class Registrazione {
         frameRegistrazione = new JFrame("Registrazione");
         frameRegistrazione.setContentPane(panel);
         frameRegistrazione.pack();
+        frameRegistrazione.setSize(500, 500);
+        frameRegistrazione.setLocationRelativeTo(null);
 
         frameRegistrazione.addWindowListener(new WindowAdapter() {
             @Override
