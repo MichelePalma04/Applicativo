@@ -14,7 +14,8 @@ import java.util.ArrayList;
 public class ViewEvento {
     private JPanel ViewEvento;
     private JPanel panelEventi;
-   /* private JScrollPane scroll;
+    private JScrollPane scroll;
+    private JButton logOutButton;
     private Controller controller;
 
 
@@ -89,8 +90,13 @@ public class ViewEvento {
         panelEventi.revalidate();
         panelEventi.repaint();
 
+        logOutButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                frameEventi.dispose();
+                frameAccedi.setVisible(true);
+            }
+        });
     }
-    */
-    
 
 }

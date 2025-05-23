@@ -27,9 +27,15 @@ public class Login {
                 String password = new String(passwordField.getText());
                 Utente u = Controller.loginUtente(mail, password);
                 if (u != null) {
-                    ViewEvento terzaGUI = new ViewEvento(controller, frame);
-                    terzaGUI.frameEventi.setVisible (true);
-                    frame.dispose();
+                    if (u instanceof Organizzatore) {
+                        AreaOrganizzatore QuartaGUI = new AreaOrganizzatore((Organizzatore) u);
+                        QuartaGUI.frameOrganizzatore.setVisible(true);
+                        frame.dispose();
+                    }else {
+                        ViewEvento terzaGUI = new ViewEvento(controller, frame);
+                        terzaGUI.frameEventi.setVisible(true);
+                        frame.dispose();
+                    }
                 } else {
                     JOptionPane.showMessageDialog(frame, "Nessun utente trovato, effettua prima la registrazione se non ancora lo hai fatto.");
                 }
@@ -46,6 +52,7 @@ public class Login {
         });
     }
     public static void main (String[]args){
+        Controller.initEventi();
         frame = new JFrame("Login");
         frame.setContentPane(new Login().Login);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

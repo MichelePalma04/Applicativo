@@ -17,6 +17,7 @@ public class Controller {
         ArrayList<Partecipante> partecipanti = new ArrayList<>();
 
         Organizzatore o =new Organizzatore("miki&sara", "sara&miki", eventiOrganizzati, giudici);
+        utentiRegistrati.add(o);
 
         Evento e = new Evento("Hackathon", "Faggiano",
                                 LocalDate.of(2025, 6, 9), LocalDate.of(2025, 6, 11),
@@ -48,7 +49,9 @@ public class Controller {
             if (u.getLogin().equals(email)){
                 return false; //utente già presente
             }
+            System.out.println(u.getLogin());
         }
+
         utentiRegistrati.add(new Utente(email, password));
         return true;
     }
@@ -63,8 +66,10 @@ public class Controller {
         return null;
     }
 
+
     public static Utente getUtenteCorrente() {
         return utenteCorrente;
     }
+
 
 }
