@@ -21,11 +21,11 @@ public class ViewEvento {
 
     public static JFrame frameEventi, frameAccedi, frameAreaPartecipante;
 
-    public ViewEvento(Controller controller, JFrame frame, JFrame frame2) {
+    public ViewEvento(Controller controller,JFrame frame, JFrame frame2) {
         scroll.getVerticalScrollBar().setUnitIncrement(20); //abbiamo aumentato la sensibilità dello scroll
         frameAccedi = frame;
-        frameAreaPartecipante = frame2;
         this.controller = controller;
+        frameAreaPartecipante = frame2;
         Controller.initEventi();
         ArrayList<Evento> eventi = Controller.getEventiDisponibili();
 
@@ -49,44 +49,71 @@ public class ViewEvento {
             eventoPanel.add(new JLabel("Organizzatore: " + ev.getOrganizzatore().getLogin()));
             JButton iscrivitiButton = new JButton("Iscriviti");
             eventoPanel.add(iscrivitiButton);
+            JButton visualizzaArea = new JButton("Visualizza info");
+            eventoPanel.add(visualizzaArea);
+            visualizzaArea.setVisible(false);
+            eventoPanel.add(visualizzaArea);
+
+            Utente u = Controller.getUtenteCorrente();
+            Partecipante partecipante = Controller.getPartecipantCorrente();
+
+            if(partecipante!= null && partecipante.getEventi().contains(ev)) {
+                //JOptionPane.showMessageDialog(frameEventi, "Sei già iscritto a questo evento.");
+                //return;
+                iscrivitiButton.setVisible(true);
+                visualizzaArea.setVisible(false);
+            } else{
+                iscrivitiButton.setVisible(true);
+                visualizzaArea.setVisible(false);
+            }
 
             iscrivitiButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    Utente u = Controller.getUtenteCorrente();
-
-                    Partecipante partecipante = Controller.getPartecipantCorrente();
-                    if(partecipante!= null && partecipante.getEventi().contains(ev)) {
+                    Partecipante p = Controller.getPartecipantCorrente();
+                    if(p!= null && p.getEventi().contains(ev)) {
                         JOptionPane.showMessageDialog(frameEventi, "Sei già iscritto a questo evento.");
                         return;
                     }
-                    if (partecipante == null) {
-                        partecipante=new Partecipante(u.getLogin(), u.getPassword(), null, new ArrayList<>());
-                        Controller.setPartecipantCorrente(partecipante);
-
+                    if (p == null) {
+                        p=new Partecipante(u.getLogin(), u.getPassword(), null, new ArrayList<>());
+                        Controller.setPartecipantCorrente(p);
                     }
 
                     //Aggiunge evento alla sua liste e viceversa
-                    partecipante.getEventi().add(ev);
-                    if(!ev.getPartecipanti().contains(partecipante)) {
-                        ev.getPartecipanti().add(partecipante);
+                    p.getEventi().add(ev);
+                    if(!ev.getPartecipanti().contains(p)) {
+                        ev.getPartecipanti().add(p);
                     }
 
                     Controller.stampaPartecipantiEvento(ev);
 
                     JOptionPane.showMessageDialog(frameEventi,"Iscrizione completata con successo!");
-                    AreaPartecipante quintaGUI = new AreaPartecipante(partecipante, ev, frameEventi);
+                    iscrivitiButton.setVisible(false);
+                    visualizzaArea.setVisible(true);
+                    AreaPartecipante quintaGUI = new AreaPartecipante(p, ev, frameEventi);
                     quintaGUI.frameAreaPartecipante.setVisible(true);
                     frameEventi.setVisible(false);
                 }
 
             });
             panelEventi.add(eventoPanel);
+            visualizzaArea.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    Partecipante p = Controller.getPartecipantCorrente();
+                    AreaPartecipante areaGUI = new AreaPartecipante(p, ev, frameEventi);
+                    areaGUI.frameAreaPartecipante.setVisible(true);
+                    frameEventi.setVisible(false);
+                }
+            });
 
         }
 
         panelEventi.revalidate();
         panelEventi.repaint();
+
+
 
         logOutButton1.addActionListener(new ActionListener() {
             @Override
