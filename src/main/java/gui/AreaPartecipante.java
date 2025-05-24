@@ -16,9 +16,14 @@ public class AreaPartecipante {
     private JComboBox <Team> comboBox1;
     private JButton uniscitiButton;
     private JLabel benvenuto;
-    private JLabel team;
+    private JLabel teamLabel;
     private JPanel panel;
     private JLabel messaggio;
+    private JButton caricaDocumento;
+    private JLabel inserisciDocumento;
+    private JTextField nomedocFied;
+    private JPanel panel2;
+    private JLabel Problema;
     private Controller controller;
     public static JFrame frameAreaPartecipante, frameEventi;
 
@@ -38,6 +43,33 @@ public class AreaPartecipante {
         ArrayList<Team> teams = evento.getTeams();
         for (Team team : teams) {
             comboBox1.addItem(team);
+        }
+
+        for (Team team : evento.getTeams()) {
+            if(team.getPartecipanti().contains(partecipante)) {
+                uniscitiButton.setVisible(false);
+                comboBox1.setVisible(false);
+                teamLabel.setVisible(false);
+                avviso.setVisible(false);
+                messaggio.setText("Ora sei un membro del " + team.getNomeTeam());
+                messaggio.setVisible(false);
+                Problema.setVisible(true);
+                caricaDocumento.setVisible(true);
+                inserisciDocumento.setVisible(true);
+                nomedocFied.setVisible(true);
+                break;
+            }else{
+                uniscitiButton.setVisible(true);
+                comboBox1.setVisible(true);
+                teamLabel.setVisible(true);
+                avviso.setVisible(true);
+                messaggio.setVisible(false);
+                Problema.setVisible(false);
+                caricaDocumento.setVisible(false);
+                inserisciDocumento.setVisible(false);
+                nomedocFied.setVisible(false);
+                break;
+            }
         }
 
         homeButton.addActionListener(new ActionListener() {
@@ -66,7 +98,7 @@ public class AreaPartecipante {
                 JOptionPane.showMessageDialog(frameAreaPartecipante, "Ti sei unito al team "+ teamSelected.getNomeTeam());
 
                 comboBox1.setVisible(false);
-                team.setVisible(false);
+                teamLabel.setVisible(false);
                 uniscitiButton.setVisible(false);
                 messaggio.setVisible(true);
                 messaggio.setText("Ora sei un membro del " + teamSelected.getNomeTeam());
