@@ -15,7 +15,7 @@ public class ViewEvento {
     private JPanel ViewEvento;
     private JPanel panelEventi;
     private JScrollPane scroll;
-    private JButton logOutButton;
+    private JButton logOutButton1;
     private Controller controller;
 
 
@@ -90,7 +90,7 @@ public class ViewEvento {
         panelEventi.revalidate();
         panelEventi.repaint();
 
-        logOutButton.addActionListener(new ActionListener() {
+        logOutButton1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 frameEventi.dispose();
