@@ -1,6 +1,7 @@
 package controller;
 import model .*;
 
+import java.lang.reflect.Array;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,7 +11,7 @@ public class Controller {
     private static final ArrayList<Evento> eventiDisponibili = new ArrayList();
     private static Utente utenteCorrente = null;
     private static Partecipante partecipantCorrente = null;
-    private static final ArrayList <Team> teamDisponibili = new ArrayList();
+    //private static final ArrayList <Team> teamDisponibili = new ArrayList();
 
 
     public static void initEventi() {
@@ -78,8 +79,34 @@ public class Controller {
         return eventiDisponibili;
     }
 
-    public static ArrayList<Team> getTeamDisponibili() {
+   /* public static ArrayList<Team> getTeamDisponibili() {
         return teamDisponibili;
+    }
+
+    */
+
+    public static ArrayList<Team> getTeamDisponibili(Evento evento){
+        return evento.getTeams();
+    }
+    //metodo per invitare giudici
+    public static boolean invitaGiudici(Evento evento, Utente utente){
+        if(!(utente instanceof Giudice)&& !(utente instanceof Partecipante)) {
+            Giudice nuovoGiudice = new Giudice (utente.getLogin(), utente.getPassword(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
+            evento.getGiudici().add(nuovoGiudice);
+            return true;
+        }
+        return false;
+    }
+
+    //metodo per ottenere solo utenti che non siano partecipanti o già giudici
+    public static ArrayList <Utente> getUtentiInvitabili(){
+        ArrayList <Utente> utentiInvitabili = new ArrayList <>();
+        for (Utente u: utentiRegistrati) {
+            if(!(u instanceof Partecipante) && !(u instanceof Giudice)) {
+                utentiInvitabili.add(u);
+            }
+        }
+        return utentiInvitabili;
     }
 
     public static boolean registraUtente (String email, String password) {
