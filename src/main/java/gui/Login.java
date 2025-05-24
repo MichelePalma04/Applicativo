@@ -28,7 +28,7 @@ public class Login {
                 Utente u = Controller.loginUtente(mail, password);
                 if (u != null) {
                     if (u instanceof Organizzatore) {
-                        AreaOrganizzatore QuartaGUI = new AreaOrganizzatore((Organizzatore) u, frame);
+                        AreaOrganizzatore QuartaGUI = new AreaOrganizzatore(controller,(Organizzatore) u, frame);
                         QuartaGUI.frameOrganizzatore.setVisible(true);
                         frame.dispose();
                     }else {

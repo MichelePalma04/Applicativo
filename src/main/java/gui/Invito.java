@@ -15,11 +15,13 @@ public class Invito {
     private JButton invitaComeGiudiceButton;
     private JPanel panel2;
     private JLabel nomeEvento;
-    public static JFrame frameInvito;
+    private JButton homeButton;
+    public static JFrame frameInvito, frameOrganizzatore;
 
     private Evento evento;
 
-    public Invito(Evento evento) {
+    public Invito(Evento evento, JFrame frame) {
+        frameOrganizzatore = frame;
         this.evento = evento;
         frameInvito = new JFrame("Operazioni organizzatore");
         frameInvito.setContentPane(panel);
@@ -28,6 +30,14 @@ public class Invito {
         frameInvito.setLocationRelativeTo(null);
 
         nomeEvento.setText("Evento " + evento.getTitolo());
+
+        homeButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                frameInvito.setVisible(false);
+                frameOrganizzatore.setVisible(true);
+            }
+        });
 
         invitaComeGiudiceButton.addActionListener(new ActionListener() {
             @Override
@@ -44,6 +54,7 @@ public class Invito {
             }
         });
 
+
     }
     private void aggiornaListaInvitabili() {
         comboBox1.removeAllItems();
@@ -51,4 +62,5 @@ public class Invito {
             comboBox1.addItem(u);
         }
     }
+
 }

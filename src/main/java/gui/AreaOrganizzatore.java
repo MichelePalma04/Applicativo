@@ -19,7 +19,8 @@ public class AreaOrganizzatore {
     private Controller controller;
 
 
-    public AreaOrganizzatore(Organizzatore organizzatore, JFrame frame){
+    public AreaOrganizzatore(Controller controller, Organizzatore organizzatore, JFrame frame){
+        this.controller = controller;
         frameInviti = frame;
         benvenuto.setText("Benvenuto organizzatore "+ organizzatore.getLogin());
         frameOrganizzatore = new JFrame("Area Organizzatore " + organizzatore.getLogin());
@@ -41,7 +42,7 @@ public class AreaOrganizzatore {
             infoButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    Invito nuovaGUI = new Invito (evento);
+                    Invito nuovaGUI = new Invito (evento, frameOrganizzatore);
                     nuovaGUI.frameInvito.setVisible(true);
                     frameOrganizzatore.setVisible(false);
                 }

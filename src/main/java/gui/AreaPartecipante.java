@@ -45,31 +45,36 @@ public class AreaPartecipante {
             comboBox1.addItem(team);
         }
 
+        boolean inTeam = false;
+        Team teamUtente = null;
         for (Team team : evento.getTeams()) {
-            if(team.getPartecipanti().contains(partecipante)) {
-                uniscitiButton.setVisible(false);
-                comboBox1.setVisible(false);
-                teamLabel.setVisible(false);
-                avviso.setVisible(false);
-                messaggio.setText("Ora sei un membro del " + team.getNomeTeam());
-                messaggio.setVisible(false);
-                Problema.setVisible(true);
-                caricaDocumento.setVisible(true);
-                inserisciDocumento.setVisible(true);
-                nomedocFied.setVisible(true);
-                break;
-            }else{
-                uniscitiButton.setVisible(true);
-                comboBox1.setVisible(true);
-                teamLabel.setVisible(true);
-                avviso.setVisible(true);
-                messaggio.setVisible(false);
-                Problema.setVisible(false);
-                caricaDocumento.setVisible(false);
-                inserisciDocumento.setVisible(false);
-                nomedocFied.setVisible(false);
+            if (team.getPartecipanti().contains(partecipante)) {
+                inTeam = true;
+                teamUtente = team;
                 break;
             }
+        }
+        if(inTeam) {
+            uniscitiButton.setVisible(false);
+            comboBox1.setVisible(false);
+            teamLabel.setVisible(false);
+            avviso.setVisible(false);
+            messaggio.setText("Ora sei un membro del " + teamUtente.getNomeTeam());
+            messaggio.setVisible(true);
+            Problema.setVisible(true);
+            caricaDocumento.setVisible(true);
+            inserisciDocumento.setVisible(true);
+            nomedocFied.setVisible(true);
+        }else{
+            uniscitiButton.setVisible(true);
+            comboBox1.setVisible(true);
+            teamLabel.setVisible(true);
+            avviso.setVisible(true);
+            messaggio.setVisible(false);
+            Problema.setVisible(false);
+            caricaDocumento.setVisible(false);
+            inserisciDocumento.setVisible(false);
+            nomedocFied.setVisible(false);
         }
 
         homeButton.addActionListener(new ActionListener() {

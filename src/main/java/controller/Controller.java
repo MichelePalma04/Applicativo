@@ -17,6 +17,7 @@ public class Controller {
     public static void initEventi() {
         ArrayList<Giudice> giudici = new ArrayList<>();
         ArrayList<Evento> eventiOrganizzati = new ArrayList<>();
+        ArrayList<Evento> eventiOrganizzati2 = new ArrayList<>();
         ArrayList<Partecipante> partecipanti = new ArrayList<>();
         ArrayList <Partecipante> partecipanti2 = new ArrayList();
         ArrayList<Partecipante> partecipanti3 = new ArrayList();
@@ -43,7 +44,9 @@ public class Controller {
         teams2.add(new Team ("Team Z",partecipante3Team3, null));
 
         Organizzatore o =new Organizzatore("miki&sara", "sara&miki", eventiOrganizzati, giudici);
+        Organizzatore o2 = new Organizzatore("sara&miki", "miki&sara", eventiOrganizzati2, giudici);
         utentiRegistrati.add(o);
+        utentiRegistrati.add(o2);
 
         Evento e = new Evento("Hackathon", "Faggiano",
                                 LocalDate.of(2025, 6, 9), LocalDate.of(2025, 6, 11),
@@ -56,7 +59,7 @@ public class Controller {
         Evento e2 = new Evento("Hackaton-Go", "Roma",
                 LocalDate.of(2025, 11, 20), LocalDate.of(2025, 11, 22),
                 30, 5, LocalDate.of(2025, 11, 10), LocalDate.of(2025, 11, 18),
-                o, giudici,  partecipanti3);
+                o2, giudici,  partecipanti3);
 
         //se ci sono elementi non li rinserisce
         if(!eventiDisponibili.isEmpty()) {
@@ -68,7 +71,7 @@ public class Controller {
         eventiDisponibili.add(e2);
         eventiOrganizzati.add(e);
         eventiOrganizzati.add(e1);
-        eventiOrganizzati.add(e2);
+        eventiOrganizzati2.add(e2);
         e.setTeams(teams);
         e1.setTeams(teams1);
         e2.setTeams(teams2);
