@@ -53,22 +53,32 @@ public class ViewEvento {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     Utente u = Controller.getUtenteCorrente();
-                    for (Partecipante p: ev.getPartecipanti()) {
+                   /* for (Partecipante p: ev.getPartecipanti()) {
                         if (p.getLogin().equals(u.getLogin())) {
                             JOptionPane.showMessageDialog(frameEventi, "Sei già iscritto a questo evento.");
                             return;
                         }
                     }
+
+                    */
                     Partecipante partecipante = Controller.getPartecipantCorrente();
-                    if(partecipante==null) {
+                    if(partecipante!= null && partecipante.getEventi().contains(ev)) {
+                        JOptionPane.showMessageDialog(frameEventi, "Sei già iscritto a questo evento.");
+                        return;
+                    }
+                    if (partecipante == null) {
                         partecipante=new Partecipante(u.getLogin(), u.getPassword(), null, new ArrayList<>());
                         Controller.setPartecipantCorrente(partecipante);
+
                     }
+
                     //Aggiunge evento alla sua liste e viceversa
                     partecipante.getEventi().add(ev);
                     ev.getPartecipanti().add(partecipante);
 
-                    JOptionPane.showMessageDialog(frameEventi,"iscrizione Completata con successo");
+                    Controller.stampaPartecipantiEvento(ev);
+
+                    JOptionPane.showMessageDialog(frameEventi,"Iscrizione completata con successo!");
                    /* Partecipante partecipanteEsistente = null;
                     for (Evento altroEvento : Controller.getEventiDisponibili()) {
                         for (Partecipante p : altroEvento.getPartecipanti()) {
@@ -95,6 +105,7 @@ public class ViewEvento {
 
             });
             panelEventi.add(eventoPanel);
+
         }
 
         panelEventi.revalidate();

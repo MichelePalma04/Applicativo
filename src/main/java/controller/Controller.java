@@ -87,4 +87,11 @@ public class Controller {
     public static void setPartecipantCorrente(Partecipante p) {
         partecipantCorrente = p;
     }
+
+    public static void stampaPartecipantiEvento(Evento e) {
+        System.out.println("Partecipanti evento: " + e.getTitolo());
+        for(Partecipante p : e.getPartecipanti()) {
+            System.out.println("-"+p.getLogin());
+        }
+    }
 }
