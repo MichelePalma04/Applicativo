@@ -12,6 +12,8 @@ public class Controller {
 
 
     public static void initEventi() {
+
+
         ArrayList<Giudice> giudici = new ArrayList<>();
         ArrayList<Evento> eventiOrganizzati = new ArrayList<>();
         ArrayList<Partecipante> partecipanti = new ArrayList<>();
@@ -31,6 +33,11 @@ public class Controller {
                 LocalDate.of(2025, 11, 20), LocalDate.of(2025, 11, 22),
                 30, 5, LocalDate.of(2025, 11, 10), LocalDate.of(2025, 11, 18),
                 o, giudici,  partecipanti);
+
+        //se ci sono elementi non li rinserisce
+        if(!eventiDisponibili.isEmpty()) {
+            return;
+        }
 
         eventiDisponibili.add(e);
         eventiDisponibili.add(e1);
