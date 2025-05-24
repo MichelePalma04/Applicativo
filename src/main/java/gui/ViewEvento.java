@@ -59,7 +59,17 @@ public class ViewEvento {
                             return;
                         }
                     }
-                    Partecipante partecipanteEsistente = null;
+                    Partecipante partecipante = Controller.getPartecipantCorrente();
+                    if(partecipante==null) {
+                        partecipante=new Partecipante(u.getLogin(), u.getPassword(), null, new ArrayList<>());
+                        Controller.setPartecipantCorrente(partecipante);
+                    }
+                    //Aggiunge evento alla sua liste e viceversa
+                    partecipante.getEventi().add(ev);
+                    ev.getPartecipanti().add(partecipante);
+
+                    JOptionPane.showMessageDialog(frameEventi,"iscrizione Completata con successo");
+                   /* Partecipante partecipanteEsistente = null;
                     for (Evento altroEvento : Controller.getEventiDisponibili()) {
                         for (Partecipante p : altroEvento.getPartecipanti()) {
                             if (p.getLogin().equals(u.getLogin())) {
@@ -80,7 +90,7 @@ public class ViewEvento {
                         ev.getPartecipanti().add(nuovo);
                     }
                     JOptionPane.showMessageDialog(frameEventi, "Iscrizione completata con successo.");
-
+*/
                 }
 
             });

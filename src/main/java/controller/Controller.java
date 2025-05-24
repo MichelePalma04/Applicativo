@@ -9,6 +9,7 @@ public class Controller {
     private static final List<Utente> utentiRegistrati = new ArrayList<Utente>();
     private static final ArrayList<Evento> eventiDisponibili = new ArrayList();
     private static Utente utenteCorrente = null;
+    private static Partecipante partecipantCorrente = null;
 
 
     public static void initEventi() {
@@ -79,4 +80,11 @@ public class Controller {
     }
 
 
+    public static Partecipante getPartecipantCorrente() {
+        return partecipantCorrente;
+    }
+
+    public static void setPartecipantCorrente(Partecipante p) {
+        partecipantCorrente = p;
+    }
 }
