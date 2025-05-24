@@ -53,14 +53,7 @@ public class ViewEvento {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     Utente u = Controller.getUtenteCorrente();
-                   /* for (Partecipante p: ev.getPartecipanti()) {
-                        if (p.getLogin().equals(u.getLogin())) {
-                            JOptionPane.showMessageDialog(frameEventi, "Sei già iscritto a questo evento.");
-                            return;
-                        }
-                    }
 
-                    */
                     Partecipante partecipante = Controller.getPartecipantCorrente();
                     if(partecipante!= null && partecipante.getEventi().contains(ev)) {
                         JOptionPane.showMessageDialog(frameEventi, "Sei già iscritto a questo evento.");
@@ -74,33 +67,13 @@ public class ViewEvento {
 
                     //Aggiunge evento alla sua liste e viceversa
                     partecipante.getEventi().add(ev);
-                    ev.getPartecipanti().add(partecipante);
+                    if(!ev.getPartecipanti().contains(partecipante)) {
+                        ev.getPartecipanti().add(partecipante);
+                    }
 
                     Controller.stampaPartecipantiEvento(ev);
 
                     JOptionPane.showMessageDialog(frameEventi,"Iscrizione completata con successo!");
-                   /* Partecipante partecipanteEsistente = null;
-                    for (Evento altroEvento : Controller.getEventiDisponibili()) {
-                        for (Partecipante p : altroEvento.getPartecipanti()) {
-                            if (p.getLogin().equals(u.getLogin())) {
-                                partecipanteEsistente = p;
-                                break;
-                            }
-                        }
-                        if (partecipanteEsistente != null) break;
-                    }
-
-                    if (partecipanteEsistente != null) {
-                        partecipanteEsistente.getEventi().add(ev);
-                        ev.getPartecipanti().add(partecipanteEsistente);
-                    } else {
-                        ArrayList<Evento> eventiPartecipante = new ArrayList<>();
-                        eventiPartecipante.add(ev);
-                        Partecipante nuovo = new Partecipante(u.getLogin(), u.getPassword(), null, eventiPartecipante);
-                        ev.getPartecipanti().add(nuovo);
-                    }
-                    JOptionPane.showMessageDialog(frameEventi, "Iscrizione completata con successo.");
-*/
                 }
 
             });
@@ -114,6 +87,8 @@ public class ViewEvento {
         logOutButton1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                Controller.setPartecipantCorrente(null);
+                Controller.setUtenteCorrente(null);
                 frameEventi.dispose();
                 frameAccedi.setVisible(true);
             }

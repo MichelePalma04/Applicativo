@@ -57,7 +57,6 @@ public class Controller {
             if (u.getLogin().equals(email)){
                 return false; //utente già presente
             }
-            System.out.println(u.getLogin());
         }
 
         utentiRegistrati.add(new Utente(email, password));
@@ -79,6 +78,10 @@ public class Controller {
         return utenteCorrente;
     }
 
+    public static void setUtenteCorrente(Utente u) {
+        utenteCorrente = u;
+    }
+
 
     public static Partecipante getPartecipantCorrente() {
         return partecipantCorrente;
@@ -88,6 +91,7 @@ public class Controller {
         partecipantCorrente = p;
     }
 
+    //Funzione che serve a controllare se vengono aggiunti effettivamente i partecipanti a quell evento
     public static void stampaPartecipantiEvento(Evento e) {
         System.out.println("Partecipanti evento: " + e.getTitolo());
         for(Partecipante p : e.getPartecipanti()) {
