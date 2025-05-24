@@ -10,14 +10,27 @@ public class Controller {
     private static final ArrayList<Evento> eventiDisponibili = new ArrayList();
     private static Utente utenteCorrente = null;
     private static Partecipante partecipantCorrente = null;
+    private static final ArrayList <Team> teamDisponibili = new ArrayList();
 
 
     public static void initEventi() {
-
-
         ArrayList<Giudice> giudici = new ArrayList<>();
         ArrayList<Evento> eventiOrganizzati = new ArrayList<>();
         ArrayList<Partecipante> partecipanti = new ArrayList<>();
+        ArrayList <Partecipante> partecipanti2 = new ArrayList();
+        ArrayList<Partecipante> partecipanti3 = new ArrayList();
+        ArrayList <Team> teams = new ArrayList();
+        ArrayList <Team> teams1 = new ArrayList();
+        ArrayList <Team> teams2 = new ArrayList();
+        teams.add(new Team ("Team 1",partecipanti, null));
+        teams.add(new Team ("Team 2",partecipanti, null));
+        teams.add(new Team ("Team 3",partecipanti, null));
+        teams1.add(new Team ("Team A",partecipanti2, null));
+        teams1.add(new Team ("Team B",partecipanti2, null));
+        teams1.add(new Team ("Team C",partecipanti3, null));
+        teams2.add(new Team ("Team X",partecipanti3, null));
+        teams2.add(new Team ("Team Y",partecipanti3, null));
+        teams2.add(new Team ("Team Z",partecipanti3, null));
 
         Organizzatore o =new Organizzatore("miki&sara", "sara&miki", eventiOrganizzati, giudici);
         utentiRegistrati.add(o);
@@ -29,11 +42,11 @@ public class Controller {
         Evento e1 = new Evento("Hackaton-Speed", "Puccianiello",
                                 LocalDate.of(2025, 11, 20), LocalDate.of(2025, 11, 22),
                                  30, 5, LocalDate.of(2025, 11, 10), LocalDate.of(2025, 11, 18),
-                                o, giudici, partecipanti);
+                                o, giudici, partecipanti2);
         Evento e2 = new Evento("Hackaton-Go", "Roma",
                 LocalDate.of(2025, 11, 20), LocalDate.of(2025, 11, 22),
                 30, 5, LocalDate.of(2025, 11, 10), LocalDate.of(2025, 11, 18),
-                o, giudici,  partecipanti);
+                o, giudici,  partecipanti3);
 
         //se ci sono elementi non li rinserisce
         if(!eventiDisponibili.isEmpty()) {
@@ -50,6 +63,10 @@ public class Controller {
 
     public static ArrayList<Evento> getEventiDisponibili() {
         return eventiDisponibili;
+    }
+
+    public static ArrayList<Team> getTeamDisponibili() {
+        return teamDisponibili;
     }
 
     public static boolean registraUtente (String email, String password) {
