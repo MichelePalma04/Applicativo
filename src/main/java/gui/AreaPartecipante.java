@@ -5,6 +5,8 @@ import model.Evento;
 import model.Partecipante;
 
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class AreaPartecipante {
     private JLabel avviso;
@@ -28,6 +30,13 @@ public class AreaPartecipante {
         avviso.setText("Iscrizione avvenuta con successo!");
         benvenuto.setText("Benvenuto, " + partecipante.getLogin());
 
+        homeButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                frameAreaPartecipante.setVisible(false);
+                frameEventi.setVisible(true);
+            }
+        });
     }
 
 }

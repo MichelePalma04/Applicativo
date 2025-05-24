@@ -19,11 +19,12 @@ public class ViewEvento {
     private Controller controller;
 
 
-    public static JFrame frameEventi, frameAccedi;
+    public static JFrame frameEventi, frameAccedi, frameAreaPartecipante;
 
-    public ViewEvento(Controller controller, JFrame frame) {
+    public ViewEvento(Controller controller, JFrame frame, JFrame frame2) {
         scroll.getVerticalScrollBar().setUnitIncrement(20); //abbiamo aumentato la sensibilità dello scroll
         frameAccedi = frame;
+        frameAreaPartecipante = frame2;
         this.controller = controller;
         Controller.initEventi();
         ArrayList<Evento> eventi = Controller.getEventiDisponibili();
@@ -74,6 +75,9 @@ public class ViewEvento {
                     Controller.stampaPartecipantiEvento(ev);
 
                     JOptionPane.showMessageDialog(frameEventi,"Iscrizione completata con successo!");
+                    AreaPartecipante quintaGUI = new AreaPartecipante(partecipante, ev, frameEventi);
+                    quintaGUI.frameAreaPartecipante.setVisible(true);
+                    frameEventi.setVisible(false);
                 }
 
             });
@@ -89,7 +93,7 @@ public class ViewEvento {
             public void actionPerformed(ActionEvent e) {
                 Controller.setPartecipantCorrente(null);
                 Controller.setUtenteCorrente(null);
-                frameEventi.dispose();
+                frameEventi.setVisible(false);
                 frameAccedi.setVisible(true);
             }
         });

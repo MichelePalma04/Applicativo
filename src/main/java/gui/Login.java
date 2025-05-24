@@ -16,7 +16,7 @@ public class Login {
     private JButton accediButton;
     private JButton registratiButton;
     private JPanel panel;
-    public static JFrame frame, frameEventi;
+    public static JFrame frame, frame2, frameEventi;
     private Controller controller;
 
     public Login() {
@@ -32,7 +32,7 @@ public class Login {
                         QuartaGUI.frameOrganizzatore.setVisible(true);
                         frame.dispose();
                     }else {
-                        ViewEvento terzaGUI = new ViewEvento(controller, frame);
+                        ViewEvento terzaGUI = new ViewEvento(controller, frame, frame2);
                         terzaGUI.frameEventi.setVisible(true);
                         frame.dispose();
                     }
