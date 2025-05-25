@@ -18,6 +18,7 @@ public class Evento {
     private ArrayList<Partecipante> partecipanti;
     private ArrayList<Team> teams;
 
+
     public Evento (String titolo, String sede, LocalDate dataInizio, LocalDate dataFine, int n_Max_Iscritti, int dim_max_team, LocalDate inizio_registrazioni, LocalDate fine_registrazioni, Organizzatore organizzatore, ArrayList<Giudice> giudici, ArrayList<Partecipante> partecipanti) {
         this.titolo = titolo;
         this.sede = sede;

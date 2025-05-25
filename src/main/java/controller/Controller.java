@@ -11,6 +11,7 @@ public class Controller {
     private static final ArrayList<Evento> eventiDisponibili = new ArrayList();
     private static Utente utenteCorrente = null;
     private static Partecipante partecipantCorrente = null;
+    private static ArrayList<InvitoGiudice> invitiPendenti = new ArrayList<>();
     //private static final ArrayList <Team> teamDisponibili = new ArrayList();
 
 
@@ -91,26 +92,6 @@ public class Controller {
     public static ArrayList<Team> getTeamDisponibili(Evento evento){
         return evento.getTeams();
     }
-    //metodo per invitare giudici
-    public static boolean invitaGiudici(Evento evento, Utente utente){
-        if(!(utente instanceof Giudice)&& !(utente instanceof Partecipante)) {
-            Giudice nuovoGiudice = new Giudice (utente.getLogin(), utente.getPassword(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
-            evento.getGiudici().add(nuovoGiudice);
-            return true;
-        }
-        return false;
-    }
-
-    //metodo per ottenere solo utenti che non siano partecipanti o già giudici
-    public static ArrayList <Utente> getUtentiInvitabili(){
-        ArrayList <Utente> utentiInvitabili = new ArrayList <>();
-        for (Utente u: utentiRegistrati) {
-            if(!(u instanceof Partecipante) && !(u instanceof Giudice)) {
-                utentiInvitabili.add(u);
-            }
-        }
-        return utentiInvitabili;
-    }
 
     public static boolean registraUtente (String email, String password) {
         for (Utente u : utentiRegistrati) {
@@ -157,5 +138,36 @@ public class Controller {
         for(Partecipante p : e.getPartecipanti()) {
             System.out.println("-"+p.getLogin());
         }
+    }
+    public static boolean invitaGiudicePendente(Evento evento, Utente utente) {
+        if (!(utente instanceof Giudice)&& !(utente instanceof Partecipante)){
+            for(InvitoGiudice invito: invitiPendenti){
+                if(invito.getEvento().equals(evento) && invito.getUtente().equals(utente.getLogin())) {
+                    return false;
+                }
+            }
+            invitiPendenti.add(new InvitoGiudice(evento, utente));
+            return true;
+        }
+        return false;
+    }
+
+    public static boolean accettaInvitoGiudice(Evento evento, Utente utente) {
+        InvitoGiudice invitoTrovato = null;
+
+        for(InvitoGiudice invito: invitiPendenti){
+            if(invito.getEvento().equals(evento) && invito.getUtente().equals(utente.getLogin()) && !invito.isAccettato()){
+            invitoTrovato = invito;
+            break;
+            }
+        }
+        if(invitoTrovato != null) {
+            invitoTrovato.accetta();
+            Giudice nuovoGiudice = new Giudice(utente.getLogin(), utente.getPassword(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
+            evento.getGiudici().add(nuovoGiudice);
+            invitiPendenti.remove(invitoTrovato);
+            return true;
+        }
+        return false;
     }
 }

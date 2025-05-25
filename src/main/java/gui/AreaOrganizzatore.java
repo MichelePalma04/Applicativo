@@ -8,20 +8,21 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.geom.Area;
 
 public class AreaOrganizzatore {
     private JPanel panel;
     private JLabel benvenuto;
     private JPanel panelEventi;
     private JScrollPane scroll;
+    private JButton logOutButton;
     public static JFrame frameOrganizzatore, frameAccessi, frameInviti;
     private Controller controller;
 
 
-    public AreaOrganizzatore(Controller controller, Organizzatore organizzatore, JFrame frame){
+    public AreaOrganizzatore(Controller controller, Organizzatore organizzatore, JFrame frame, JFrame frame2) {
         this.controller = controller;
         frameInviti = frame;
+        frameAccessi = frame2;
         benvenuto.setText("Benvenuto organizzatore "+ organizzatore.getLogin());
         frameOrganizzatore = new JFrame("Area Organizzatore " + organizzatore.getLogin());
         frameOrganizzatore.setContentPane(panel);
@@ -54,6 +55,13 @@ public class AreaOrganizzatore {
             panelEventi.add(eventoBox);
         }
 
+        logOutButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                frameOrganizzatore.setVisible(false);
+                frameAccessi.setVisible(true);
+            }
+        });
     }
 
 
