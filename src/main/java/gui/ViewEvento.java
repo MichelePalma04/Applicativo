@@ -132,7 +132,7 @@ public class ViewEvento {
                 Utente utente = Controller.getUtenteCorrente();
                 System.out.println("Utente corrente: " + utente.getLogin());
                 System.out.println("Inviti trovati: " + Controller.getInvitiUtente(utente).size());
-                ViewNotificheInvito notifiche = new ViewNotificheInvito(controller, utente, frameEventi);
+                VediNotifica notifiche = new VediNotifica(controller, utente, frameEventi);
                 notifiche.frameNotifiche.setVisible(true);
                 frameEventi.setVisible(false);
             }
