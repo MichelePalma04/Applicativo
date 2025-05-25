@@ -91,7 +91,7 @@ public class Controller {
 
     public static boolean registraUtente (String email, String password) {
         for (Utente u : utentiRegistrati) {
-            if (u.getLogin().equals(email)){
+            if (u.getLogin().equals(email)) {
                 return false; //utente già presente
             }
         }
@@ -183,14 +183,17 @@ public class Controller {
 
         for (InvitoGiudice invito : invitiPendenti) {
             if(invito.getEvento().equals(evento) && invito.getUtente().equals(utente.getLogin()) && !invito.isAccettato()){
-                 invitoDaRimuovere = invito;
-                 break;
+                 //invitoDaRimuovere = invito;
+                //  break;
+                invito.setRifiutato();
+                return true;
             }
-        }
+        }/*
         if (invitoDaRimuovere != null) {
             invitiPendenti.remove(invitoDaRimuovere);
             return true;
         }
+        */
         return false;
     }
 
@@ -216,7 +219,7 @@ public class Controller {
             }
 
             for (InvitoGiudice invito: invitiPendenti) {
-                if(invito.getEvento().equals(evento) && invito.getUtente().equals(u.getLogin())) {
+                if(invito.getEvento().equals(evento) && invito.getUtente().equals(u.getLogin()) && !invito.isAccettato() && !invito.isRifiutato()) {
                     giaInvitato = true;
                     break;
                 }
@@ -240,7 +243,7 @@ public class Controller {
     public static ArrayList <Evento> getInvitiUtente(Utente utente) {
         ArrayList <Evento> invitiUtente = new ArrayList <>();
         for(InvitoGiudice invito: invitiPendenti){
-            if(invito.getUtente().getLogin().equals(utente.getLogin()) && !invito.isAccettato()) {
+            if(invito.getUtente().getLogin().equals(utente.getLogin()) && !invito.isAccettato() && !invito.isRifiutato()) {
                 invitiUtente.add(invito.getEvento());
             }
         }
