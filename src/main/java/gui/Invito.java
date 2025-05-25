@@ -44,7 +44,7 @@ public class Invito {
             public void actionPerformed(ActionEvent e) {
                 Utente daInvitare = (Utente) comboBox1.getSelectedItem();
                 if (daInvitare != null) {
-                    if (Controller.invitaGiudici(evento, daInvitare)) {
+                    if (Controller.invitaGiudicePendente(evento, daInvitare)) {
                         JOptionPane.showMessageDialog(frameInvito, "Giudice invitato con sucesso!");
                         aggiornaListaInvitabili();
                     } else {
@@ -53,12 +53,13 @@ public class Invito {
                 }
             }
         });
-
-
+        aggiornaListaInvitabili();
+        frameInvito.setVisible(true);
     }
+
     private void aggiornaListaInvitabili() {
         comboBox1.removeAllItems();
-        for (Utente u : Controller.getUtentiInvitabili()) {
+        for (Utente u : Controller.getUtentiInvitabili(evento)) {
             comboBox1.addItem(u);
         }
     }

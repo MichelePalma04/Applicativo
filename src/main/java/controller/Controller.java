@@ -1,13 +1,12 @@
 package controller;
 import model .*;
 
-import java.lang.reflect.Array;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Controller {
-    private static final List<Utente> utentiRegistrati = new ArrayList<Utente>();
+    private static final ArrayList<Utente> utentiRegistrati = new ArrayList<Utente>();
     private static final ArrayList<Evento> eventiDisponibili = new ArrayList();
     private static Utente utenteCorrente = null;
     private static Partecipante partecipantCorrente = null;
@@ -83,11 +82,6 @@ public class Controller {
         return eventiDisponibili;
     }
 
-   /* public static ArrayList<Team> getTeamDisponibili() {
-        return teamDisponibili;
-    }
-
-    */
 
     public static ArrayList<Team> getTeamDisponibili(Evento evento){
         return evento.getTeams();
@@ -117,6 +111,10 @@ public class Controller {
 
     public static Utente getUtenteCorrente() {
         return utenteCorrente;
+    }
+
+    public static ArrayList<Utente> getUtentiRegistrati() {
+        return utentiRegistrati;
     }
 
     public static void setUtenteCorrente(Utente u) {
@@ -169,5 +167,44 @@ public class Controller {
             return true;
         }
         return false;
+    }
+
+    public static ArrayList <Utente> getUtentiInvitabili(Evento evento){
+        ArrayList <Utente> invitabili = new ArrayList <>();
+        for (Utente u : utentiRegistrati) {
+            boolean giaGiudice = false;
+            boolean giaPartecipante = false;
+            boolean giaInvitato = false;
+
+            for (Giudice g: evento.getGiudici()) {
+                if(g.getLogin().equals(u.getLogin())) {
+                    giaGiudice = true;
+                    break;
+                }
+            }
+
+            for (Partecipante p: evento.getPartecipanti()) {
+                if(p.getLogin().equals(u.getLogin())) {
+                    giaPartecipante = true;
+                    break;
+                }
+            }
+
+            for (InvitoGiudice invito: invitiPendenti) {
+                if(invito.getEvento().equals(evento) && invito.getUtente().equals(u.getLogin())) {
+                    giaInvitato = true;
+                    break;
+                }
+            }
+
+            if (u instanceof Organizzatore) {
+                continue;
+            }
+
+            if(!giaGiudice && !giaPartecipante && !giaInvitato){
+                invitabili.add(u);
+            }
+        }
+        return invitabili;
     }
 }
