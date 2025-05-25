@@ -26,4 +26,8 @@ public class InvitoGiudice {
     public void accetta(){
         this.accettato = true;
     }
+
+    public void setRifiutato() {
+        this.accettato = false;
+    }
 }

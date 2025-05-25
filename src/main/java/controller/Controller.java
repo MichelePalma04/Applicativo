@@ -1,4 +1,5 @@
 package controller;
+import gui.Invito;
 import model .*;
 
 import java.time.LocalDate;
@@ -11,6 +12,7 @@ public class Controller {
     private static Utente utenteCorrente = null;
     private static Partecipante partecipantCorrente = null;
     private static ArrayList<InvitoGiudice> invitiPendenti = new ArrayList<>();
+    private static ArrayList<InvitoGiudice> invitiGiudice = new ArrayList<>();
     //private static final ArrayList <Team> teamDisponibili = new ArrayList();
 
 
@@ -163,7 +165,30 @@ public class Controller {
             invitoTrovato.accetta();
             Giudice nuovoGiudice = new Giudice(utente.getLogin(), utente.getPassword(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
             evento.getGiudici().add(nuovoGiudice);
-            invitiPendenti.remove(invitoTrovato);
+            utentiRegistrati.add(nuovoGiudice);
+            for(InvitoGiudice invito: invitiPendenti){
+                if(invito.getUtente().equals(utente.getLogin()) && !invito.getEvento().equals(evento)) {
+                    invito.setRifiutato();
+                }
+            }
+           // invitiPendenti.remove(invitoTrovato);
+            // invitiGiudice.add(invitoTrovato);
+            return true;
+        }
+        return false;
+    }
+
+    public static boolean rifiutaInvitoGiudice (Evento evento, Utente utente) {
+        InvitoGiudice invitoDaRimuovere = null;
+
+        for (InvitoGiudice invito : invitiPendenti) {
+            if(invito.getEvento().equals(evento) && invito.getUtente().equals(utente.getLogin()) && !invito.isAccettato()){
+                 invitoDaRimuovere = invito;
+                 break;
+            }
+        }
+        if (invitoDaRimuovere != null) {
+            invitiPendenti.remove(invitoDaRimuovere);
             return true;
         }
         return false;
@@ -206,5 +231,19 @@ public class Controller {
             }
         }
         return invitabili;
+    }
+
+    public static void aggiungiInvitoGiudice (InvitoGiudice invito){
+        invitiGiudice.add(invito);
+    }
+
+    public static ArrayList <Evento> getInvitiUtente(Utente utente) {
+        ArrayList <Evento> invitiUtente = new ArrayList <>();
+        for(InvitoGiudice invito: invitiPendenti){
+            if(invito.getUtente().equals(utente.getLogin()) && !invito.isAccettato()) {
+                invitiUtente.add(invito.getEvento());
+            }
+        }
+        return invitiUtente;
     }
 }

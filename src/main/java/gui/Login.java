@@ -32,7 +32,7 @@ public class Login {
                         QuartaGUI.frameOrganizzatore.setVisible(true);
                         frame.dispose();
                     }else {
-                        ViewEvento terzaGUI = new ViewEvento(controller, frame, frame2);
+                        ViewEvento terzaGUI = new ViewEvento(controller, frame, frame2, frame);
                         terzaGUI.frameEventi.setVisible(true);
                         frame.dispose();
                     }

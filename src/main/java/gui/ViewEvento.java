@@ -16,16 +16,18 @@ public class ViewEvento {
     private JPanel panelEventi;
     private JScrollPane scroll;
     private JButton logOutButton1;
+    private JButton visualizzaButton;
     private Controller controller;
 
 
-    public static JFrame frameEventi, frameAccedi, frameAreaPartecipante;
+    public static JFrame frameEventi, frameAccedi, frameAreaPartecipante, frameNotifiche;
 
-    public ViewEvento(Controller controller,JFrame frame, JFrame frame2) {
+    public ViewEvento(Controller controller,JFrame frame, JFrame frame2, JFrame frame3) {
         scroll.getVerticalScrollBar().setUnitIncrement(20); //abbiamo aumentato la sensibilità dello scroll
         frameAccedi = frame;
         this.controller = controller;
         frameAreaPartecipante = frame2;
+        frameNotifiche = frame3;
         Controller.initEventi();
         ArrayList<Evento> eventi = Controller.getEventiDisponibili();
 
@@ -122,6 +124,15 @@ public class ViewEvento {
                 Controller.setUtenteCorrente(null);
                 frameEventi.setVisible(false);
                 frameAccedi.setVisible(true);
+            }
+        });
+        visualizzaButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Utente utente = Controller.getUtenteCorrente();
+                ViewNotificheInviti notifiche = new ViewNotificheInviti(controller, utente);
+                notifiche.frameNotifiche.setVisible(true);
+                frameEventi.setVisible(false);
             }
         });
     }
