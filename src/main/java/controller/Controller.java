@@ -240,7 +240,7 @@ public class Controller {
     public static ArrayList <Evento> getInvitiUtente(Utente utente) {
         ArrayList <Evento> invitiUtente = new ArrayList <>();
         for(InvitoGiudice invito: invitiPendenti){
-            if(invito.getUtente().equals(utente.getLogin()) && !invito.isAccettato()) {
+            if(invito.getUtente().getLogin().equals(utente.getLogin()) && !invito.isAccettato()) {
                 invitiUtente.add(invito.getEvento());
             }
         }

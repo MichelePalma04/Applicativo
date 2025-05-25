@@ -130,6 +130,8 @@ public class ViewEvento {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Utente utente = Controller.getUtenteCorrente();
+                System.out.println("Utente corrente: " + utente.getLogin());
+                System.out.println("Inviti trovati: " + Controller.getInvitiUtente(utente).size());
                 ViewNotificheInviti notifiche = new ViewNotificheInviti(controller, utente);
                 notifiche.frameNotifiche.setVisible(true);
                 frameEventi.setVisible(false);
