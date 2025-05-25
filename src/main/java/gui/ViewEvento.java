@@ -52,7 +52,7 @@ public class ViewEvento {
             JButton iscrivitiButton = new JButton("Iscriviti");
             eventoPanel.add(iscrivitiButton);
             JButton visualizzaArea = new JButton("Visualizza info");
-            eventoPanel.add(visualizzaArea);
+            //eventoPanel.add(visualizzaArea);
             visualizzaArea.setVisible(false);
             eventoPanel.add(visualizzaArea);
 

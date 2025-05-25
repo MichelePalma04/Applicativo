@@ -12,10 +12,11 @@ import java.util.ArrayList;
 
 public class VediNotifica {
 
-    private JPanel VediNotifica;
+    private JPanel mainPanel;
     private JPanel panelInviti;
     private JPanel panelbottone;
     private JButton backButton;
+    private JScrollPane scroll;
     private Controller controller;
     private Utente utente;
     public static JFrame frameNotifiche, frameEventi;
@@ -25,47 +26,18 @@ public class VediNotifica {
         this.utente = utente;
         frameEventi = frame;
 
-        ArrayList<Evento> inviti = Controller.getInvitiUtente(utente);
+        scroll.getVerticalScrollBar().setUnitIncrement(20);
+
         frameNotifiche = new JFrame("Inviti ricevuti");
-        System.out.println("vediNotifica: "+ VediNotifica);
-        frameNotifiche.setContentPane(VediNotifica);
+        //System.out.println("vediNotifica: "+ mainPanel);
+        frameNotifiche.setContentPane(mainPanel);
         frameNotifiche.pack();
         frameNotifiche.setSize(500, 500);
         frameNotifiche.setLocationRelativeTo(null);
 
-        if (inviti.isEmpty()) {
-            panelInviti.add(new JLabel("Nessun invito ricevuto"));
-        }else{
-            for (Evento evento : inviti) {
-                JPanel riga = new JPanel(new GridLayout(0,1));
-                riga.add(new JLabel("Sei stato invitato da " + evento.getOrganizzatore().getLogin() + " per l'evento " + evento.getTitolo()));
-                JButton accettabutton = new JButton("Accetta");
-                JButton rifiutabutton = new JButton("Rifiuta");
-                riga.add(accettabutton);
-                riga.add(rifiutabutton);
+        panelInviti.setLayout(new BoxLayout(panelInviti, BoxLayout.Y_AXIS));
+        aggiornaInviti();
 
-
-                accettabutton.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        Controller.accettaInvitoGiudice(evento, utente);
-                        JOptionPane.showMessageDialog(frameNotifiche, "Ora sei giudice dell'evento: " + evento.getTitolo());
-                        accettabutton.setEnabled(false);
-                        rifiutabutton.setEnabled(false);
-                    }
-                });
-
-                rifiutabutton.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        Controller.rifiutaInvitoGiudice(evento, utente);
-                        accettabutton.setEnabled(false);
-                        rifiutabutton.setEnabled(false);
-                    }
-                });
-                panelInviti.add(riga);
-            }
-        }
         backButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -74,5 +46,44 @@ public class VediNotifica {
             }
         });
     }
+    private void aggiornaInviti() {
+        panelInviti.removeAll();
 
+        ArrayList<Evento> inviti = Controller.getInvitiUtente(utente);
+
+        if (inviti.isEmpty()) {
+            panelInviti.add(new JLabel("Nessun invito ricevuto"));
+        } else {
+            for (Evento evento : inviti) {
+                JPanel riga = new JPanel(new FlowLayout(FlowLayout.LEFT));
+                riga.add(new JLabel("Sei stato invitato da " + evento.getOrganizzatore().getLogin() + " per l'evento " + evento.getTitolo()));
+                JButton accettabutton = new JButton("Accetta");
+                JButton rifiutabutton = new JButton("Rifiuta");
+                riga.add(accettabutton);
+                riga.add(rifiutabutton);
+                panelInviti.add(riga);
+
+
+                accettabutton.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        Controller.accettaInvitoGiudice(evento, utente);
+                        JOptionPane.showMessageDialog(frameNotifiche, "Ora sei giudice dell'evento: " + evento.getTitolo());
+                        aggiornaInviti();
+                    }
+                });
+
+                rifiutabutton.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        Controller.rifiutaInvitoGiudice(evento, utente);
+                        aggiornaInviti();
+                    }
+                });
+
+            }
+        }
+        panelInviti.revalidate();
+        panelInviti.repaint();
+    }
 }

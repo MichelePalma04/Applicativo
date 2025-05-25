@@ -166,13 +166,7 @@ public class Controller {
             Giudice nuovoGiudice = new Giudice(utente.getLogin(), utente.getPassword(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
             evento.getGiudici().add(nuovoGiudice);
             utentiRegistrati.add(nuovoGiudice);
-            for(InvitoGiudice invito: invitiPendenti){
-                if(invito.getUtente().equals(utente.getLogin()) && !invito.getEvento().equals(evento)) {
-                    invito.setRifiutato();
-                }
-            }
-           // invitiPendenti.remove(invitoTrovato);
-            // invitiGiudice.add(invitoTrovato);
+            invitiPendenti.remove(invitoTrovato);
             return true;
         }
         return false;
@@ -181,19 +175,14 @@ public class Controller {
     public static boolean rifiutaInvitoGiudice (Evento evento, Utente utente) {
         InvitoGiudice invitoDaRimuovere = null;
 
-        for (InvitoGiudice invito : invitiPendenti) {
+        //uso di new ArrayList <> così da evitare problemi nella rimozioni di elementi durante il for
+        for (InvitoGiudice invito : new ArrayList <> (invitiPendenti)) {
             if(invito.getEvento().equals(evento) && invito.getUtente().equals(utente.getLogin()) && !invito.isAccettato()){
-                 //invitoDaRimuovere = invito;
-                //  break;
                 invito.setRifiutato();
+                invitiPendenti.remove(invito);
                 return true;
             }
-        }/*
-        if (invitoDaRimuovere != null) {
-            invitiPendenti.remove(invitoDaRimuovere);
-            return true;
         }
-        */
         return false;
     }
 
@@ -243,7 +232,7 @@ public class Controller {
     public static ArrayList <Evento> getInvitiUtente(Utente utente) {
         ArrayList <Evento> invitiUtente = new ArrayList <>();
         for(InvitoGiudice invito: invitiPendenti){
-            if(invito.getUtente().getLogin().equals(utente.getLogin()) && !invito.isAccettato() && !invito.isRifiutato()) {
+            if(invito.getUtente().equals(utente) && !invito.isAccettato() && !invito.isRifiutato()) {
                 invitiUtente.add(invito.getEvento());
             }
         }
