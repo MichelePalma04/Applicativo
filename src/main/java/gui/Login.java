@@ -34,7 +34,7 @@ public class Login {
                     }else {
                         ViewEvento terzaGUI = new ViewEvento(controller, frame, frame2, frame);
                         terzaGUI.frameEventi.setVisible(true);
-                        frame.dispose();
+                        frame.setVisible(false);
                     }
                 } else {
                     JOptionPane.showMessageDialog(frame, "Nessun utente trovato, effettua prima la registrazione se non ancora lo hai fatto.");

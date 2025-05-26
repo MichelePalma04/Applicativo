@@ -29,7 +29,6 @@ public class VediNotifica {
         scroll.getVerticalScrollBar().setUnitIncrement(20);
 
         frameNotifiche = new JFrame("Inviti ricevuti");
-        //System.out.println("vediNotifica: "+ mainPanel);
         frameNotifiche.setContentPane(mainPanel);
         frameNotifiche.pack();
         frameNotifiche.setSize(500, 500);
@@ -42,7 +41,10 @@ public class VediNotifica {
             @Override
             public void actionPerformed(ActionEvent e) {
                 frameNotifiche.setVisible(false);
-                frameEventi.setVisible(true);
+                //frameEventi.setVisible(true);
+                frameEventi.dispose();
+                ViewEvento nuovo = new ViewEvento(controller, frameNotifiche, frameNotifiche, frameNotifiche);
+                nuovo.frameEventi.setVisible(true);
             }
         });
     }

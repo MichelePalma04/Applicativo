@@ -2,6 +2,7 @@ package gui;
 
 import controller.Controller;
 import model.Evento;
+import model.Giudice;
 import model.Partecipante;
 import model.Utente;
 
@@ -52,19 +53,20 @@ public class ViewEvento {
             JButton iscrivitiButton = new JButton("Iscriviti");
             eventoPanel.add(iscrivitiButton);
             JButton visualizzaArea = new JButton("Visualizza info");
-            //eventoPanel.add(visualizzaArea);
             visualizzaArea.setVisible(false);
             eventoPanel.add(visualizzaArea);
 
             Utente u = Controller.getUtenteCorrente();
             Partecipante partecipante = Controller.getPartecipantCorrente();
+            Giudice giudiceCorrente = Controller.getGiudiceCorrente(ev);
 
-            if(partecipante!= null && partecipante.getEventi().contains(ev)) {
-                //JOptionPane.showMessageDialog(frameEventi, "Sei già iscritto a questo evento.");
-                //return;
-                iscrivitiButton.setVisible(true);
+            if(Controller.isUtenteGiudice(ev, Controller.getUtenteCorrente())) {
+                iscrivitiButton.setVisible(false);
                 visualizzaArea.setVisible(false);
-            } else{
+            }else if(partecipante != null && partecipante.getEventi().contains(ev)) {
+                iscrivitiButton.setVisible(false);
+                visualizzaArea.setVisible(true);
+            }else {
                 iscrivitiButton.setVisible(true);
                 visualizzaArea.setVisible(false);
             }
@@ -74,8 +76,8 @@ public class ViewEvento {
                 public void actionPerformed(ActionEvent e) {
                     Partecipante p = Controller.getPartecipantCorrente();
                     if(p!= null && p.getEventi().contains(ev)) {
-                        JOptionPane.showMessageDialog(frameEventi, "Sei già iscritto a questo evento.");
-                        return;
+                        iscrivitiButton.setVisible(false);
+                        visualizzaArea.setVisible(true);
                     }
                     if (p == null) {
                         p=new Partecipante(u.getLogin(), u.getPassword(), null, new ArrayList<>());
