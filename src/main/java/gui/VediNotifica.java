@@ -5,6 +5,7 @@ import model.Evento;
 import model.Utente;
 
 import javax.swing.*;
+import javax.swing.text.View;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -43,8 +44,8 @@ public class VediNotifica {
                 frameNotifiche.setVisible(false);
                 //frameEventi.setVisible(true);
                 frameEventi.dispose();
-                ViewEvento nuovo = new ViewEvento(controller, frameNotifiche, frameNotifiche, frameNotifiche);
-                nuovo.frameEventi.setVisible(true);
+                ViewEvento nuovo = new ViewEvento(controller, ViewEvento.frameAccedi, ViewEvento.frameAreaPartecipante, null);
+                ViewEvento.frameEventi.setVisible(true);
             }
         });
     }
