@@ -42,9 +42,8 @@ public class VediNotifica {
             @Override
             public void actionPerformed(ActionEvent e) {
                 frameNotifiche.setVisible(false);
-                //frameEventi.setVisible(true);
                 frameEventi.dispose();
-                ViewEvento nuovo = new ViewEvento(controller, ViewEvento.frameAccedi, ViewEvento.frameAreaPartecipante, null);
+                ViewEvento nuovo = new ViewEvento(controller, ViewEvento.frameAccedi, ViewEvento.frameAreaPartecipante, frameNotifiche);
                 ViewEvento.frameEventi.setVisible(true);
             }
         });

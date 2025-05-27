@@ -28,11 +28,11 @@ public class Login {
                 Utente u = Controller.loginUtente(mail, password);
                 if (u != null) {
                     if (u instanceof Organizzatore) {
-                        AreaOrganizzatore QuartaGUI = new AreaOrganizzatore(controller,(Organizzatore) u, frame, frame);
+                        AreaOrganizzatore QuartaGUI = new AreaOrganizzatore(controller,(Organizzatore) u, null, frame);
                         QuartaGUI.frameOrganizzatore.setVisible(true);
                         frame.dispose();
                     }else {
-                        ViewEvento terzaGUI = new ViewEvento(controller, frame, frame2, frame);
+                        ViewEvento terzaGUI = new ViewEvento(controller, frame, null, null);
                         terzaGUI.frameEventi.setVisible(true);
                         frame.setVisible(false);
                     }

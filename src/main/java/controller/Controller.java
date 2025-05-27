@@ -162,8 +162,14 @@ public class Controller {
     }
 
     public static boolean invitaGiudicePendente(Evento evento, Utente utente) {
-        if((utente instanceof Giudice)||(utente instanceof Partecipante)) {
+        if((utente instanceof Partecipante)) {
             return false;
+        }
+
+        for(Giudice giudice: evento.getGiudici()) {
+            if(giudice.getLogin().equals(utente.getLogin())) {
+                return false;
+            }
         }
         for(InvitoGiudice invito: invitiPendenti){
             if(invito.getEvento().equals(evento)&&invito.getUtente().getLogin().equals(utente.getLogin()) && !invito.isAccettato() && !invito.isRifiutato()) {
@@ -186,11 +192,14 @@ public class Controller {
         if(invitoTrovato != null) {
             invitoTrovato.accetta();
             Giudice nuovoGiudice = new Giudice(utente.getLogin(), utente.getPassword(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
-            evento.getGiudici().add(nuovoGiudice);
-            if(utenteCorrente.getLogin().equals(utente.getLogin())) {
-                utenteCorrente=nuovoGiudice;
-            }
+            utentiRegistrati.remove(utente);
             utentiRegistrati.add(nuovoGiudice);
+            evento.getGiudici().add(nuovoGiudice);
+            if(utenteCorrente!= null & utenteCorrente .getLogin().equals(utente.getLogin())) {
+                utenteCorrente=nuovoGiudice;
+                partecipantCorrente=null;
+            }
+           // utentiRegistrati.add(nuovoGiudice);
             invitiPendenti.remove(invitoTrovato);
             Controller.setUtenteCorrente(nuovoGiudice);
             Controller.setPartecipantCorrente(null);
@@ -198,6 +207,8 @@ public class Controller {
             for (Giudice g : evento.getGiudici()) {
                 System.out.println("- " + g.getLogin());
             }
+            Controller.stampaUtentiRegistrati();
+
 
             return true;
         }
@@ -227,44 +238,45 @@ public class Controller {
         return false;
     }
 
-
     public static ArrayList <Utente> getUtentiInvitabili(Evento evento){
         ArrayList <Utente> invitabili = new ArrayList <>();
         for (Utente u : utentiRegistrati) {
             if (u instanceof Organizzatore) {
                 continue;
             }
-            boolean giaGiudice = false;
-            boolean giaPartecipante = false;
-            boolean giaInvitato = false;
+            boolean giaGiudiceInQuestoEvento = false;
+            boolean giaPartecipanteInQuestoEvento = false;
+            boolean giaInvitatoAQuestoEvento = false;
 
             for (Giudice g: evento.getGiudici()) {
                 if(g.getLogin().equals(u.getLogin())) {
-                    giaGiudice = true;
+                    giaGiudiceInQuestoEvento = true;
                     break;
                 }
             }
 
             for (Partecipante p: evento.getPartecipanti()) {
                 if(p.getLogin().equals(u.getLogin())) {
-                    giaPartecipante = true;
+                    giaPartecipanteInQuestoEvento = true;
                     break;
                 }
             }
 
             for (InvitoGiudice invito: invitiPendenti) {
                 if(invito.getEvento().equals(evento) && invito.getUtente().getLogin().equals(u.getLogin()) && !invito.isAccettato() && !invito.isRifiutato()) {
-                    giaInvitato = true;
+                    giaInvitatoAQuestoEvento = true;
                     break;
                 }
             }
 
-            if(!giaGiudice && !giaPartecipante && !giaInvitato){
+            if(!giaGiudiceInQuestoEvento && !giaPartecipanteInQuestoEvento && !giaInvitatoAQuestoEvento){
                 invitabili.add(u);
             }
         }
         return invitabili;
     }
+
+
 
     public static void aggiungiInvitoGiudice (InvitoGiudice invito){
         invitiGiudice.add(invito);
@@ -278,5 +290,16 @@ public class Controller {
             }
         }
         return invitiUtente;
+    }
+    public static void stampaUtentiRegistrati() {
+        System.out.println("UTENTI REGISTRATI:");
+        for (Utente u : utentiRegistrati) {
+            String tipo = "Utente Generico";
+            if (u instanceof Partecipante) tipo = "Partecipante";
+            else if (u instanceof Giudice) tipo = "Giudice";
+            else if (u instanceof Organizzatore) tipo = "Organizzatore";
+
+            System.out.println("- " + u.getLogin() + " (" + tipo + ")");
+        }
     }
 }
