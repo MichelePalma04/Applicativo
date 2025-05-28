@@ -27,7 +27,8 @@ public class AreaPartecipante {
     private Controller controller;
     public static JFrame frameAreaPartecipante, frameEventi;
 
-    public AreaPartecipante(Partecipante partecipante, Evento evento, JFrame frame) {
+    public AreaPartecipante(Partecipante partecipante, Evento evento, JFrame frame, Controller controller) {
+        this.controller = controller;
         frameEventi = frame;
         frameAreaPartecipante = new JFrame("Area Personale " + partecipante.getLogin());
         frameAreaPartecipante.setContentPane(panel);

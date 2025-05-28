@@ -7,16 +7,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Controller {
-    private static final ArrayList<Utente> utentiRegistrati = new ArrayList<Utente>();
-    private static final ArrayList<Evento> eventiDisponibili = new ArrayList();
-    private static Utente utenteCorrente = null;
-    private static Partecipante partecipantCorrente = null;
-    private static ArrayList<InvitoGiudice> invitiPendenti = new ArrayList<>();
-    private static ArrayList<InvitoGiudice> invitiGiudice = new ArrayList<>();
+    private ArrayList<Utente> utentiRegistrati;
+    private ArrayList<Evento> eventiDisponibili;
+    private Utente utenteCorrente = null;
+    private Partecipante partecipantCorrente = null;
+    private ArrayList<InvitoGiudice> invitiPendenti;
+    private ArrayList<InvitoGiudice> invitiGiudice;
     //private static final ArrayList <Team> teamDisponibili = new ArrayList();
 
+    public Controller() {
+        this.utentiRegistrati = new ArrayList<>();
+        this.eventiDisponibili = new ArrayList<>();
+        this.invitiPendenti = new ArrayList<>();
+        this.invitiGiudice = new ArrayList<>();
+        initEventi();
+    }
 
-    public static void initEventi() {
+
+    public void initEventi() {
         ArrayList<Giudice> giudici = new ArrayList<>();
         ArrayList<Evento> eventiOrganizzati = new ArrayList<>();
         ArrayList<Evento> eventiOrganizzati2 = new ArrayList<>();
@@ -47,8 +55,8 @@ public class Controller {
 
         Organizzatore o =new Organizzatore("miki&sara", "sara&miki", eventiOrganizzati, giudici);
         Organizzatore o2 = new Organizzatore("sara&miki", "miki&sara", eventiOrganizzati2, giudici);
-        utentiRegistrati.add(o);
-        utentiRegistrati.add(o2);
+        this.utentiRegistrati.add(o);
+        this.utentiRegistrati.add(o2);
 
         Evento e = new Evento("Hackathon", "Faggiano",
                                 LocalDate.of(2025, 6, 9), LocalDate.of(2025, 6, 11),
@@ -80,7 +88,7 @@ public class Controller {
 
     }
 
-    public static ArrayList<Evento> getEventiDisponibili() {
+    public ArrayList<Evento> getEventiDisponibili() {
         return eventiDisponibili;
     }
 
@@ -89,18 +97,17 @@ public class Controller {
         return evento.getTeams();
     }
 
-    public static boolean registraUtente (String email, String password) {
+    public boolean registraUtente (String email, String password) {
         for (Utente u : utentiRegistrati) {
             if (u.getLogin().equals(email)) {
                 return false; //utente già presente
             }
         }
-
         utentiRegistrati.add(new Utente(email, password));
         return true;
     }
 
-    public static Utente loginUtente (String email, String password) {
+    public Utente loginUtente (String email, String password) {
         for (Utente u : utentiRegistrati) {
             if (u.getLogin().equals(email) && u.getPassword().equals(password)) {
                 utenteCorrente = u;
@@ -123,28 +130,28 @@ public class Controller {
     }
 
 
-    public static Utente getUtenteCorrente() {
+    public Utente getUtenteCorrente() {
         return utenteCorrente;
     }
 
-    public static ArrayList<Utente> getUtentiRegistrati() {
+    public ArrayList<Utente> getUtentiRegistrati() {
         return utentiRegistrati;
     }
 
-    public static void setUtenteCorrente(Utente u) {
+    public void setUtenteCorrente(Utente u) {
         utenteCorrente = u;
     }
 
 
-    public static Partecipante getPartecipantCorrente() {
+    public Partecipante getPartecipantCorrente() {
         return partecipantCorrente;
     }
 
-    public static void setPartecipantCorrente(Partecipante p) {
+    public void setPartecipantCorrente(Partecipante p) {
         partecipantCorrente = p;
     }
 
-    public static Giudice getGiudiceCorrente(Evento evento) {
+    public Giudice getGiudiceCorrente(Evento evento) {
         for (Giudice giudice: evento.getGiudici()) {
             if(giudice.getLogin().equals(utenteCorrente.getLogin())) {
                 return giudice;
@@ -154,14 +161,14 @@ public class Controller {
     }
 
     //Funzione che serve a controllare se vengono aggiunti effettivamente i partecipanti a quell evento
-    public static void stampaPartecipantiEvento(Evento e) {
+    public void stampaPartecipantiEvento(Evento e) {
         System.out.println("Partecipanti evento: " + e.getTitolo());
         for(Partecipante p : e.getPartecipanti()) {
             System.out.println("-"+p.getLogin());
         }
     }
 
-    public static boolean invitaGiudicePendente(Evento evento, Utente utente) {
+    public boolean invitaGiudicePendente(Evento evento, Utente utente) {
         if((utente instanceof Partecipante)) {
             return false;
         }
@@ -180,7 +187,7 @@ public class Controller {
         return true;
     }
 
-    public static boolean accettaInvitoGiudice(Evento evento, Utente utente) {
+    public boolean accettaInvitoGiudice(Evento evento, Utente utente) {
         InvitoGiudice invitoTrovato = null;
 
         for(InvitoGiudice invito: invitiPendenti){
@@ -201,13 +208,13 @@ public class Controller {
             }
            // utentiRegistrati.add(nuovoGiudice);
             invitiPendenti.remove(invitoTrovato);
-            Controller.setUtenteCorrente(nuovoGiudice);
-            Controller.setPartecipantCorrente(null);
+            setUtenteCorrente(nuovoGiudice);
+            setPartecipantCorrente(null);
             System.out.println("Giudici dell'evento "+ evento.getTitolo() + " dopo l'accettazione.");
             for (Giudice g : evento.getGiudici()) {
                 System.out.println("- " + g.getLogin());
             }
-            Controller.stampaUtentiRegistrati();
+            stampaUtentiRegistrati();
 
 
             return true;
@@ -215,7 +222,7 @@ public class Controller {
         return false;
     }
 
-    public static boolean rifiutaInvitoGiudice (Evento evento, Utente utente) {
+    public boolean rifiutaInvitoGiudice (Evento evento, Utente utente) {
         InvitoGiudice invitoDaRimuovere = null;
 
         //uso di new ArrayList <> così da evitare problemi nella rimozioni di elementi durante il for
@@ -229,7 +236,7 @@ public class Controller {
         return false;
     }
 
-    public static boolean isUtenteGiudice(Evento evento, Utente utente) {
+    public boolean isUtenteGiudice(Evento evento, Utente utente) {
         for (Giudice g : evento.getGiudici()) {
             if (g.getLogin().equals(utente.getLogin())) {
                 return true;
@@ -238,7 +245,7 @@ public class Controller {
         return false;
     }
 
-    public static ArrayList <Utente> getUtentiInvitabili(Evento evento){
+    public ArrayList <Utente> getUtentiInvitabili(Evento evento){
         ArrayList <Utente> invitabili = new ArrayList <>();
         for (Utente u : utentiRegistrati) {
             if (u instanceof Organizzatore) {
@@ -278,11 +285,11 @@ public class Controller {
 
 
 
-    public static void aggiungiInvitoGiudice (InvitoGiudice invito){
+    public void aggiungiInvitoGiudice (InvitoGiudice invito){
         invitiGiudice.add(invito);
     }
 
-    public static ArrayList <Evento> getInvitiUtente(Utente utente) {
+    public ArrayList <Evento> getInvitiUtente(Utente utente) {
         ArrayList <Evento> invitiUtente = new ArrayList <>();
         for(InvitoGiudice invito: invitiPendenti){
             if(invito.getUtente().equals(utente) && !invito.isAccettato() && !invito.isRifiutato()) {
@@ -291,7 +298,7 @@ public class Controller {
         }
         return invitiUtente;
     }
-    public static void stampaUtentiRegistrati() {
+    public void stampaUtentiRegistrati() {
         System.out.println("UTENTI REGISTRATI:");
         for (Utente u : utentiRegistrati) {
             String tipo = "Utente Generico";

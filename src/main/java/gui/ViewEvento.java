@@ -29,8 +29,8 @@ public class ViewEvento {
         this.controller = controller;
         frameAreaPartecipante = frame2;
         frameNotifiche = frame3;
-        Controller.initEventi();
-        ArrayList<Evento> eventi = Controller.getEventiDisponibili();
+        controller.initEventi();
+        ArrayList<Evento> eventi = controller.getEventiDisponibili();
 
         frameEventi = new JFrame("Eventi");
         frameEventi.setContentPane(ViewEvento);
@@ -56,11 +56,11 @@ public class ViewEvento {
             visualizzaArea.setVisible(false);
             eventoPanel.add(visualizzaArea);
 
-            Utente u = Controller.getUtenteCorrente();
-            Partecipante partecipante = Controller.getPartecipantCorrente();
-            Giudice giudiceCorrente = Controller.getGiudiceCorrente(ev);
+            Utente u = controller.getUtenteCorrente();
+            Partecipante partecipante = controller.getPartecipantCorrente();
+            Giudice giudiceCorrente = controller.getGiudiceCorrente(ev);
 
-            if(Controller.isUtenteGiudice(ev, Controller.getUtenteCorrente())) {
+            if(controller.isUtenteGiudice(ev, controller.getUtenteCorrente())) {
                 iscrivitiButton.setVisible(false);
                 visualizzaArea.setVisible(false);
             }else if(partecipante != null && partecipante.getEventi().contains(ev)) {
@@ -74,14 +74,14 @@ public class ViewEvento {
             iscrivitiButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    Partecipante p = Controller.getPartecipantCorrente();
+                    Partecipante p = controller.getPartecipantCorrente();
                     if(p!= null && p.getEventi().contains(ev)) {
                         iscrivitiButton.setVisible(false);
                         visualizzaArea.setVisible(true);
                     }
                     if (p == null) {
                         p=new Partecipante(u.getLogin(), u.getPassword(), null, new ArrayList<>());
-                        Controller.setPartecipantCorrente(p);
+                        controller.setPartecipantCorrente(p);
                     }
 
                     //Aggiunge evento alla sua liste e viceversa
@@ -90,12 +90,12 @@ public class ViewEvento {
                         ev.getPartecipanti().add(p);
                     }
 
-                    Controller.stampaPartecipantiEvento(ev);
+                    controller.stampaPartecipantiEvento(ev);
 
                     JOptionPane.showMessageDialog(frameEventi,"Iscrizione completata con successo!");
                     iscrivitiButton.setVisible(false);
                     visualizzaArea.setVisible(true);
-                    AreaPartecipante quintaGUI = new AreaPartecipante(p, ev, frameEventi);
+                    AreaPartecipante quintaGUI = new AreaPartecipante(p, ev, frameEventi, controller);
                     quintaGUI.frameAreaPartecipante.setVisible(true);
                     frameEventi.setVisible(false);
                 }
@@ -105,8 +105,8 @@ public class ViewEvento {
             visualizzaArea.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    Partecipante p = Controller.getPartecipantCorrente();
-                    AreaPartecipante areaGUI = new AreaPartecipante(p, ev, frameEventi);
+                    Partecipante p = controller.getPartecipantCorrente();
+                    AreaPartecipante areaGUI = new AreaPartecipante(p, ev, frameEventi, controller);
                     areaGUI.frameAreaPartecipante.setVisible(true);
                     frameEventi.setVisible(false);
                 }
@@ -122,8 +122,8 @@ public class ViewEvento {
         logOutButton1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Controller.setPartecipantCorrente(null);
-                Controller.setUtenteCorrente(null);
+                controller.setPartecipantCorrente(null);
+                controller.setUtenteCorrente(null);
                 frameEventi.setVisible(false);
                 frameAccedi.setVisible(true);
             }
@@ -131,9 +131,9 @@ public class ViewEvento {
         visualizzaButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Utente utente = Controller.getUtenteCorrente();
+                Utente utente = controller.getUtenteCorrente();
                 System.out.println("Utente corrente: " + utente.getLogin());
-                System.out.println("Inviti trovati: " + Controller.getInvitiUtente(utente).size());
+                System.out.println("Inviti trovati: " + controller.getInvitiUtente(utente).size());
                 VediNotifica notifiche = new VediNotifica(controller, utente, frameEventi);
                 notifiche.frameNotifiche.setVisible(true);
                 frameEventi.setVisible(false);

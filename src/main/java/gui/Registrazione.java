@@ -43,7 +43,7 @@ public class Registrazione {
                 String email = new String (emailField.getText());
                 String password = new String (passwordField.getPassword());
 
-                boolean successo = Controller.registraUtente(email, password);
+                boolean successo = controller.registraUtente(email, password);
                 if(successo) {
                     JOptionPane.showMessageDialog(frameRegistrazione, "Registrazione completata.");
                     frameRegistrazione.dispose();

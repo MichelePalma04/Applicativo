@@ -20,12 +20,13 @@ public class Login {
     private Controller controller;
 
     public Login() {
+        controller = new Controller();
         accediButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String mail = new String(mailField.getText());
                 String password = new String(passwordField.getText());
-                Utente u = Controller.loginUtente(mail, password);
+                Utente u = controller.loginUtente(mail, password);
                 if (u != null) {
                     if (u instanceof Organizzatore) {
                         AreaOrganizzatore QuartaGUI = new AreaOrganizzatore(controller,(Organizzatore) u, null, frame);
@@ -52,7 +53,6 @@ public class Login {
         });
     }
     public static void main (String[]args){
-        Controller.initEventi();
         frame = new JFrame("Login");
         frame.setContentPane(new Login().Login);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

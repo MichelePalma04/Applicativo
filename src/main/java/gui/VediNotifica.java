@@ -51,7 +51,7 @@ public class VediNotifica {
     private void aggiornaInviti() {
         panelInviti.removeAll();
 
-        ArrayList<Evento> inviti = Controller.getInvitiUtente(utente);
+        ArrayList<Evento> inviti = controller.getInvitiUtente(utente);
 
         if (inviti.isEmpty()) {
             panelInviti.add(new JLabel("Nessun invito ricevuto"));
@@ -69,7 +69,7 @@ public class VediNotifica {
                 accettabutton.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        Controller.accettaInvitoGiudice(evento, utente);
+                        controller.accettaInvitoGiudice(evento, utente);
                         JOptionPane.showMessageDialog(frameNotifiche, "Ora sei giudice dell'evento: " + evento.getTitolo());
                         aggiornaInviti();
                     }
@@ -78,7 +78,7 @@ public class VediNotifica {
                 rifiutabutton.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        Controller.rifiutaInvitoGiudice(evento, utente);
+                        controller.rifiutaInvitoGiudice(evento, utente);
                         aggiornaInviti();
                     }
                 });

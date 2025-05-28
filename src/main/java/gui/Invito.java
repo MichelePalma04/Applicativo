@@ -17,10 +17,12 @@ public class Invito {
     private JLabel nomeEvento;
     private JButton homeButton;
     public static JFrame frameInvito, frameOrganizzatore;
+    private Controller controller;
 
     private Evento evento;
 
-    public Invito(Evento evento, JFrame frame) {
+    public Invito(Evento evento, JFrame frame, Controller controller) {
+        this.controller = controller;
         frameOrganizzatore = frame;
         this.evento = evento;
         frameInvito = new JFrame("Operazioni organizzatore");
@@ -44,7 +46,7 @@ public class Invito {
             public void actionPerformed(ActionEvent e) {
                 Utente daInvitare = (Utente) comboBox1.getSelectedItem();
                 if (daInvitare != null) {
-                    if (Controller.invitaGiudicePendente(evento, daInvitare)) {
+                    if (controller.invitaGiudicePendente(evento, daInvitare)) {
                         JOptionPane.showMessageDialog(frameInvito, "Giudice invitato con sucesso!");
                         aggiornaListaInvitabili();
                     } else {
@@ -59,7 +61,7 @@ public class Invito {
 
     private void aggiornaListaInvitabili() {
         comboBox1.removeAllItems();
-        for (Utente u : Controller.getUtentiInvitabili(evento)) {
+        for (Utente u : controller.getUtentiInvitabili(evento)) {
             comboBox1.addItem(u);
         }
     }
