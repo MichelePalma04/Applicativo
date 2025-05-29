@@ -81,8 +81,10 @@ public class AreaPartecipante {
         homeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                frameAreaPartecipante.setVisible(false);
-                frameEventi.setVisible(true);
+                ViewEvento gui = new ViewEvento(controller, ViewEvento.frameAccedi, frameAreaPartecipante, ViewEvento.frameNotifiche);
+                gui.frameAreaPartecipante.setVisible(false);
+                ViewEvento.frameEventi.setVisible(true);
+
             }
         });
         uniscitiButton.addActionListener(new ActionListener() {

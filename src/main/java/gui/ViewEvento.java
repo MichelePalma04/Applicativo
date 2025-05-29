@@ -18,6 +18,7 @@ public class ViewEvento {
     private JScrollPane scroll;
     private JButton logOutButton1;
     private JButton visualizzaButton;
+    private JLabel notifiche;
     private Controller controller;
 
 
@@ -66,6 +67,8 @@ public class ViewEvento {
             }else if(partecipante != null && partecipante.getEventi().contains(ev)) {
                 iscrivitiButton.setVisible(false);
                 visualizzaArea.setVisible(true);
+                visualizzaButton.setVisible(false);
+                notifiche.setVisible(false);
             }else {
                 iscrivitiButton.setVisible(true);
                 visualizzaArea.setVisible(false);

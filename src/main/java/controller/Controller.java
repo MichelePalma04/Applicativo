@@ -26,11 +26,14 @@ public class Controller {
 
     public void initEventi() {
         ArrayList<Giudice> giudici = new ArrayList<>();
+
         ArrayList<Evento> eventiOrganizzati = new ArrayList<>();
         ArrayList<Evento> eventiOrganizzati2 = new ArrayList<>();
+
         ArrayList<Partecipante> partecipanti = new ArrayList<>();
         ArrayList <Partecipante> partecipanti2 = new ArrayList();
         ArrayList<Partecipante> partecipanti3 = new ArrayList();
+
         ArrayList<Partecipante> partecipante1Team1 = new ArrayList<>();
         ArrayList <Partecipante> partecipante2Team1 = new ArrayList();
         ArrayList<Partecipante> partecipante3Team1 = new ArrayList();
@@ -40,23 +43,27 @@ public class Controller {
         ArrayList<Partecipante> partecipante1Team3 = new ArrayList<>();
         ArrayList <Partecipante> partecipante2Team3 = new ArrayList();
         ArrayList<Partecipante> partecipante3Team3 = new ArrayList();
+
         ArrayList <Team> teams = new ArrayList();
-        ArrayList <Team> teams1 = new ArrayList();
-        ArrayList <Team> teams2 = new ArrayList();
         teams.add(new Team ("Team 1",partecipante1Team1, null));
         teams.add(new Team ("Team 2",partecipante2Team1, null));
         teams.add(new Team ("Team 3",partecipante3Team1, null));
+
+        ArrayList <Team> teams1 = new ArrayList();
         teams1.add(new Team ("Team A",partecipante1Team2, null));
         teams1.add(new Team ("Team B",partecipante2Team2, null));
         teams1.add(new Team ("Team C",partecipante3Team2, null));
+
+        ArrayList <Team> teams2 = new ArrayList();
         teams2.add(new Team ("Team X",partecipante1Team3, null));
         teams2.add(new Team ("Team Y",partecipante2Team3, null));
         teams2.add(new Team ("Team Z",partecipante3Team3, null));
 
+        //Organizzatori gia presenti in piattaforma
         Organizzatore o =new Organizzatore("miki&sara", "sara&miki", eventiOrganizzati, giudici);
         Organizzatore o2 = new Organizzatore("sara&miki", "miki&sara", eventiOrganizzati2, giudici);
-        this.utentiRegistrati.add(o);
-        this.utentiRegistrati.add(o2);
+        aggiungiUtenteSeNuovo(o);
+        aggiungiUtenteSeNuovo(o2);
 
         Evento e = new Evento("Hackathon", "Faggiano",
                                 LocalDate.of(2025, 6, 9), LocalDate.of(2025, 6, 11),
@@ -72,13 +79,18 @@ public class Controller {
                 o2, giudici,  partecipanti3);
 
         //se ci sono elementi non li rinserisce
-        if(!eventiDisponibili.isEmpty()) {
+        /*if(!eventiDisponibili.isEmpty()) {
             return;
         }
+         */
 
-        eventiDisponibili.add(e);
-        eventiDisponibili.add(e1);
-        eventiDisponibili.add(e2);
+        aggiungiEventoSeNuovo(e);
+        aggiungiEventoSeNuovo(e1);
+        aggiungiEventoSeNuovo(e2);
+
+        //eventiDisponibili.add(e);
+        //eventiDisponibili.add(e1);
+        //eventiDisponibili.add(e2);
         eventiOrganizzati.add(e);
         eventiOrganizzati.add(e1);
         eventiOrganizzati2.add(e2);
@@ -86,6 +98,25 @@ public class Controller {
         e1.setTeams(teams1);
         e2.setTeams(teams2);
 
+    }
+
+    public void aggiungiUtenteSeNuovo(Utente utente){
+        for(Utente u: utentiRegistrati){
+            if(u.getLogin().equals(utente.getLogin())){
+                return;
+            }
+        }
+        utentiRegistrati.add(utente);
+    }
+
+    public void aggiungiEventoSeNuovo(Evento evento){
+        for(Evento e: eventiDisponibili){
+            //supponiamo che non ci siano eventi con lo stesso Titolo svolti nello stesso periodo
+            if(e.getTitolo().equals(evento.getTitolo()) && e.getDataInizio().equals(evento.getDataInizio()) && e.getDataFine().equals(evento.getDataFine())){
+                return;
+            }
+        }
+        eventiDisponibili.add(evento);
     }
 
     public ArrayList<Evento> getEventiDisponibili() {

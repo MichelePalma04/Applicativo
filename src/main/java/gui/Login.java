@@ -51,6 +51,7 @@ public class Login {
                 frame.setVisible(false);
             }
         });
+
     }
     public static void main (String[]args){
         frame = new JFrame("Login");
