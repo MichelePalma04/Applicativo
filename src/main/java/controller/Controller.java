@@ -138,7 +138,7 @@ public class Controller {
         return true;
     }
 
-    public Utente loginUtente (String email, String password) {
+    /*public Utente loginUtente (String email, String password) {
         for (Utente u : utentiRegistrati) {
             if (u.getLogin().equals(email) && u.getPassword().equals(password)) {
                 utenteCorrente = u;
@@ -154,6 +154,40 @@ public class Controller {
                         }
                     }
                 }
+                return u;
+            }
+        }
+        return null;
+    }
+     */
+    public Utente loginUtente (String email, String password) {
+        for (Utente u : utentiRegistrati) {
+            if (u.getLogin().equals(email) && u.getPassword().equals(password)) {
+                for(Evento e: eventiDisponibili) {
+                    if (e.getOrganizzatore().getLogin().equals(u.getLogin())) {
+                        Organizzatore org = e.getOrganizzatore();
+                        utenteCorrente = org;
+                        return org;
+                    }
+                }
+                for(Evento e: eventiDisponibili) {
+                    for(Giudice g: e.getGiudici()) {
+                        if(g.getLogin().equals(u.getLogin())) {
+                            utenteCorrente = g;
+                            return g;
+                        }
+                    }
+                }
+
+                for(Evento e: eventiDisponibili) {
+                    for(Partecipante p: e.getPartecipanti()) {
+                        if(p.getLogin().equals(u.getLogin())) {
+                            utenteCorrente = p;
+                            return p;
+                        }
+                    }
+                }
+                utenteCorrente = u;
                 return u;
             }
         }
