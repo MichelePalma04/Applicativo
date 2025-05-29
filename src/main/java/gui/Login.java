@@ -16,7 +16,9 @@ public class Login {
     private JButton accediButton;
     private JButton registratiButton;
     private JPanel panel;
-    public static JFrame frame, frame2, frameEventi;
+    public static JFrame frame;
+    public JFrame frame2;
+    public JFrame frameEventi;
     private Controller controller;
 
     public Login() {
@@ -29,11 +31,15 @@ public class Login {
                 Utente u = controller.loginUtente(mail, password);
                 if (u != null) {
                     if (u instanceof Organizzatore) {
-                        AreaOrganizzatore QuartaGUI = new AreaOrganizzatore(controller,(Organizzatore) u, null, frame);
+                        AreaOrganizzatore QuartaGUI = new AreaOrganizzatore(controller, (Organizzatore) u, null, frame);
                         QuartaGUI.frameOrganizzatore.setVisible(true);
-                        frame.dispose();
+                        frame.setVisible(false);
+                    }else if(u instanceof Giudice){
+                        AreaGiudice gui = new AreaGiudice(controller, (Giudice) u, frame);
+                        gui.frameGiudice.setVisible(true);
+                        frame.setVisible(false);
                     }else {
-                        ViewEvento terzaGUI = new ViewEvento(controller, frame, null, null);
+                        ViewEvento terzaGUI = new ViewEvento(controller, frame, null, null, null);
                         terzaGUI.frameEventi.setVisible(true);
                         frame.setVisible(false);
                     }

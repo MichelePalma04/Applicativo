@@ -230,14 +230,13 @@ public class Controller {
         if(invitoTrovato != null) {
             invitoTrovato.accetta();
             Giudice nuovoGiudice = new Giudice(utente.getLogin(), utente.getPassword(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
-            utentiRegistrati.remove(utente);
+            nuovoGiudice.getEventi().add(evento);
             utentiRegistrati.add(nuovoGiudice);
             evento.getGiudici().add(nuovoGiudice);
-            if(utenteCorrente!= null & utenteCorrente .getLogin().equals(utente.getLogin())) {
+            if(utenteCorrente!= null && utenteCorrente .getLogin().equals(utente.getLogin())) {
                 utenteCorrente=nuovoGiudice;
                 partecipantCorrente=null;
             }
-           // utentiRegistrati.add(nuovoGiudice);
             invitiPendenti.remove(invitoTrovato);
             setUtenteCorrente(nuovoGiudice);
             setPartecipantCorrente(null);

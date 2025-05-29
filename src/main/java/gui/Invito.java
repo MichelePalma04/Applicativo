@@ -16,7 +16,7 @@ public class Invito {
     private JPanel panel2;
     private JLabel nomeEvento;
     private JButton homeButton;
-    public static JFrame frameInvito, frameOrganizzatore;
+    public JFrame frameInvito, frameOrganizzatore;
     private Controller controller;
 
     private Evento evento;

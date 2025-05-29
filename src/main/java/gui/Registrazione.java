@@ -15,8 +15,8 @@ public class Registrazione {
     private JLabel password;
     private JButton registrazione;
     private JPasswordField passwordField;
-    public static JFrame frameRegistrazione;
-    public static JFrame frameAccedi;
+    public JFrame frameRegistrazione;
+    public JFrame frameAccedi;
     private Controller controller;
 
     public Registrazione(Controller controller, JFrame frame) {

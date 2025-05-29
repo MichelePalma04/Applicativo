@@ -2,6 +2,7 @@ package gui;
 
 import controller.Controller;
 import model.Evento;
+import model.Giudice;
 import model.Utente;
 
 import javax.swing.*;
@@ -20,12 +21,16 @@ public class VediNotifica {
     private JScrollPane scroll;
     private Controller controller;
     private Utente utente;
-    public static JFrame frameNotifiche, frameEventi;
+    public JFrame frameNotifiche, frameEventi, frameGiudice, frameAccesso, frameAreaPartecipante;
+    private Evento evento;
 
-    public VediNotifica(Controller controller, Utente utente, JFrame frame) {
+    public VediNotifica(Controller controller, Utente utente, JFrame frame, JFrame frame2, JFrame frame3, JFrame frame4) {
         this.controller = controller;
         this.utente = utente;
         frameEventi = frame;
+        frameGiudice = frame2;
+        frameAccesso = frame3;
+        frameAreaPartecipante = frame4;
 
         scroll.getVerticalScrollBar().setUnitIncrement(20);
 
@@ -41,10 +46,18 @@ public class VediNotifica {
         backButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                frameNotifiche.setVisible(false);
-                frameEventi.dispose();
-                ViewEvento nuovo = new ViewEvento(controller, ViewEvento.frameAccedi, ViewEvento.frameAreaPartecipante, frameNotifiche);
-                ViewEvento.frameEventi.setVisible(true);
+                Utente u = controller.getUtenteCorrente();
+                for(Evento ev : controller.getEventiDisponibili()) {
+                    if (controller.isUtenteGiudice(ev, u) && u instanceof Giudice) {
+                        AreaGiudice GUI = new AreaGiudice(controller, (Giudice) u, frameAccesso);
+                        GUI.frameGiudice.setVisible(true);
+                        frameNotifiche.setVisible(false);
+                        return;
+                    }
+                }
+                frameNotifiche.dispose();
+                ViewEvento nuovo = new ViewEvento(controller, frameAccesso, frameAreaPartecipante, frameNotifiche, frameGiudice);
+                frameEventi.setVisible(true);
             }
         });
     }

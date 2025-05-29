@@ -25,15 +25,18 @@ public class AreaPartecipante {
     private JPanel panel2;
     private JLabel Problema;
     private Controller controller;
-    public static JFrame frameAreaPartecipante, frameEventi;
+    public JFrame frameAreaPartecipante, frameEventi, frameAccedi, frameNotifica, frameGiudice;
 
-    public AreaPartecipante(Partecipante partecipante, Evento evento, JFrame frame, Controller controller) {
+    public AreaPartecipante(Partecipante partecipante, Evento evento, JFrame frame, JFrame frame2, JFrame frame3, JFrame frame4, Controller controller) {
         this.controller = controller;
         frameEventi = frame;
+        frameAccedi = frame2;
+        frameNotifica = frame3;
+        frameGiudice = frame4;
         frameAreaPartecipante = new JFrame("Area Personale " + partecipante.getLogin());
         frameAreaPartecipante.setContentPane(panel);
         frameAreaPartecipante.pack();
-        frameAreaPartecipante.setSize(500, 500);
+        frameAreaPartecipante.setSize(600, 600);
         frameAreaPartecipante.setLocationRelativeTo(null);
 
         messaggio.setVisible(false);
@@ -81,9 +84,9 @@ public class AreaPartecipante {
         homeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ViewEvento gui = new ViewEvento(controller, ViewEvento.frameAccedi, frameAreaPartecipante, ViewEvento.frameNotifiche);
+                ViewEvento gui = new ViewEvento(controller, frameAccedi, frameAreaPartecipante, frameNotifica, frameGiudice);
                 gui.frameAreaPartecipante.setVisible(false);
-                ViewEvento.frameEventi.setVisible(true);
+                frameEventi.setVisible(true);
 
             }
         });
@@ -110,7 +113,10 @@ public class AreaPartecipante {
                 uniscitiButton.setVisible(false);
                 messaggio.setVisible(true);
                 messaggio.setText("Ora sei un membro del " + teamSelected.getNomeTeam());
-
+                Problema.setVisible(true);
+                caricaDocumento.setVisible(true);
+                inserisciDocumento.setVisible(true);
+                nomedocFied.setVisible(true);
             }
         });
     }

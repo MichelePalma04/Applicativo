@@ -22,11 +22,12 @@ public class ViewEvento {
     private Controller controller;
 
 
-    public static JFrame frameEventi, frameAccedi, frameAreaPartecipante, frameNotifiche;
+    public JFrame frameEventi, frameAccedi, frameAreaPartecipante, frameNotifiche, frameGiudice;
 
-    public ViewEvento(Controller controller,JFrame frame, JFrame frame2, JFrame frame3) {
+    public ViewEvento(Controller controller,JFrame frame, JFrame frame2, JFrame frame3, JFrame frame4) {
         scroll.getVerticalScrollBar().setUnitIncrement(20); //abbiamo aumentato la sensibilità dello scroll
         frameAccedi = frame;
+        frameGiudice = frame4;
         this.controller = controller;
         frameAreaPartecipante = frame2;
         frameNotifiche = frame3;
@@ -98,7 +99,7 @@ public class ViewEvento {
                     JOptionPane.showMessageDialog(frameEventi,"Iscrizione completata con successo!");
                     iscrivitiButton.setVisible(false);
                     visualizzaArea.setVisible(true);
-                    AreaPartecipante quintaGUI = new AreaPartecipante(p, ev, frameEventi, controller);
+                    AreaPartecipante quintaGUI = new AreaPartecipante(p, ev, frameEventi, frameAccedi, frameNotifiche, frameAreaPartecipante, controller);
                     quintaGUI.frameAreaPartecipante.setVisible(true);
                     frameEventi.setVisible(false);
                 }
@@ -109,7 +110,7 @@ public class ViewEvento {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     Partecipante p = controller.getPartecipantCorrente();
-                    AreaPartecipante areaGUI = new AreaPartecipante(p, ev, frameEventi, controller);
+                    AreaPartecipante areaGUI = new AreaPartecipante(p, ev, frameEventi, frameAccedi, frameNotifiche, frameAreaPartecipante, controller);
                     areaGUI.frameAreaPartecipante.setVisible(true);
                     frameEventi.setVisible(false);
                 }
@@ -137,7 +138,7 @@ public class ViewEvento {
                 Utente utente = controller.getUtenteCorrente();
                 System.out.println("Utente corrente: " + utente.getLogin());
                 System.out.println("Inviti trovati: " + controller.getInvitiUtente(utente).size());
-                VediNotifica notifiche = new VediNotifica(controller, utente, frameEventi);
+                VediNotifica notifiche = new VediNotifica(controller, utente, frameEventi, frameGiudice, frameAccedi, frameAreaPartecipante );
                 notifiche.frameNotifiche.setVisible(true);
                 frameEventi.setVisible(false);
             }
