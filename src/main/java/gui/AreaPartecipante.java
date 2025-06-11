@@ -23,9 +23,13 @@ public class AreaPartecipante {
     private JLabel inserisciDocumento;
     private JTextField nomedocFied;
     private JPanel panel2;
-    private JLabel Problema;
+    private JLabel problema;
     private Controller controller;
-    public JFrame frameAreaPartecipante, frameEventi, frameAccedi, frameNotifica, frameGiudice;
+    protected JFrame frameAreaPartecipante;
+    private JFrame frameEventi;
+    private JFrame frameAccedi;
+    private JFrame frameNotifica;
+    private JFrame frameGiudice;
 
     public AreaPartecipante(Partecipante partecipante, Evento evento, JFrame frame, JFrame frame2, JFrame frame3, JFrame frame4, Controller controller) {
         this.controller = controller;
@@ -65,7 +69,7 @@ public class AreaPartecipante {
             avviso.setVisible(false);
             messaggio.setText("Ora sei un membro del " + teamUtente.getNomeTeam());
             messaggio.setVisible(true);
-            Problema.setVisible(true);
+            problema.setVisible(true);
             caricaDocumento.setVisible(true);
             inserisciDocumento.setVisible(true);
             nomedocFied.setVisible(true);
@@ -75,7 +79,7 @@ public class AreaPartecipante {
             teamLabel.setVisible(true);
             avviso.setVisible(true);
             messaggio.setVisible(false);
-            Problema.setVisible(false);
+            problema.setVisible(false);
             caricaDocumento.setVisible(false);
             inserisciDocumento.setVisible(false);
             nomedocFied.setVisible(false);
@@ -113,7 +117,7 @@ public class AreaPartecipante {
                 uniscitiButton.setVisible(false);
                 messaggio.setVisible(true);
                 messaggio.setText("Ora sei un membro del " + teamSelected.getNomeTeam());
-                Problema.setVisible(true);
+                problema.setVisible(true);
                 caricaDocumento.setVisible(true);
                 inserisciDocumento.setVisible(true);
                 nomedocFied.setVisible(true);

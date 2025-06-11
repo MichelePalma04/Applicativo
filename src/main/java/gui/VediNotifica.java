@@ -6,7 +6,6 @@ import model.Giudice;
 import model.Utente;
 
 import javax.swing.*;
-import javax.swing.text.View;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -21,7 +20,11 @@ public class VediNotifica {
     private JScrollPane scroll;
     private Controller controller;
     private Utente utente;
-    public JFrame frameNotifiche, frameEventi, frameGiudice, frameAccesso, frameAreaPartecipante;
+    protected JFrame frameNotifiche;
+    private JFrame frameEventi;
+    private JFrame frameGiudice;
+    private JFrame frameAccesso;
+    protected JFrame frameAreaPartecipante;
     private Evento evento;
 
     public VediNotifica(Controller controller, Utente utente, JFrame frame, JFrame frame2, JFrame frame3, JFrame frame4) {

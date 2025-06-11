@@ -13,10 +13,10 @@ public class Registrazione {
     private JLabel email;
     private JTextField emailField;
     private JLabel password;
-    private JButton registrazione;
+    private JButton registrati;
     private JPasswordField passwordField;
-    public JFrame frameRegistrazione;
-    public JFrame frameAccedi;
+    protected JFrame frameRegistrazione;
+    private JFrame frameAccedi;
     private Controller controller;
 
     public Registrazione(Controller controller, JFrame frame) {
@@ -37,7 +37,7 @@ public class Registrazione {
                 frameRegistrazione.dispose();
             }
         });
-        registrazione.addActionListener(new ActionListener() {
+        registrati.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String email = new String (emailField.getText());

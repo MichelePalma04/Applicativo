@@ -13,7 +13,7 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 public class ViewEvento {
-    private JPanel ViewEvento;
+    private JPanel mainPanel;
     private JPanel panelEventi;
     private JScrollPane scroll;
     private JButton logOutButton1;
@@ -22,7 +22,11 @@ public class ViewEvento {
     private Controller controller;
 
 
-    public JFrame frameEventi, frameAccedi, frameAreaPartecipante, frameNotifiche, frameGiudice;
+    protected JFrame frameEventi;
+    private JFrame frameAccedi;
+    protected JFrame frameAreaPartecipante;
+    private JFrame frameNotifiche;
+    private JFrame frameGiudice;
 
     public ViewEvento(Controller controller,JFrame frame, JFrame frame2, JFrame frame3, JFrame frame4) {
         scroll.getVerticalScrollBar().setUnitIncrement(20); //abbiamo aumentato la sensibilità dello scroll
@@ -35,7 +39,7 @@ public class ViewEvento {
         ArrayList<Evento> eventi = controller.getEventiDisponibili();
 
         frameEventi = new JFrame("Eventi");
-        frameEventi.setContentPane(ViewEvento);
+        frameEventi.setContentPane(mainPanel);
         frameEventi.pack();
         frameEventi.setSize(500,500);
         frameEventi.setLocationRelativeTo(null);
@@ -138,8 +142,8 @@ public class ViewEvento {
                 Utente utente = controller.getUtenteCorrente();
                 System.out.println("Utente corrente: " + utente.getLogin());
                 System.out.println("Inviti trovati: " + controller.getInvitiUtente(utente).size());
-                VediNotifica notifiche = new VediNotifica(controller, utente, frameEventi, frameGiudice, frameAccedi, frameAreaPartecipante );
-                notifiche.frameNotifiche.setVisible(true);
+                VediNotifica notifica = new VediNotifica(controller, utente, frameEventi, frameGiudice, frameAccedi, frameAreaPartecipante );
+                notifica.frameNotifiche.setVisible(true);
                 frameEventi.setVisible(false);
             }
         });

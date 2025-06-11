@@ -15,7 +15,9 @@ public class AreaOrganizzatore {
     private JPanel panelEventi;
     private JScrollPane scroll;
     private JButton logOutButton;
-    public JFrame frameOrganizzatore, frameAccessi, frameInviti;
+    protected JFrame frameOrganizzatore;
+    private JFrame frameAccessi;
+    protected JFrame frameInviti;
     private Controller controller;
 
 
@@ -26,7 +28,6 @@ public class AreaOrganizzatore {
         benvenuto.setText("Benvenuto organizzatore "+ organizzatore.getLogin());
         frameOrganizzatore = new JFrame("Area Organizzatore " + organizzatore.getLogin());
         frameOrganizzatore.setContentPane(panel);
-        frameOrganizzatore.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frameOrganizzatore.pack();
         frameOrganizzatore.setSize(500, 500);
         frameOrganizzatore.setLocationRelativeTo(null);

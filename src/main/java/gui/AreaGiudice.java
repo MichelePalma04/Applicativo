@@ -5,7 +5,6 @@ import model.Evento;
 import model.Giudice;
 
 import javax.swing.*;
-import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -16,7 +15,8 @@ public class AreaGiudice {
     private JLabel benvenuto;
     private JScrollPane scroll;
     private JPanel panel;
-    public JFrame frameGiudice, frameAccesso;
+    protected JFrame frameGiudice;
+    private JFrame frameAccesso;
 
     private Controller controller;
 
