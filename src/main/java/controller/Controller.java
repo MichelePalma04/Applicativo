@@ -249,11 +249,11 @@ public class Controller {
             evento.getGiudici().add(nuovoGiudice);
             if(utenteCorrente!= null && utenteCorrente.getLogin().equals(utente.getLogin())) {
                 utenteCorrente = nuovoGiudice;
-                partecipantCorrente=null;
+                //partecipantCorrente=null;
             }
             invitiPendenti.remove(invitoTrovato);
             setUtenteCorrente(nuovoGiudice);
-            setPartecipantCorrente(null);
+            //setPartecipantCorrente(null);
             System.out.println("Giudici dell'evento "+ evento.getTitolo() + " dopo l'accettazione.");
                 for (Giudice g : evento.getGiudici()) {
                     System.out.println("- " + g.getLogin());

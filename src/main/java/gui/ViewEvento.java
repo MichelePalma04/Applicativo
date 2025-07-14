@@ -61,24 +61,19 @@ public class ViewEvento {
             JButton iscrivitiButton = new JButton("Iscriviti");
             eventoPanel.add(iscrivitiButton);
             JButton visualizzaArea = new JButton("Visualizza info");
-            visualizzaArea.setVisible(false);
             eventoPanel.add(visualizzaArea);
+            visualizzaArea.setVisible(false);
 
             Utente u = controller.getUtenteCorrente();
             Partecipante partecipante = controller.getPartecipantCorrente();
             Giudice giudiceCorrente = controller.getGiudiceCorrente(ev);
 
-            if(controller.isUtenteGiudice(ev, controller.getUtenteCorrente())) {
+            if(controller.isUtenteGiudice(ev, u) && giudiceCorrente.getEventi().contains(ev)) {
                 iscrivitiButton.setVisible(false);
                 visualizzaArea.setVisible(false);
             }else if(partecipante != null && partecipante.getEventi().contains(ev)) {
                 iscrivitiButton.setVisible(false);
                 visualizzaArea.setVisible(true);
-                visualizzaButton.setVisible(true);
-                notifiche.setVisible(true);
-            }else {
-                iscrivitiButton.setVisible(true);
-                visualizzaArea.setVisible(false);
             }
 
             iscrivitiButton.addActionListener(new ActionListener() {
@@ -92,6 +87,7 @@ public class ViewEvento {
                     }
                     if (p == null) {
                         p = new Partecipante(u.getLogin(), u.getPassword(), null, new ArrayList<>());
+                        controller.getUtentiRegistrati().add(p);
                         controller.setPartecipantCorrente(p);
                     }
 
@@ -151,9 +147,10 @@ public class ViewEvento {
                 Utente utente = controller.getUtenteCorrente();
                 System.out.println("Utente corrente: " + utente.getLogin());
                 System.out.println("Inviti trovati: " + controller.getInvitiUtente(utente).size());
-                VediNotifica notifica = new VediNotifica(controller, utente, frameEventi, frameGiudice, frameAccedi, frameAreaPartecipante );
+                VediNotifica notifica = new VediNotifica(controller, frameEventi, frameGiudice, frameAccedi, frameAreaPartecipante );
                 notifica.frameNotifiche.setVisible(true);
                 frameEventi.setVisible(false);
+
             }
         });
     }
