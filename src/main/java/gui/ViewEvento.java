@@ -90,7 +90,7 @@ public class ViewEvento {
                         visualizzaArea.setVisible(true);
                     }
                     if (p == null) {
-                        p=new Partecipante(u.getLogin(), u.getPassword(), null, new ArrayList<>());
+                        p = new Partecipante(u.getLogin(), u.getPassword(), null, new ArrayList<>());
                         controller.setPartecipantCorrente(p);
                     }
 
