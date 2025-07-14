@@ -50,14 +50,14 @@ public class VediNotifica {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Utente u = controller.getUtenteCorrente();
-                for(Evento ev : controller.getEventiDisponibili()) {
+                /*for(Evento ev : controller.getEventiDisponibili()) {
                     if (controller.isUtenteGiudice(ev, u) && u instanceof Giudice) {
                         AreaGiudice GUI = new AreaGiudice(controller, (Giudice) u, frameAccesso);
                         GUI.frameGiudice.setVisible(true);
                         frameNotifiche.setVisible(false);
                         return;
                     }
-                }
+                }*/
                 frameNotifiche.dispose();
                 ViewEvento nuovo = new ViewEvento(controller, frameAccesso, frameAreaPartecipante, frameNotifiche, frameGiudice);
                 frameEventi.setVisible(true);

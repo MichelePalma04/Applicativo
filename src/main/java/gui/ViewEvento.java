@@ -72,8 +72,8 @@ public class ViewEvento {
             }else if(partecipante != null && partecipante.getEventi().contains(ev)) {
                 iscrivitiButton.setVisible(false);
                 visualizzaArea.setVisible(true);
-                visualizzaButton.setVisible(false);
-                notifiche.setVisible(false);
+                visualizzaButton.setVisible(true);
+                notifiche.setVisible(true);
             }else {
                 iscrivitiButton.setVisible(true);
                 visualizzaArea.setVisible(false);
@@ -99,6 +99,12 @@ public class ViewEvento {
                     }
 
                     controller.stampaPartecipantiEvento(ev);
+
+                    System.out.println("Utenti attualmente nel sistema");
+                    for(Utente u: controller.getUtentiRegistrati()){
+                        System.out.println(u.getLogin());
+                    }
+
 
                     JOptionPane.showMessageDialog(frameEventi,"Iscrizione completata con successo!");
                     iscrivitiButton.setVisible(false);

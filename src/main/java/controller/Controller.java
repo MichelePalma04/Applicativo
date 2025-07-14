@@ -123,7 +123,6 @@ public class Controller {
         return eventiDisponibili;
     }
 
-
     public static ArrayList<Team> getTeamDisponibili(Evento evento){
         return evento.getTeams();
     }
@@ -138,28 +137,7 @@ public class Controller {
         return true;
     }
 
-    /*public Utente loginUtente (String email, String password) {
-        for (Utente u : utentiRegistrati) {
-            if (u.getLogin().equals(email) && u.getPassword().equals(password)) {
-                utenteCorrente = u;
-                if (u instanceof Partecipante) {
-                    partecipantCorrente=(Partecipante)u;
-                }else{
-                    for(Evento e:eventiDisponibili) {
-                        for(Partecipante p:e.getPartecipanti()) {
-                            if(p.getLogin().equals(u.getLogin())) {
-                                partecipantCorrente=p;
-                                break;
-                            }
-                        }
-                    }
-                }
-                return u;
-            }
-        }
-        return null;
-    }
-     */
+
     public Utente loginUtente (String email, String password) {
         for (Utente u : utentiRegistrati) {
             if (u.getLogin().equals(email) && u.getPassword().equals(password)) {
@@ -170,19 +148,21 @@ public class Controller {
                         return org;
                     }
                 }
-                for(Evento e: eventiDisponibili) {
+
+                /*for(Evento e: eventiDisponibili) {
                     for(Giudice g: e.getGiudici()) {
                         if(g.getLogin().equals(u.getLogin())) {
                             utenteCorrente = g;
                             return g;
                         }
                     }
-                }
+                }*/
 
                 for(Evento e: eventiDisponibili) {
                     for(Partecipante p: e.getPartecipanti()) {
                         if(p.getLogin().equals(u.getLogin())) {
                             utenteCorrente = p;
+                            partecipantCorrente = p;
                             return p;
                         }
                     }
@@ -204,7 +184,7 @@ public class Controller {
     }
 
     public void setUtenteCorrente(Utente u) {
-        utenteCorrente = u;
+        this.utenteCorrente = u;
     }
 
 
@@ -234,9 +214,9 @@ public class Controller {
     }
 
     public boolean invitaGiudicePendente(Evento evento, Utente utente) {
-        if((utente instanceof Partecipante)) {
+        /*if((utente instanceof Partecipante)) {
             return false;
-        }
+        }*/
 
         for(Giudice giudice: evento.getGiudici()) {
             if(giudice.getLogin().equals(utente.getLogin())) {
@@ -356,7 +336,7 @@ public class Controller {
     public ArrayList <Evento> getInvitiUtente(Utente utente) {
         ArrayList <Evento> invitiUtente = new ArrayList <>();
         for(InvitoGiudice invito: invitiPendenti){
-            if(invito.getUtente().equals(utente) && !invito.isAccettato() && !invito.isRifiutato()) {
+            if(invito.getUtente().getLogin().equals(utente.getLogin()) && !invito.isAccettato() && !invito.isRifiutato()) {
                 invitiUtente.add(invito.getEvento());
             }
         }
