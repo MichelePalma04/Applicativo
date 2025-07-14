@@ -22,11 +22,11 @@ public class ViewEvento {
     private Controller controller;
 
 
-    protected JFrame frameEventi;
-    private JFrame frameAccedi;
-    protected JFrame frameAreaPartecipante;
-    private JFrame frameNotifiche;
-    private JFrame frameGiudice;
+    public JFrame frameEventi;
+    public JFrame frameAccedi;
+    public JFrame frameAreaPartecipante;
+    public JFrame frameNotifiche;
+    public JFrame frameGiudice;
 
     public ViewEvento(Controller controller,JFrame frame, JFrame frame2, JFrame frame3, JFrame frame4) {
         scroll.getVerticalScrollBar().setUnitIncrement(20); //abbiamo aumentato la sensibilità dello scroll

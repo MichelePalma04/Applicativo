@@ -25,11 +25,11 @@ public class AreaPartecipante {
     private JPanel panel2;
     private JLabel problema;
     private Controller controller;
-    protected JFrame frameAreaPartecipante;
-    private JFrame frameEventi;
-    private JFrame frameAccedi;
-    private JFrame frameNotifica;
-    private JFrame frameGiudice;
+    public JFrame frameAreaPartecipante;
+    public JFrame frameEventi;
+    public JFrame frameAccedi;
+    public JFrame frameNotifica;
+    public JFrame frameGiudice;
 
     public AreaPartecipante(Partecipante partecipante, Evento evento, JFrame frame, JFrame frame2, JFrame frame3, JFrame frame4, Controller controller) {
         this.controller = controller;

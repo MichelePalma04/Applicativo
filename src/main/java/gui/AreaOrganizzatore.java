@@ -15,9 +15,9 @@ public class AreaOrganizzatore {
     private JPanel panelEventi;
     private JScrollPane scroll;
     private JButton logOutButton;
-    protected JFrame frameOrganizzatore;
-    private JFrame frameAccessi;
-    protected JFrame frameInviti;
+    public JFrame frameOrganizzatore;
+    public JFrame frameAccessi;
+    public JFrame frameInviti;
     private Controller controller;
 
 

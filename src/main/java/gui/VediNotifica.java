@@ -20,11 +20,11 @@ public class VediNotifica {
     private JScrollPane scroll;
     private Controller controller;
     private Utente utente;
-    protected JFrame frameNotifiche;
-    private JFrame frameEventi;
-    private JFrame frameGiudice;
-    private JFrame frameAccesso;
-    protected JFrame frameAreaPartecipante;
+    public JFrame frameNotifiche;
+    public JFrame frameEventi;
+    public JFrame frameGiudice;
+    public JFrame frameAccesso;
+    public JFrame frameAreaPartecipante;
     private Evento evento;
 
     public VediNotifica(Controller controller, Utente utente, JFrame frame, JFrame frame2, JFrame frame3, JFrame frame4) {

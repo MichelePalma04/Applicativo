@@ -15,8 +15,8 @@ public class AreaGiudice {
     private JLabel benvenuto;
     private JScrollPane scroll;
     private JPanel panel;
-    protected JFrame frameGiudice;
-    private JFrame frameAccesso;
+    public JFrame frameGiudice;
+    public JFrame frameAccesso;
 
     private Controller controller;
 

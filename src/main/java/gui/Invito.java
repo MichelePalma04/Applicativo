@@ -16,8 +16,8 @@ public class Invito {
     private JPanel panel2;
     private JLabel nomeEvento;
     private JButton homeButton;
-    protected JFrame frameInvito;
-    private JFrame frameOrganizzatore;
+    public JFrame frameInvito;
+    public JFrame frameOrganizzatore;
     private Controller controller;
 
     private Evento evento;
