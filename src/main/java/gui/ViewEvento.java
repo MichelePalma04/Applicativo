@@ -85,6 +85,7 @@ public class ViewEvento {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     Partecipante p = controller.getPartecipantCorrente();
+                    
                     if(p!= null && p.getEventi().contains(ev)) {
                         iscrivitiButton.setVisible(false);
                         visualizzaArea.setVisible(true);

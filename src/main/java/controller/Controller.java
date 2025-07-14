@@ -344,11 +344,15 @@ public class Controller {
     }
     public void stampaUtentiRegistrati() {
         System.out.println("UTENTI REGISTRATI:");
+
         for (Utente u : utentiRegistrati) {
             String tipo = "Utente Generico";
-            if (u instanceof Partecipante) tipo = "Partecipante";
-            else if (u instanceof Giudice) tipo = "Giudice";
-            else if (u instanceof Organizzatore) tipo = "Organizzatore";
+
+            if (u instanceof Partecipante) {
+                tipo = "Partecipante";
+            } if (u instanceof Giudice) {
+                tipo = "Giudice";
+            }else if (u instanceof Organizzatore){ tipo = "Organizzatore";}
 
             System.out.println("- " + u.getLogin() + " (" + tipo + ")");
         }
