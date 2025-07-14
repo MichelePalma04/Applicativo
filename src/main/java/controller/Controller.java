@@ -247,17 +247,17 @@ public class Controller {
             nuovoGiudice.getEventi().add(evento);
             utentiRegistrati.add(nuovoGiudice);
             evento.getGiudici().add(nuovoGiudice);
-            if(utenteCorrente!= null && utenteCorrente .getLogin().equals(utente.getLogin())) {
-                utenteCorrente=nuovoGiudice;
+            if(utenteCorrente!= null && utenteCorrente.getLogin().equals(utente.getLogin())) {
+                utenteCorrente = nuovoGiudice;
                 partecipantCorrente=null;
             }
             invitiPendenti.remove(invitoTrovato);
             setUtenteCorrente(nuovoGiudice);
             setPartecipantCorrente(null);
             System.out.println("Giudici dell'evento "+ evento.getTitolo() + " dopo l'accettazione.");
-            for (Giudice g : evento.getGiudici()) {
-                System.out.println("- " + g.getLogin());
-            }
+                for (Giudice g : evento.getGiudici()) {
+                    System.out.println("- " + g.getLogin());
+                }
             stampaUtentiRegistrati();
 
 
