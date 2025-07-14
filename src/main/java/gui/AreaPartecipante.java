@@ -123,6 +123,7 @@ public class AreaPartecipante {
                 nomedocFied.setVisible(true);
             }
         });
+        controller.stampaUtentiRegistrati();
     }
 
 }
