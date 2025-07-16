@@ -63,18 +63,34 @@ public class ViewEvento {
             JButton visualizzaArea = new JButton("Visualizza info");
             eventoPanel.add(visualizzaArea);
             visualizzaArea.setVisible(false);
+            JButton areaGiudice = new JButton("Area personale giudice");
+            eventoPanel.add(areaGiudice);
+            areaGiudice.setVisible(false);
 
             Utente u = controller.getUtenteCorrente();
             Partecipante partecipante = controller.getPartecipantCorrente();
             Giudice giudiceCorrente = controller.getGiudiceCorrente(ev);
 
-            if(controller.isUtenteGiudice(ev, u) && giudiceCorrente.getEventi().contains(ev)) {
+            if(giudiceCorrente != null && controller.isUtenteGiudice(ev, u) && giudiceCorrente.getEventi().contains(ev)) {
                 iscrivitiButton.setVisible(false);
                 visualizzaArea.setVisible(false);
+                areaGiudice.setVisible(true);
             }else if(partecipante != null && partecipante.getEventi().contains(ev)) {
                 iscrivitiButton.setVisible(false);
                 visualizzaArea.setVisible(true);
             }
+
+            areaGiudice.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    Giudice g =  controller.getGiudiceCorrente(ev);
+                    if(g != null) {
+                        AreaGiudice gui = new AreaGiudice(controller, g, frame);
+                        gui.frameGiudice.setVisible(true);
+                        frameEventi.setVisible(false);
+                    }
+                }
+            });
 
             iscrivitiButton.addActionListener(new ActionListener() {
                 @Override
@@ -115,6 +131,7 @@ public class ViewEvento {
 
             });
             panelEventi.add(eventoPanel);
+
             visualizzaArea.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {

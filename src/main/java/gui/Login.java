@@ -9,9 +9,9 @@ import controller.Controller;
 public class Login {
     private JPanel Login;
     private JPanel PanneloMail;
-    private JLabel mailLabel;
+    private JLabel nomeUtenteLabel;
     private JLabel passwordLabel;
-    private JTextField mailField;
+    private JTextField nomeUtenteField;
     private JPasswordField passwordField;
     private JButton accediButton;
     private JButton registratiButton;
@@ -26,9 +26,15 @@ public class Login {
         accediButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String mail = new String(mailField.getText());
+                String nome = new String(nomeUtenteField.getText());
                 String password = new String(passwordField.getText());
-                Utente u = controller.loginUtente(mail, password);
+
+                if (nome.isEmpty() || password.isEmpty()) {
+                    JOptionPane.showMessageDialog(frame, "Inserisci sia il nome utente che la password!");
+                    return;
+                }
+
+                Utente u = controller.loginUtente(nome, password);
                 if (u != null) {
                     if (u instanceof Organizzatore) {
                         AreaOrganizzatore QuartaGUI = new AreaOrganizzatore(controller, (Organizzatore) u, null, frame);
