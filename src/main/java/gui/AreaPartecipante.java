@@ -62,6 +62,7 @@ public class AreaPartecipante {
             }
         }
 
+
         boolean inTeam = false;
         Team teamUtente = null;
         for (Team team : evento.getTeams()) {
@@ -111,7 +112,7 @@ public class AreaPartecipante {
             caricaDocumento.setVisible(true);
             inserisciDocumento.setVisible(true);
             nomedocFied.setVisible(true);
-        }/*else{
+        }else{
             uniscitiButton.setVisible(true);
             comboBox1.setVisible(true);
             teamLabel.setVisible(true);
@@ -122,7 +123,7 @@ public class AreaPartecipante {
             inserisciDocumento.setVisible(false);
             nomedocFied.setVisible(false);
         }
-        */
+
 
         homeButton.addActionListener(new ActionListener() {
             @Override
