@@ -4,8 +4,8 @@ import java.util.ArrayList;
 public class Partecipante extends Utente {
     private Team team;
     private ArrayList<Evento> eventi;
-   // private boolean partecipazioneDefinita = false;
-   // private boolean partecipazioneSingolo = false;
+    //private ArrayList <Evento> eventiComeSingolo = new ArrayList<>();
+    //private ArrayList <Evento> eventiComeTeam = new ArrayList<>();
 
     public Partecipante(String login, String password, Team team, ArrayList<Evento> eventi) {
         super(login, password);
@@ -25,20 +25,30 @@ public class Partecipante extends Utente {
             this.eventi.add(newE);
         }
     }
-/*
-    public boolean isPartecipazioneDefinita() {
-        return partecipazioneDefinita;
+
+    /*public void aggiungiEventoComeSingolo (Evento e){
+        eventiComeSingolo.add(e);
     }
 
-    public boolean isPartecipazioneSingolo() {
-        return partecipazioneSingolo;
+    public boolean haSceltoSingolo (Evento e){
+        return eventiComeSingolo.contains(e);
     }
 
-    public void setPartecipazioneSingolo (boolean singolo) {
-        this.partecipazioneSingolo = singolo;
-        this.partecipazioneDefinita = true;
+    public void setEventiComeSingolo (ArrayList <Evento> eventoComeSingolo){
+        this.eventiComeSingolo = eventoComeSingolo;
     }
- */
+    public void aggiungiEventoTeam (Evento e){
+        eventiComeTeam.add(e);
+    }
+
+    public boolean haSceltoTeam (Evento e){
+        return eventiComeTeam.contains(e);
+    }
+
+    public void setEventiComeTeam (ArrayList <Evento> eventoComeTeam){
+        this.eventiComeTeam = eventoComeTeam;
+    }*/
+
 
     /*@Override
     public String toString(){

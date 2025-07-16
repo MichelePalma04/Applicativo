@@ -24,6 +24,9 @@ public class AreaPartecipante {
     private JTextField nomedocFied;
     private JPanel panel2;
     private JLabel problema;
+    private JButton creaTeamButton;
+    private JTextField nomeField;
+    private JLabel nomeTeam;
     private Controller controller;
     public JFrame frameAreaPartecipante;
     public JFrame frameEventi;
@@ -49,8 +52,14 @@ public class AreaPartecipante {
         benvenuto.setText("Benvenuto, " + partecipante.getLogin());
 
         ArrayList<Team> teams = evento.getTeams();
-        for (Team team : teams) {
-            comboBox1.addItem(team);
+        if (teams.isEmpty()) {
+            uniscitiButton.setEnabled(false);
+            comboBox1.setEnabled(false);
+            teamLabel.setText("Nessun team disponibile a cui unirsi.");
+        } else {
+            for (Team team : teams) {
+                comboBox1.addItem(team);
+            }
         }
 
         boolean inTeam = false;
@@ -62,18 +71,47 @@ public class AreaPartecipante {
                 break;
             }
         }
-        if(inTeam){
+        creaTeamButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String nome = nomeField.getText();
+                Team nuovoTeam = null;
+                if(!nome.isEmpty()) {
+                    nuovoTeam = new Team(nome, partecipante, null);
+                    evento.getTeams().add(nuovoTeam);
+                    comboBox1.addItem(nuovoTeam);
+                }
+                nomeField.setVisible(false);
+                nomeTeam.setVisible(false);
+                creaTeamButton.setVisible(false);
+                teamLabel.setVisible(false);
+                comboBox1.setVisible(false);
+                uniscitiButton.setVisible(false);
+                avviso.setVisible(false);
+                messaggio.setVisible(true);
+                messaggio.setText("Ora sei un membro del team "+ nuovoTeam.getNomeTeam());
+                problema.setVisible(true);
+                caricaDocumento.setVisible(true);
+                inserisciDocumento.setVisible(true);
+                nomedocFied.setVisible(true);
+            }
+        });
+
+        if(inTeam) {
+            creaTeamButton.setVisible(false);
+            nomeField.setVisible(false);
+            nomeTeam.setVisible(false);
             uniscitiButton.setVisible(false);
             comboBox1.setVisible(false);
             teamLabel.setVisible(false);
             avviso.setVisible(false);
-            messaggio.setText("Ora sei un membro del "+ teamUtente.getNomeTeam());
             messaggio.setVisible(true);
+            messaggio.setText("Ora sei membro del " + teamUtente.getNomeTeam());
             problema.setVisible(true);
             caricaDocumento.setVisible(true);
             inserisciDocumento.setVisible(true);
             nomedocFied.setVisible(true);
-        } else{
+        }/*else{
             uniscitiButton.setVisible(true);
             comboBox1.setVisible(true);
             teamLabel.setVisible(true);
@@ -84,6 +122,7 @@ public class AreaPartecipante {
             inserisciDocumento.setVisible(false);
             nomedocFied.setVisible(false);
         }
+        */
 
         homeButton.addActionListener(new ActionListener() {
             @Override
@@ -112,9 +151,13 @@ public class AreaPartecipante {
                 teamSelected.getPartecipanti().add(partecipante);
                 JOptionPane.showMessageDialog(frameAreaPartecipante, "Ti sei unito al team "+ teamSelected.getNomeTeam());
 
+                creaTeamButton.setVisible(false);
+                nomeField.setVisible(false);
+                nomeTeam.setVisible(false);
                 comboBox1.setVisible(false);
                 teamLabel.setVisible(false);
                 uniscitiButton.setVisible(false);
+                avviso.setVisible(false);
                 messaggio.setVisible(true);
                 messaggio.setText("Ora sei un membro del " + teamSelected.getNomeTeam());
                 problema.setVisible(true);
@@ -124,6 +167,9 @@ public class AreaPartecipante {
             }
         });
         controller.stampaUtentiRegistrati();
+
+
+
     }
 
 }

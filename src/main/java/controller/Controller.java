@@ -94,9 +94,10 @@ public class Controller {
         eventiOrganizzati.add(e);
         eventiOrganizzati.add(e1);
         eventiOrganizzati2.add(e2);
-        e.setTeams(teams);
+        /*e.setTeams(teams);
         e1.setTeams(teams1);
         e2.setTeams(teams2);
+         */
 
     }
 
