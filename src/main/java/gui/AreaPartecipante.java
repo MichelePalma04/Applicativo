@@ -62,32 +62,7 @@ public class AreaPartecipante {
                 break;
             }
         }
-        if(!inTeam){
-            String[] opzioni = {"Singolo", "Team"};
-            int scelta = JOptionPane.showOptionDialog(frameAreaPartecipante, "Vuoi partecipare come singolo o in team? La scelta è definitiva", "Modalità partecipazione", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, opzioni, opzioni[0]);
-            if (scelta == 0) { //singolo
-                uniscitiButton.setVisible(false);
-                comboBox1.setVisible(false);
-                teamLabel.setVisible(false);
-                avviso.setVisible(false);
-                messaggio.setText("Hai scelto di partecipare come singolo");
-                messaggio.setVisible(true);
-                problema.setVisible(true);
-                caricaDocumento.setVisible(true);
-                inserisciDocumento.setVisible(true);
-                nomedocFied.setVisible(true);
-            } else if (scelta == 1){ // team
-                uniscitiButton.setVisible(true);
-                comboBox1.setVisible(true);
-                teamLabel.setVisible(true);
-                avviso.setVisible(true);
-                messaggio.setVisible(false);
-                problema.setVisible(false);
-                caricaDocumento.setVisible(false);
-                inserisciDocumento.setVisible(false);
-                nomedocFied.setVisible(false);
-            }
-        } else{ //già in un team
+        if(inTeam){
             uniscitiButton.setVisible(false);
             comboBox1.setVisible(false);
             teamLabel.setVisible(false);
@@ -98,6 +73,16 @@ public class AreaPartecipante {
             caricaDocumento.setVisible(true);
             inserisciDocumento.setVisible(true);
             nomedocFied.setVisible(true);
+        } else{
+            uniscitiButton.setVisible(true);
+            comboBox1.setVisible(true);
+            teamLabel.setVisible(true);
+            avviso.setVisible(true);
+            messaggio.setVisible(false);
+            problema.setVisible(false);
+            caricaDocumento.setVisible(false);
+            inserisciDocumento.setVisible(false);
+            nomedocFied.setVisible(false);
         }
 
         homeButton.addActionListener(new ActionListener() {
