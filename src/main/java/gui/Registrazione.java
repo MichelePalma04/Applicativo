@@ -10,8 +10,8 @@ import java.awt.event.WindowEvent;
 
 public class Registrazione {
     private JPanel panel;
-    private JLabel email;
-    private JTextField emailField;
+    private JLabel nome;
+    private JTextField nomeUtenteField;
     private JLabel password;
     private JButton registrati;
     private JPasswordField passwordField;
@@ -40,10 +40,15 @@ public class Registrazione {
         registrati.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String email = new String (emailField.getText());
+                String nome = new String (nomeUtenteField.getText());
                 String password = new String (passwordField.getPassword());
 
-                boolean successo = controller.registraUtente(email, password);
+                if (nome.isEmpty() || password.isEmpty()) {
+                    JOptionPane.showMessageDialog(frame, "Inserisci sia il nome utente che la password!");
+                    return;
+                }
+
+                boolean successo = controller.registraUtente(nome, password);
                 if(successo) {
                     JOptionPane.showMessageDialog(frameRegistrazione, "Registrazione completata.");
                     frameRegistrazione.dispose();
