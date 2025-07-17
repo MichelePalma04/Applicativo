@@ -44,7 +44,7 @@ public class Registrazione {
                 String password = new String (passwordField.getPassword());
 
                 if (nome.isEmpty() || password.isEmpty()) {
-                    JOptionPane.showMessageDialog(frame, "Inserisci sia il nome utente che la password!");
+                    JOptionPane.showMessageDialog(frame, "Inserisci sia il nome utente che la password!", "Error", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
 

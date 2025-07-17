@@ -77,8 +77,10 @@ public class VediNotifica {
                 accettabutton.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        controller.accettaInvitoGiudice(evento, controller.getUtenteCorrente());
-                        JOptionPane.showMessageDialog(frameNotifiche, "Ora sei giudice dell'evento: " + evento.getTitolo());
+                        if(controller.accettaInvitoGiudice(evento, controller.getUtenteCorrente())){
+                            JOptionPane.showMessageDialog(frameNotifiche, "Ora sei giudice dell'evento: " + evento.getTitolo());
+                            aggiornaInviti();
+                        }
                         aggiornaInviti();
                     }
                 });

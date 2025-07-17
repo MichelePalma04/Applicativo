@@ -1,6 +1,7 @@
 package controller;
 import gui.Invito;
 import model .*;
+import javax.swing.*;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -206,6 +207,8 @@ public class Controller {
         return null;
     }
 
+
+
     //Funzione che serve a controllare se vengono aggiunti effettivamente i partecipanti a quell evento
     public void stampaPartecipantiEvento(Evento e) {
         System.out.println("Partecipanti evento: " + e.getTitolo());
@@ -233,7 +236,153 @@ public class Controller {
         return true;
     }
 
+    /*
+    public boolean accettaInvitoGiudice (Evento evento, Utente utente){
+        InvitoGiudice invitoTrovato = null;
+        for (InvitoGiudice invito: invitiPendenti) {
+            if(invito.getEvento().equals(evento)&&invito.getUtente().getLogin().equals(utente.getLogin()) && !invito.isAccettato()) {
+                invitoTrovato = invito;
+                break;
+            }
+        }
+        if(invitoTrovato != null) {
+            for(Utente p : evento.getPartecipanti()){
+                if(p.getLogin().equals(utente.getLogin())) {
+                    JOptionPane.showMessageDialog(null, "Non puoi accettare l'invito come giudice: sei già partecipante di questo evento", "Errore", JOptionPane.ERROR_MESSAGE);
+                    invitiPendenti.remove(invitoTrovato);
+                    return false;
+                }
+            }
+            boolean giaGiudice = false;
+            for (Utente g: evento.getGiudici()){
+                if(g.getLogin().equals(utente.getLogin())) {
+                    giaGiudice = true;
+                    break;
+                }
+            }
+
+            if(!giaGiudice) {
+                if(utente instanceof Giudice) {
+                    evento.getGiudici().add((Giudice) utente);
+                }
+            }
+            invitoTrovato.accetta();
+            invitiPendenti.remove(invitoTrovato);
+            System.out.println("Giudici dell'evento "+ evento.getTitolo() + " dopo l'accettazione.");
+            for (Utente g : evento.getGiudici()) {
+                System.out.println("- " + g.getLogin());
+            }
+            stampaUtentiRegistrati();
+
+            return true;
+        }
+        return false;
+    }
+     */
+
+
     public boolean accettaInvitoGiudice(Evento evento, Utente utente) {
+        InvitoGiudice invitoTrovato = null;
+        for (InvitoGiudice invito: invitiPendenti) {
+            if(invito.getEvento().equals(evento)&&invito.getUtente().getLogin().equals(utente.getLogin()) && !invito.isAccettato()) {
+                invitoTrovato = invito;
+                break;
+            }
+        }
+        if(invitoTrovato != null) {
+            for(Partecipante p : evento.getPartecipanti()){
+                if(p.getLogin().equals(utente.getLogin())) {
+                    JOptionPane.showMessageDialog(null, "Non puoi accettare l'invito come giudice: sei già partecipante di questo evento", "Errore", JOptionPane.ERROR_MESSAGE);
+                    invitiPendenti.remove(invitoTrovato);
+                    return false;
+                }
+            }
+            invitoTrovato.accetta();
+
+            /*MODIFICA
+
+            Utente utenteRegistrato = null;
+            for (Utente u: utentiRegistrati) {
+                if(u.getLogin().equals(utente.getLogin())) {
+                    utenteRegistrato = u;
+                    break;
+                }
+            }
+
+            if(utenteRegistrato == null) {
+                return false;
+            }
+
+            Giudice nuovoGiudice = new Giudice (utenteRegistrato.getLogin(), utenteRegistrato.getPassword(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
+            nuovoGiudice.getEventi().add(evento);
+            utentiRegistrati.remove(utenteRegistrato);
+            utentiRegistrati.add(nuovoGiudice);
+            evento.getGiudici().add(nuovoGiudice);
+
+            if(utenteCorrente!=null && utenteCorrente.getLogin().equals(utente.getLogin())) {
+                utenteCorrente = nuovoGiudice;
+            }
+            setUtenteCorrente(nuovoGiudice);
+
+MODIFICA INIZIALE
+            if(!utenteRegistrato.equals(utente)) {}
+            boolean giaGiudiceInEvento = false;
+            for(Giudice g: evento.getGiudici()){
+                if(g.getLogin().equals(utente.getLogin())) {
+                    giaGiudiceInEvento = true;
+                    break;
+                }
+            }
+
+            if(!giaGiudiceInEvento) {
+                Giudice nuovoGiudice = new Giudice(utente.getLogin(), utente.getPassword(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
+                nuovoGiudice.getEventi().add(evento);
+                evento.getGiudici().add(nuovoGiudice);
+            }
+
+ */
+
+            Giudice giudiceEsistente = null;
+
+            for (Utente u : utentiRegistrati) {
+                if (u instanceof Giudice && u.getLogin().equals(utente.getLogin())) {
+                    giudiceEsistente = (Giudice) u;
+                    break;
+                }
+            }
+
+            if (giudiceEsistente != null) {
+                if (!giudiceEsistente.getEventi().contains(evento)) {
+                    giudiceEsistente.getEventi().add(evento);
+                }
+                evento.getGiudici().add(giudiceEsistente);
+                if (utenteCorrente != null && utenteCorrente.getLogin().equals(utente.getLogin())) {
+                    utenteCorrente = giudiceEsistente;
+                }
+                setUtenteCorrente(giudiceEsistente);
+            }else{
+                Giudice nuovoGiudice = new Giudice(utente.getLogin(), utente.getPassword(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
+                nuovoGiudice.getEventi().add(evento);
+                utentiRegistrati.add(nuovoGiudice);
+                evento.getGiudici().add(nuovoGiudice);
+                if (utenteCorrente != null && utenteCorrente.getLogin().equals(utente.getLogin())) {
+                    utenteCorrente = nuovoGiudice;
+                }
+                setUtenteCorrente(nuovoGiudice);
+            }
+
+            invitiPendenti.remove(invitoTrovato);
+            System.out.println("Giudici dell'evento "+ evento.getTitolo() + " dopo l'accettazione.");
+            for (Giudice g : evento.getGiudici()) {
+                System.out.println("- " + g.getLogin());
+            }
+            stampaUtentiRegistrati();
+            return true;
+        }
+        return false;
+    }
+
+    /*public boolean accettaInvitoGiudice(Evento evento, Utente utente) {
         InvitoGiudice invitoTrovato = null;
 
         for(InvitoGiudice invito: invitiPendenti){
@@ -265,7 +414,7 @@ public class Controller {
             return true;
         }
         return false;
-    }
+    }*/
 
     public boolean rifiutaInvitoGiudice (Evento evento, Utente utente) {
         InvitoGiudice invitoDaRimuovere = null;
@@ -301,7 +450,7 @@ public class Controller {
             boolean giaInvitatoAQuestoEvento = false;
 
             for (Giudice g: evento.getGiudici()) {
-                if(g.getLogin().equals(u.getLogin())) {
+                if(g.getLogin().equals(u.getLogin()) && g.getEventi().contains(evento)) {
                     giaGiudiceInQuestoEvento = true;
                     break;
                 }
@@ -313,6 +462,7 @@ public class Controller {
                     break;
                 }
             }
+
 
             for (InvitoGiudice invito: invitiPendenti) {
                 if(invito.getEvento().equals(evento) && invito.getUtente().getLogin().equals(u.getLogin()) && !invito.isAccettato() && !invito.isRifiutato()) {
@@ -358,4 +508,13 @@ public class Controller {
             System.out.println("- " + u.getLogin() + " (" + tipo + ")");
         }
     }
+
+    public boolean assegnaGiudiceDescrizione (Evento evento, Giudice giudice) {
+        if(evento.getGiudici().contains(giudice)){
+            evento.setGiudiceDescrizione(giudice);
+            return true;
+        }
+        return false;
+    }
+
 }

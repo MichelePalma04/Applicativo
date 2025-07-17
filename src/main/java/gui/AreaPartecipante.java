@@ -76,12 +76,15 @@ public class AreaPartecipante {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String nome = nomeField.getText();
-                Team nuovoTeam = null;
-                if(!nome.isEmpty()) {
-                    nuovoTeam = new Team(nome, partecipante, null);
-                    evento.getTeams().add(nuovoTeam);
-                    comboBox1.addItem(nuovoTeam);
+                if(nome.isEmpty()) {
+                    JOptionPane.showMessageDialog(frameAreaPartecipante, "Inserire un nome valido.", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
                 }
+
+                Team nuovoTeam = new Team(nome, partecipante, null);
+                evento.getTeams().add(nuovoTeam);
+                comboBox1.addItem(nuovoTeam);
+
                 nomeField.setVisible(false);
                 nomeTeam.setVisible(false);
                 creaTeamButton.setVisible(false);

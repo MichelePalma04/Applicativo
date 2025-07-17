@@ -85,7 +85,7 @@ public class ViewEvento {
                 public void actionPerformed(ActionEvent e) {
                     Giudice g =  controller.getGiudiceCorrente(ev);
                     if(g != null) {
-                        AreaGiudice gui = new AreaGiudice(controller, g, frame);
+                        AreaGiudice gui = new AreaGiudice(controller, g, frame, frameEventi, ev);
                         gui.frameGiudice.setVisible(true);
                         frameEventi.setVisible(false);
                     }

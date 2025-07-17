@@ -17,6 +17,7 @@ public class Evento {
     private ArrayList<Giudice> giudici;
     private ArrayList<Partecipante> partecipanti;
     private ArrayList<Team> teams = new ArrayList<>();
+    private  Giudice giudiceDescrizione;
 
 
     public Evento (String titolo, String sede, LocalDate dataInizio, LocalDate dataFine, int n_Max_Iscritti, int dim_max_team, LocalDate inizio_registrazioni, LocalDate fine_registrazioni, Organizzatore organizzatore, ArrayList<Giudice> giudici, ArrayList<Partecipante> partecipanti) {
@@ -105,6 +106,10 @@ public class Evento {
         return organizzatore;
     }
 
+    public String getProblema() {
+        return problema;
+    }
+
     public void setProblema (String problema){
         this.problema = problema;
     }
@@ -117,8 +122,11 @@ public class Evento {
         this.teams = teams;
     }
 
-    /*@Override
-    public String toString() {
-        return  getTitolo()+ " "+ getSede() + " "+ getDataInizio()+ " "+ getDataFine() ;
-    }*/
+    public Giudice getGiudiceDescrizione(){
+        return giudiceDescrizione;
+    }
+
+    public void setGiudiceDescrizione(Giudice giudiceDescrizione){
+        this.giudiceDescrizione = giudiceDescrizione;
+    }
 }
