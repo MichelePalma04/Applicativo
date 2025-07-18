@@ -26,80 +26,37 @@ public class Controller {
 
 
     public void initEventi() {
-        ArrayList<Giudice> giudici = new ArrayList<>();
+       // ArrayList<Giudice> giudici = new ArrayList<>();
 
         ArrayList<Evento> eventiOrganizzati = new ArrayList<>();
         ArrayList<Evento> eventiOrganizzati2 = new ArrayList<>();
 
-        ArrayList<Partecipante> partecipanti = new ArrayList<>();
-        ArrayList <Partecipante> partecipanti2 = new ArrayList();
-        ArrayList<Partecipante> partecipanti3 = new ArrayList();
-
-        ArrayList<Partecipante> partecipante1Team1 = new ArrayList<>();
-        ArrayList <Partecipante> partecipante2Team1 = new ArrayList();
-        ArrayList<Partecipante> partecipante3Team1 = new ArrayList();
-        ArrayList<Partecipante> partecipante1Team2 = new ArrayList<>();
-        ArrayList <Partecipante> partecipante2Team2 = new ArrayList();
-        ArrayList<Partecipante> partecipante3Team2 = new ArrayList();
-        ArrayList<Partecipante> partecipante1Team3 = new ArrayList<>();
-        ArrayList <Partecipante> partecipante2Team3 = new ArrayList();
-        ArrayList<Partecipante> partecipante3Team3 = new ArrayList();
-
-        ArrayList <Team> teams = new ArrayList();
-        teams.add(new Team ("Team 1",partecipante1Team1, null));
-        teams.add(new Team ("Team 2",partecipante2Team1, null));
-        teams.add(new Team ("Team 3",partecipante3Team1, null));
-
-        ArrayList <Team> teams1 = new ArrayList();
-        teams1.add(new Team ("Team A",partecipante1Team2, null));
-        teams1.add(new Team ("Team B",partecipante2Team2, null));
-        teams1.add(new Team ("Team C",partecipante3Team2, null));
-
-        ArrayList <Team> teams2 = new ArrayList();
-        teams2.add(new Team ("Team X",partecipante1Team3, null));
-        teams2.add(new Team ("Team Y",partecipante2Team3, null));
-        teams2.add(new Team ("Team Z",partecipante3Team3, null));
-
         //Organizzatori gia presenti in piattaforma
-        Organizzatore o =new Organizzatore("miki&sara", "sara&miki", eventiOrganizzati, giudici);
-        Organizzatore o2 = new Organizzatore("sara&miki", "miki&sara", eventiOrganizzati2, giudici);
+        Organizzatore o =new Organizzatore("miki&sara", "sara&miki", eventiOrganizzati, new ArrayList<>());
+        Organizzatore o2 = new Organizzatore("sara&miki", "miki&sara", eventiOrganizzati2, new ArrayList<>());
         aggiungiUtenteSeNuovo(o);
         aggiungiUtenteSeNuovo(o2);
 
         Evento e = new Evento("Hackathon", "Faggiano",
                                 LocalDate.of(2025, 6, 9), LocalDate.of(2025, 6, 11),
                                 40, 3, LocalDate.of(2025, 6, 3), LocalDate.of(2025, 6, 7),
-                                o, giudici, partecipanti );
+                                o, new ArrayList<>(), new ArrayList<>() );
         Evento e1 = new Evento("Hackaton-Speed", "Puccianiello",
                                 LocalDate.of(2025, 11, 20), LocalDate.of(2025, 11, 22),
                                  30, 5, LocalDate.of(2025, 11, 10), LocalDate.of(2025, 11, 18),
-                                o, giudici, partecipanti2);
+                                o, new ArrayList<>(), new ArrayList<>() );
         Evento e2 = new Evento("Hackaton-Go", "Roma",
                 LocalDate.of(2025, 11, 20), LocalDate.of(2025, 11, 22),
                 30, 5, LocalDate.of(2025, 11, 10), LocalDate.of(2025, 11, 18),
-                o2, giudici,  partecipanti3);
-
-        //se ci sono elementi non li rinserisce
-        /*if(!eventiDisponibili.isEmpty()) {
-            return;
-        }
-         */
+                o2, new ArrayList<>(),  new ArrayList<>() );
 
         aggiungiEventoSeNuovo(e);
         aggiungiEventoSeNuovo(e1);
         aggiungiEventoSeNuovo(e2);
 
-        //eventiDisponibili.add(e);
-        //eventiDisponibili.add(e1);
-        //eventiDisponibili.add(e2);
         eventiOrganizzati.add(e);
         eventiOrganizzati.add(e1);
         eventiOrganizzati2.add(e2);
-        /*e.setTeams(teams);
-        e1.setTeams(teams1);
-        e2.setTeams(teams2);
-         */
-
     }
 
     public void aggiungiUtenteSeNuovo(Utente utente){
@@ -150,16 +107,7 @@ public class Controller {
                         return org;
                     }
                 }
-
-                /*for(Evento e: eventiDisponibili) {
-                    for(Giudice g: e.getGiudici()) {
-                        if(g.getLogin().equals(u.getLogin())) {
-                            utenteCorrente = g;
-                            return g;
-                        }
-                    }
-                }*/
-
+            
                 for(Evento e: eventiDisponibili) {
                     for(Partecipante p: e.getPartecipanti()) {
                         if(p.getLogin().equals(u.getLogin())) {
@@ -236,51 +184,6 @@ public class Controller {
         return true;
     }
 
-    /*
-    public boolean accettaInvitoGiudice (Evento evento, Utente utente){
-        InvitoGiudice invitoTrovato = null;
-        for (InvitoGiudice invito: invitiPendenti) {
-            if(invito.getEvento().equals(evento)&&invito.getUtente().getLogin().equals(utente.getLogin()) && !invito.isAccettato()) {
-                invitoTrovato = invito;
-                break;
-            }
-        }
-        if(invitoTrovato != null) {
-            for(Utente p : evento.getPartecipanti()){
-                if(p.getLogin().equals(utente.getLogin())) {
-                    JOptionPane.showMessageDialog(null, "Non puoi accettare l'invito come giudice: sei già partecipante di questo evento", "Errore", JOptionPane.ERROR_MESSAGE);
-                    invitiPendenti.remove(invitoTrovato);
-                    return false;
-                }
-            }
-            boolean giaGiudice = false;
-            for (Utente g: evento.getGiudici()){
-                if(g.getLogin().equals(utente.getLogin())) {
-                    giaGiudice = true;
-                    break;
-                }
-            }
-
-            if(!giaGiudice) {
-                if(utente instanceof Giudice) {
-                    evento.getGiudici().add((Giudice) utente);
-                }
-            }
-            invitoTrovato.accetta();
-            invitiPendenti.remove(invitoTrovato);
-            System.out.println("Giudici dell'evento "+ evento.getTitolo() + " dopo l'accettazione.");
-            for (Utente g : evento.getGiudici()) {
-                System.out.println("- " + g.getLogin());
-            }
-            stampaUtentiRegistrati();
-
-            return true;
-        }
-        return false;
-    }
-     */
-
-
     public boolean accettaInvitoGiudice(Evento evento, Utente utente) {
         InvitoGiudice invitoTrovato = null;
         for (InvitoGiudice invito: invitiPendenti) {
@@ -298,49 +201,6 @@ public class Controller {
                 }
             }
             invitoTrovato.accetta();
-
-            /*MODIFICA
-
-            Utente utenteRegistrato = null;
-            for (Utente u: utentiRegistrati) {
-                if(u.getLogin().equals(utente.getLogin())) {
-                    utenteRegistrato = u;
-                    break;
-                }
-            }
-
-            if(utenteRegistrato == null) {
-                return false;
-            }
-
-            Giudice nuovoGiudice = new Giudice (utenteRegistrato.getLogin(), utenteRegistrato.getPassword(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
-            nuovoGiudice.getEventi().add(evento);
-            utentiRegistrati.remove(utenteRegistrato);
-            utentiRegistrati.add(nuovoGiudice);
-            evento.getGiudici().add(nuovoGiudice);
-
-            if(utenteCorrente!=null && utenteCorrente.getLogin().equals(utente.getLogin())) {
-                utenteCorrente = nuovoGiudice;
-            }
-            setUtenteCorrente(nuovoGiudice);
-
-MODIFICA INIZIALE
-            if(!utenteRegistrato.equals(utente)) {}
-            boolean giaGiudiceInEvento = false;
-            for(Giudice g: evento.getGiudici()){
-                if(g.getLogin().equals(utente.getLogin())) {
-                    giaGiudiceInEvento = true;
-                    break;
-                }
-            }
-
-            if(!giaGiudiceInEvento) {
-                Giudice nuovoGiudice = new Giudice(utente.getLogin(), utente.getPassword(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
-                nuovoGiudice.getEventi().add(evento);
-                evento.getGiudici().add(nuovoGiudice);
-            }
-
- */
 
             Giudice giudiceEsistente = null;
 
@@ -382,40 +242,6 @@ MODIFICA INIZIALE
         return false;
     }
 
-    /*public boolean accettaInvitoGiudice(Evento evento, Utente utente) {
-        InvitoGiudice invitoTrovato = null;
-
-        for(InvitoGiudice invito: invitiPendenti){
-            if(invito.getEvento().equals(evento) && invito.getUtente().getLogin().equals(utente.getLogin()) && !invito.isAccettato()){
-            invitoTrovato = invito;
-            break;
-            }
-        }
-        if(invitoTrovato != null) {
-            invitoTrovato.accetta();
-            Giudice nuovoGiudice = new Giudice(utente.getLogin(), utente.getPassword(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
-            nuovoGiudice.getEventi().add(evento);
-            utentiRegistrati.add(nuovoGiudice);
-            evento.getGiudici().add(nuovoGiudice);
-            if(utenteCorrente!= null && utenteCorrente.getLogin().equals(utente.getLogin())) {
-                utenteCorrente = nuovoGiudice;
-                //partecipantCorrente=null;
-            }
-            invitiPendenti.remove(invitoTrovato);
-            setUtenteCorrente(nuovoGiudice);
-            //setPartecipantCorrente(null);
-            System.out.println("Giudici dell'evento "+ evento.getTitolo() + " dopo l'accettazione.");
-                for (Giudice g : evento.getGiudici()) {
-                    System.out.println("- " + g.getLogin());
-                }
-            stampaUtentiRegistrati();
-
-
-            return true;
-        }
-        return false;
-    }*/
-
     public boolean rifiutaInvitoGiudice (Evento evento, Utente utente) {
         InvitoGiudice invitoDaRimuovere = null;
 
@@ -440,6 +266,10 @@ MODIFICA INIZIALE
     }
 
     public ArrayList <Utente> getUtentiInvitabili(Evento evento){
+        System.out.println("Evento: " + evento.getTitolo());
+        for (Giudice g : evento.getGiudici()) {
+            System.out.println("Giudice presente: " + g.getLogin());
+        }
         ArrayList <Utente> invitabili = new ArrayList <>();
         for (Utente u : utentiRegistrati) {
             if (u instanceof Organizzatore) {
@@ -450,7 +280,7 @@ MODIFICA INIZIALE
             boolean giaInvitatoAQuestoEvento = false;
 
             for (Giudice g: evento.getGiudici()) {
-                if(g.getLogin().equals(u.getLogin()) && g.getEventi().contains(evento)) {
+                if(g.getLogin().equals(u.getLogin())) {
                     giaGiudiceInQuestoEvento = true;
                     break;
                 }
