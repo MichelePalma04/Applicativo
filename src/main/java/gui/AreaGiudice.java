@@ -1,8 +1,7 @@
 package gui;
 
 import controller.Controller;
-import model.Evento;
-import model.Giudice;
+import model.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -80,6 +79,79 @@ public class AreaGiudice {
             panel.add(message);
             panel.add(scrollProblema);
         }
+
+        if (eventoCorrente.getDocumenti() != null && !eventoCorrente.getDocumenti().isEmpty()) {
+            JLabel documenti = new JLabel("Documenti caricati dai team: ");
+            panel.add (documenti);
+
+            for (Team t: eventoCorrente.getTeams()){
+                boolean haDocumenti = false;
+                for (Documento doc: eventoCorrente.getDocumenti()){
+                    if(doc.getTeam().equals(t)){
+                        haDocumenti = true;
+                        break;
+                    }
+                }
+
+                if(haDocumenti){
+                    JLabel nomeTeam = new JLabel(t.getNomeTeam());
+                    JButton visualizzaDocumenti = new JButton("Visualizza documenti");
+                    JPanel rigaTeam = new JPanel(new FlowLayout(FlowLayout.LEFT));
+                    if(t.haVotato(giudice)){
+                        int votoAssegnato = t.getVotoDiGiudici(giudice);
+                        rigaTeam.add(nomeTeam);
+                        rigaTeam.add(visualizzaDocumenti);
+                        rigaTeam.add(new JLabel("Voto al team: "+ votoAssegnato));
+                        panel.add(rigaTeam);
+                    }else{
+                        JComboBox <Integer> voti = new JComboBox<>();
+                        for(int i = 0; i <= 10; i++){
+                            voti.addItem(i);
+                        }
+                        JButton confermaVoto = new JButton("Conferma");
+                        rigaTeam.add(nomeTeam);
+                        rigaTeam.add(visualizzaDocumenti);
+                        rigaTeam.add(new JLabel("Voto: "));
+                        rigaTeam.add(voti);
+                        rigaTeam.add(confermaVoto);
+                        panel.add(rigaTeam);
+
+                        confermaVoto.addActionListener(new ActionListener() {
+                            @Override
+                            public void actionPerformed(ActionEvent e) {
+                                int votoSelezionato = (int) voti.getSelectedItem();
+                                t.setVotoDiGiudice(giudice, votoSelezionato);
+                                JOptionPane.showMessageDialog(frameGiudice, "Voto "+ votoSelezionato + " assegnato con successo al team "+ t.getNomeTeam());
+                                //voto.setVisible(false);
+                                voti.setVisible(false);
+                                confermaVoto.setVisible(false);
+                                JLabel votoAssegnato = new JLabel("" +votoSelezionato);
+                                rigaTeam.add(votoAssegnato);
+
+                                rigaTeam.revalidate();
+                                rigaTeam.repaint();
+                            }
+                        });
+                    }
+
+                    visualizzaDocumenti.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                           VisualizzaDocumenti nuovaGUI = new VisualizzaDocumenti(controller, t, eventoCorrente, frameGiudice);
+                           nuovaGUI.frameDocumenti.setVisible(true);
+                           frameGiudice.setVisible(false);
+                        }
+                    });
+
+
+                }
+            }
+        }else{
+            JLabel noDocumenti = new JLabel ("Nessun documento caricato dai team.");
+            panel.add (noDocumenti);
+        }
+
+
 
 
         logOutButton.addActionListener(new ActionListener() {

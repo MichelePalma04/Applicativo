@@ -18,6 +18,7 @@ public class Evento {
     private ArrayList<Partecipante> partecipanti;
     private ArrayList<Team> teams = new ArrayList<>();
     private  Giudice giudiceDescrizione;
+    private ArrayList<Documento> documenti;
 
 
     public Evento (String titolo, String sede, LocalDate dataInizio, LocalDate dataFine, int n_Max_Iscritti, int dim_max_team, LocalDate inizio_registrazioni, LocalDate fine_registrazioni, Organizzatore organizzatore, ArrayList<Giudice> giudici, ArrayList<Partecipante> partecipanti) {
@@ -128,5 +129,13 @@ public class Evento {
 
     public void setGiudiceDescrizione(Giudice giudiceDescrizione){
         this.giudiceDescrizione = giudiceDescrizione;
+    }
+
+    public ArrayList<Documento> getDocumenti() {
+        return documenti;
+    }
+
+    public void setDocumenti(ArrayList<Documento> documenti) {
+        this.documenti = documenti;
     }
 }

@@ -1,6 +1,7 @@
 package gui;
 
 import controller.Controller;
+import model.Documento;
 import model.Evento;
 import model.Partecipante;
 import model.Team;
@@ -8,6 +9,7 @@ import model.Team;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class AreaPartecipante {
@@ -19,9 +21,8 @@ public class AreaPartecipante {
     private JLabel teamLabel;
     private JPanel panel;
     private JLabel messaggio;
-    private JButton caricaDocumento;
+    private JButton sfogliaDocumenti;
     private JLabel inserisciDocumento;
-    private JTextField nomedocFied;
     private JPanel panel2;
     private JLabel problema;
     private JButton creaTeamButton;
@@ -33,6 +34,7 @@ public class AreaPartecipante {
     public JFrame frameAccedi;
     public JFrame frameNotifica;
     public JFrame frameGiudice;
+
 
     public AreaPartecipante(Partecipante partecipante, Evento evento, JFrame frame, JFrame frame2, JFrame frame3, JFrame frame4, Controller controller) {
         this.controller = controller;
@@ -50,6 +52,8 @@ public class AreaPartecipante {
 
         avviso.setText("Iscrizione avvenuta con successo!");
         benvenuto.setText("Benvenuto, " + partecipante.getLogin());
+
+
 
         ArrayList<Team> teams = evento.getTeams();
         if (teams.isEmpty()) {
@@ -94,10 +98,16 @@ public class AreaPartecipante {
                 avviso.setVisible(false);
                 messaggio.setVisible(true);
                 messaggio.setText("Ora sei un membro del team "+ nuovoTeam.getNomeTeam());
-                problema.setVisible(true);
-                caricaDocumento.setVisible(true);
-                inserisciDocumento.setVisible(true);
-                nomedocFied.setVisible(true);
+                if(evento.getProblema()!= null && !evento.getProblema().isEmpty()){
+                    problema.setText("Problema da risolvere: " + evento.getProblema());
+                    problema.setVisible(true);
+                    sfogliaDocumenti.setVisible(true);
+                    inserisciDocumento.setVisible(true);
+                }else{
+                    problema.setVisible(false);
+                    sfogliaDocumenti.setVisible(false);
+                    inserisciDocumento.setVisible(false);
+                }
             }
         });
 
@@ -111,10 +121,16 @@ public class AreaPartecipante {
             avviso.setVisible(false);
             messaggio.setVisible(true);
             messaggio.setText("Ora sei membro del " + teamUtente.getNomeTeam());
-            problema.setVisible(true);
-            caricaDocumento.setVisible(true);
-            inserisciDocumento.setVisible(true);
-            nomedocFied.setVisible(true);
+            if(evento.getProblema()!= null && !evento.getProblema().isEmpty()){
+                problema.setText("Problema da risolvere: " + evento.getProblema());
+                problema.setVisible(true);
+                sfogliaDocumenti.setVisible(true);
+                inserisciDocumento.setVisible(true);
+            }else{
+                problema.setVisible(false);
+                sfogliaDocumenti.setVisible(false);
+                inserisciDocumento.setVisible(false);
+            }
         }else{
             uniscitiButton.setVisible(true);
             comboBox1.setVisible(true);
@@ -122,9 +138,8 @@ public class AreaPartecipante {
             avviso.setVisible(true);
             messaggio.setVisible(false);
             problema.setVisible(false);
-            caricaDocumento.setVisible(false);
+            sfogliaDocumenti.setVisible(false);
             inserisciDocumento.setVisible(false);
-            nomedocFied.setVisible(false);
         }
 
 
@@ -164,16 +179,42 @@ public class AreaPartecipante {
                 avviso.setVisible(false);
                 messaggio.setVisible(true);
                 messaggio.setText("Ora sei un membro del " + teamSelected.getNomeTeam());
-                problema.setVisible(true);
-                caricaDocumento.setVisible(true);
-                inserisciDocumento.setVisible(true);
-                nomedocFied.setVisible(true);
+                if(evento.getProblema()!= null && !evento.getProblema().isEmpty()){
+                    problema.setText("Problema da risolvere: " + evento.getProblema());
+                    problema.setVisible(true);
+                    sfogliaDocumenti.setVisible(true);
+                    inserisciDocumento.setVisible(true);
+                }else{
+                    problema.setVisible(false);
+                    sfogliaDocumenti.setVisible(false);
+                    inserisciDocumento.setVisible(false);
+                }
             }
         });
         controller.stampaUtentiRegistrati();
 
 
+        sfogliaDocumenti.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JFileChooser fileChooser = new JFileChooser();
+                int risultato = fileChooser.showOpenDialog(frameAreaPartecipante);
+                if (risultato == JFileChooser.APPROVE_OPTION) {
+                    java.io.File file = fileChooser.getSelectedFile();
 
+                    Team teamUser = null;
+                    for (Team t: evento.getTeams()) {
+                        if (t.getPartecipanti().contains(partecipante)) {
+                            teamUser = t;
+                            break;
+                        }
+                    }
+                    Documento documento = new Documento(LocalDate.now(), file, teamUser);
+                    controller.caricaDocumento (evento, documento);
+                    JOptionPane.showMessageDialog(frameAreaPartecipante, "Documento caricato con successo!");
+                }
+            }
+        });
     }
 
 }

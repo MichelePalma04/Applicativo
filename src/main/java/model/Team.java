@@ -7,6 +7,8 @@ public class Team {
     private ArrayList<Documento> documenti;
     private ArrayList<Partecipante> partecipanti;
     private ArrayList<Voto> voti;
+    private ArrayList <Integer> votiAssegnati = new ArrayList();
+    private ArrayList <Giudice> giudiciCheHannoVotato = new ArrayList();
 
     public Team (String nomeTeam, ArrayList<Partecipante> partecipanti, ArrayList<Voto> voti) {
         this.nomeTeam = nomeTeam;
@@ -30,8 +32,8 @@ public class Team {
         }
     }
 
-    public ArrayList<Voto> getVoti() {
-        return voti;
+    public void setVoti(int voto) {
+        this.voti = voti;
     }
 
     public void addPartecipanti(Partecipante newP) {
@@ -61,5 +63,27 @@ public class Team {
    @Override
     public String toString() {
         return nomeTeam;
+    }
+
+    public boolean haVotato(Giudice g) {
+        return giudiciCheHannoVotato.contains(g);
+    }
+
+    public int getVotoDiGiudici(Giudice g) {
+        int index = giudiciCheHannoVotato.indexOf(g);
+        if (index != -1) {
+            return votiAssegnati.get(index);
+        }
+        return -1;
+    }
+
+    public void setVotoDiGiudice(Giudice g, int voto) {
+        int index = giudiciCheHannoVotato.indexOf(g);
+        if (index != -1) {
+            votiAssegnati.set(index, voto);
+        } else {
+            giudiciCheHannoVotato.add(g);
+            votiAssegnati.add(voto);
+        }
     }
 }

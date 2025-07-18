@@ -57,6 +57,10 @@ public class Controller {
         eventiOrganizzati.add(e);
         eventiOrganizzati.add(e1);
         eventiOrganizzati2.add(e2);
+
+        e.setDocumenti(new ArrayList<>());
+        e1.setDocumenti(new ArrayList<>());
+        e2.setDocumenti(new ArrayList<>());
     }
 
     public void aggiungiUtenteSeNuovo(Utente utente){
@@ -107,7 +111,7 @@ public class Controller {
                         return org;
                     }
                 }
-            
+
                 for(Evento e: eventiDisponibili) {
                     for(Partecipante p: e.getPartecipanti()) {
                         if(p.getLogin().equals(u.getLogin())) {
@@ -347,4 +351,17 @@ public class Controller {
         return false;
     }
 
+    public void caricaDocumento (Evento e, Documento documento) {
+        e.getDocumenti().add(documento);
+    }
+
+    public ArrayList <Documento> getDocumentoTeam(Evento evento, Team team) {
+        ArrayList <Documento> documento = new ArrayList <>();
+        for(Documento doc: evento.getDocumenti()){
+            if(doc.getTeam().equals(team)){
+                documento.add(doc);
+            }
+        }
+        return documento;
+    }
 }
