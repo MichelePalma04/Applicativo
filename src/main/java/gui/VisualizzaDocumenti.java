@@ -29,6 +29,7 @@ public class VisualizzaDocumenti {
         frameDocumenti.setSize(500, 500);
         frameDocumenti.setLocationRelativeTo(null);
         documentiTeam.setText("Documenti del team: " + team.getNomeTeam());
+        scroll.getVerticalScrollBar().setUnitIncrement(20);
 
         panelDocumenti.setLayout(new BoxLayout(panelDocumenti, BoxLayout.Y_AXIS));
         for(Documento doc: controller.getDocumentoTeam(evento, team)) {

@@ -20,6 +20,7 @@ public class ViewEvento {
     private JButton logOutButton1;
     private JButton visualizzaButton;
     private JLabel notifiche;
+    private JPanel panelBottoni;
     private Controller controller;
 
 
