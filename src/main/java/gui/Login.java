@@ -8,7 +8,6 @@ import controller.Controller;
 
 public class Login {
     private JPanel Login;
-    private JPanel PanneloMail;
     private JLabel nomeUtenteLabel;
     private JLabel passwordLabel;
     private JTextField nomeUtenteField;

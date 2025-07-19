@@ -287,7 +287,7 @@ public class Controller {
         }
         return invitabili;
     }
-    
+
     public void aggiungiInvitoGiudice (InvitoGiudice invito){
         invitiGiudice.add(invito);
     }
@@ -309,10 +309,11 @@ public class Controller {
 
             if (u instanceof Partecipante) {
                 tipo = "Partecipante";
-            } if (u instanceof Giudice) {
+            }else if (u instanceof Giudice) {
                 tipo = "Giudice";
-            }else if (u instanceof Organizzatore){ tipo = "Organizzatore";}
-
+            }else if (u instanceof Organizzatore){
+                tipo = "Organizzatore";
+            }
             System.out.println("- " + u.getLogin() + " (" + tipo + ")");
         }
     }
