@@ -22,9 +22,6 @@ public class ViewEvento {
     private JLabel notifiche;
     private JPanel panelBottoni;
     private Controller controller;
-
-
-
     public JFrame frameEventi;
     public JFrame frameAccedi;
     public JFrame frameAreaPartecipante;
