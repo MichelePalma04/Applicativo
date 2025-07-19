@@ -10,6 +10,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class ViewEvento {
@@ -66,6 +67,9 @@ public class ViewEvento {
             JButton areaGiudice = new JButton("Area personale giudice");
             eventoPanel.add(areaGiudice);
             areaGiudice.setVisible(false);
+            JButton classificaButton = new JButton("Vedi classifica");
+            eventoPanel.add(classificaButton);
+            classificaButton.setVisible(false);
 
             Utente u = controller.getUtenteCorrente();
             Partecipante partecipante = controller.getPartecipantCorrente();
@@ -79,6 +83,19 @@ public class ViewEvento {
                 iscrivitiButton.setVisible(false);
                 visualizzaArea.setVisible(true);
             }
+
+            if(ev.getDataFine().isBefore(LocalDate.now())) {
+                classificaButton.setVisible(true);
+            }
+
+            classificaButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    Classifica classificaGUI = new Classifica(ev, controller, frameEventi);
+                    classificaGUI.frameClassifica.setVisible(true);
+                    frameEventi.setVisible(false);
+                }
+            });
 
             areaGiudice.addActionListener(new ActionListener() {
                 @Override

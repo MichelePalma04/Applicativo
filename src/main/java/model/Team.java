@@ -86,4 +86,15 @@ public class Team {
             votiAssegnati.add(voto);
         }
     }
+
+    public double mediaVoti() {
+        if(votiAssegnati == null || votiAssegnati.isEmpty()) {
+            return 0.0;
+        }
+        int somma = 0;
+        for (int voto: votiAssegnati) {
+            somma += voto;
+        }
+        return (double) somma / votiAssegnati.size();
+    }
 }

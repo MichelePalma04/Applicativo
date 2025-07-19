@@ -15,6 +15,7 @@ public class AreaOrganizzatore {
     private JPanel panelEventi;
     private JScrollPane scroll;
     private JButton logOutButton;
+    private JButton creaEventiButton;
     public JFrame frameOrganizzatore;
     public JFrame frameAccessi;
     public JFrame frameInviti;
@@ -61,6 +62,15 @@ public class AreaOrganizzatore {
             public void actionPerformed(ActionEvent e) {
                 frameOrganizzatore.setVisible(false);
                 frameAccessi.setVisible(true);
+            }
+        });
+
+        creaEventiButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                CreazioneEventi nuovaGUI = new CreazioneEventi(controller, frameOrganizzatore, organizzatore, frameAccessi, frameInviti);
+                nuovaGUI.frameCreazioneEventi.setVisible(true);
+                frameOrganizzatore.setVisible(false);
             }
         });
     }

@@ -12,9 +12,9 @@ public class Controller {
     private ArrayList<Evento> eventiDisponibili;
     private Utente utenteCorrente = null;
     private Partecipante partecipantCorrente = null;
+    private Organizzatore organizzatoreCorrente = null;
     private ArrayList<InvitoGiudice> invitiPendenti;
     private ArrayList<InvitoGiudice> invitiGiudice;
-    //private static final ArrayList <Team> teamDisponibili = new ArrayList();
 
     public Controller() {
         this.utentiRegistrati = new ArrayList<>();
@@ -24,19 +24,20 @@ public class Controller {
         initEventi();
     }
 
-
     public void initEventi() {
        // ArrayList<Giudice> giudici = new ArrayList<>();
 
         ArrayList<Evento> eventiOrganizzati = new ArrayList<>();
         ArrayList<Evento> eventiOrganizzati2 = new ArrayList<>();
-
-        //Organizzatori gia presenti in piattaforma
         Organizzatore o =new Organizzatore("miki&sara", "sara&miki", eventiOrganizzati, new ArrayList<>());
         Organizzatore o2 = new Organizzatore("sara&miki", "miki&sara", eventiOrganizzati2, new ArrayList<>());
+
         aggiungiUtenteSeNuovo(o);
         aggiungiUtenteSeNuovo(o2);
 
+        //Organizzatori gia presenti in piattaforma
+
+/*
         Evento e = new Evento("Hackathon", "Faggiano",
                                 LocalDate.of(2025, 6, 9), LocalDate.of(2025, 6, 11),
                                 40, 3, LocalDate.of(2025, 6, 3), LocalDate.of(2025, 6, 7),
@@ -61,7 +62,10 @@ public class Controller {
         e.setDocumenti(new ArrayList<>());
         e1.setDocumenti(new ArrayList<>());
         e2.setDocumenti(new ArrayList<>());
+*/
     }
+
+
 
     public void aggiungiUtenteSeNuovo(Utente utente){
         for(Utente u: utentiRegistrati){
@@ -100,7 +104,37 @@ public class Controller {
         return true;
     }
 
+    public Utente loginUtente (String email, String password) {
+        for (Utente u : utentiRegistrati) {
+            if(u.getLogin().equals(email) && u.getPassword().equals(password)){
+                utenteCorrente = u;
+                if(u instanceof Organizzatore){
+                    organizzatoreCorrente = (Organizzatore) u;
+                    partecipantCorrente = null;
+                }else if (u instanceof Partecipante){
+                    partecipantCorrente = (Partecipante) u;
+                    organizzatoreCorrente = null;
+                }else{
+                    organizzatoreCorrente = null;
+                    partecipantCorrente = null;
+                }
+                return u;
+            }
+        }
+        return null;
+    }
 
+    public boolean creaEvento (String titolo, String sede, LocalDate dataInizio, LocalDate dataFine, int nMaxIscritti, int dimMaxTeam, LocalDate inizioRegistrazioni, LocalDate fineRegistrazioni) {
+        Evento nuovoEvento = new Evento (titolo, sede, dataInizio, dataFine, nMaxIscritti, dimMaxTeam, inizioRegistrazioni, fineRegistrazioni, organizzatoreCorrente, new ArrayList<>(),  new ArrayList<>());
+        if(!eventiDisponibili.contains(nuovoEvento)) {
+            eventiDisponibili.add(nuovoEvento);
+            organizzatoreCorrente.getEventi().add(nuovoEvento);
+            return true;
+        }
+        return false;
+    }
+
+    /*
     public Utente loginUtente (String email, String password) {
         for (Utente u : utentiRegistrati) {
             if (u.getLogin().equals(email) && u.getPassword().equals(password)) {
@@ -127,6 +161,7 @@ public class Controller {
         }
         return null;
     }
+     */
 
 
     public Utente getUtenteCorrente() {

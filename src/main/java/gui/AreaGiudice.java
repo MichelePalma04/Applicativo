@@ -74,10 +74,9 @@ public class AreaGiudice {
 
         if(eventoCorrente.getProblema() != null && !eventoCorrente.getProblema().isEmpty() && !giudice.equals(eventoCorrente.getGiudiceDescrizione())) {
             JLabel message = new JLabel("Problema assegnato per l'evento: \n" + eventoCorrente.getProblema());
-            JScrollPane scrollProblema = new JScrollPane(message);
 
             panel.add(message);
-            panel.add(scrollProblema);
+
         }
 
         if (eventoCorrente.getDocumenti() != null && !eventoCorrente.getDocumenti().isEmpty()) {
