@@ -18,7 +18,7 @@ public class Evento {
     private ArrayList<Partecipante> partecipanti;
     private ArrayList<Team> teams = new ArrayList<>();
     private  Giudice giudiceDescrizione;
-    private ArrayList<Documento> documenti;
+    private ArrayList<Documento> documenti = new ArrayList<>();
 
 
     public Evento (String titolo, String sede, LocalDate dataInizio, LocalDate dataFine, int n_Max_Iscritti, int dim_max_team, LocalDate inizio_registrazioni, LocalDate fine_registrazioni, Organizzatore organizzatore, ArrayList<Giudice> giudici, ArrayList<Partecipante> partecipanti) {

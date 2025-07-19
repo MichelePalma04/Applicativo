@@ -25,47 +25,12 @@ public class Controller {
     }
 
     public void initEventi() {
-       // ArrayList<Giudice> giudici = new ArrayList<>();
-
-        ArrayList<Evento> eventiOrganizzati = new ArrayList<>();
-        ArrayList<Evento> eventiOrganizzati2 = new ArrayList<>();
-        Organizzatore o =new Organizzatore("miki&sara", "sara&miki", eventiOrganizzati, new ArrayList<>());
-        Organizzatore o2 = new Organizzatore("sara&miki", "miki&sara", eventiOrganizzati2, new ArrayList<>());
+        Organizzatore o =new Organizzatore("miki&sara", "sara&miki", new ArrayList<>(), new ArrayList<>());
+        Organizzatore o2 = new Organizzatore("sara&miki", "miki&sara", new ArrayList<>(), new ArrayList<>());
 
         aggiungiUtenteSeNuovo(o);
         aggiungiUtenteSeNuovo(o2);
-
-        //Organizzatori gia presenti in piattaforma
-
-/*
-        Evento e = new Evento("Hackathon", "Faggiano",
-                                LocalDate.of(2025, 6, 9), LocalDate.of(2025, 6, 11),
-                                40, 3, LocalDate.of(2025, 6, 3), LocalDate.of(2025, 6, 7),
-                                o, new ArrayList<>(), new ArrayList<>() );
-        Evento e1 = new Evento("Hackaton-Speed", "Puccianiello",
-                                LocalDate.of(2025, 11, 20), LocalDate.of(2025, 11, 22),
-                                 30, 5, LocalDate.of(2025, 11, 10), LocalDate.of(2025, 11, 18),
-                                o, new ArrayList<>(), new ArrayList<>() );
-        Evento e2 = new Evento("Hackaton-Go", "Roma",
-                LocalDate.of(2025, 11, 20), LocalDate.of(2025, 11, 22),
-                30, 5, LocalDate.of(2025, 11, 10), LocalDate.of(2025, 11, 18),
-                o2, new ArrayList<>(),  new ArrayList<>() );
-
-        aggiungiEventoSeNuovo(e);
-        aggiungiEventoSeNuovo(e1);
-        aggiungiEventoSeNuovo(e2);
-
-        eventiOrganizzati.add(e);
-        eventiOrganizzati.add(e1);
-        eventiOrganizzati2.add(e2);
-
-        e.setDocumenti(new ArrayList<>());
-        e1.setDocumenti(new ArrayList<>());
-        e2.setDocumenti(new ArrayList<>());
-*/
     }
-
-
 
     public void aggiungiUtenteSeNuovo(Utente utente){
         for(Utente u: utentiRegistrati){
@@ -90,9 +55,11 @@ public class Controller {
         return eventiDisponibili;
     }
 
-    public static ArrayList<Team> getTeamDisponibili(Evento evento){
+   /* NON USATA
+   public static ArrayList<Team> getTeamDisponibili(Evento evento){
         return evento.getTeams();
     }
+    */
 
     public boolean registraUtente (String email, String password) {
         for (Utente u : utentiRegistrati) {
@@ -104,46 +71,25 @@ public class Controller {
         return true;
     }
 
-    public Utente loginUtente (String email, String password) {
-        for (Utente u : utentiRegistrati) {
-            if(u.getLogin().equals(email) && u.getPassword().equals(password)){
-                utenteCorrente = u;
-                if(u instanceof Organizzatore){
-                    organizzatoreCorrente = (Organizzatore) u;
-                    partecipantCorrente = null;
-                }else if (u instanceof Partecipante){
-                    partecipantCorrente = (Partecipante) u;
-                    organizzatoreCorrente = null;
-                }else{
-                    organizzatoreCorrente = null;
-                    partecipantCorrente = null;
-                }
-                return u;
-            }
-        }
-        return null;
-    }
-
     public boolean creaEvento (String titolo, String sede, LocalDate dataInizio, LocalDate dataFine, int nMaxIscritti, int dimMaxTeam, LocalDate inizioRegistrazioni, LocalDate fineRegistrazioni) {
         Evento nuovoEvento = new Evento (titolo, sede, dataInizio, dataFine, nMaxIscritti, dimMaxTeam, inizioRegistrazioni, fineRegistrazioni, organizzatoreCorrente, new ArrayList<>(),  new ArrayList<>());
         if(!eventiDisponibili.contains(nuovoEvento)) {
             eventiDisponibili.add(nuovoEvento);
             organizzatoreCorrente.getEventi().add(nuovoEvento);
+            nuovoEvento.setDocumenti(new ArrayList<>());
             return true;
         }
         return false;
     }
 
-    /*
+
     public Utente loginUtente (String email, String password) {
         for (Utente u : utentiRegistrati) {
             if (u.getLogin().equals(email) && u.getPassword().equals(password)) {
-                for(Evento e: eventiDisponibili) {
-                    if (e.getOrganizzatore().getLogin().equals(u.getLogin())) {
-                        Organizzatore org = e.getOrganizzatore();
-                        utenteCorrente = org;
-                        return org;
-                    }
+                if(u instanceof Organizzatore){
+                    organizzatoreCorrente = (Organizzatore) u;
+                    utenteCorrente = u;
+                    return u;
                 }
 
                 for(Evento e: eventiDisponibili) {
@@ -161,8 +107,6 @@ public class Controller {
         }
         return null;
     }
-     */
-
 
     public Utente getUtenteCorrente() {
         return utenteCorrente;
@@ -175,7 +119,6 @@ public class Controller {
     public void setUtenteCorrente(Utente u) {
         this.utenteCorrente = u;
     }
-
 
     public Partecipante getPartecipantCorrente() {
         return partecipantCorrente;
@@ -193,8 +136,6 @@ public class Controller {
         }
         return null;
     }
-
-
 
     //Funzione che serve a controllare se vengono aggiunti effettivamente i partecipanti a quell evento
     public void stampaPartecipantiEvento(Evento e) {
@@ -346,9 +287,7 @@ public class Controller {
         }
         return invitabili;
     }
-
-
-
+    
     public void aggiungiInvitoGiudice (InvitoGiudice invito){
         invitiGiudice.add(invito);
     }
