@@ -1,6 +1,7 @@
 package gui;
 
 import controller.Controller;
+import model.Evento;
 import model.Organizzatore;
 
 import javax.swing.*;
@@ -71,8 +72,8 @@ public class CreazioneEventi {
                 LocalDate inizioReg = LocalDate.parse(inizoRegField.getText());
                 LocalDate fineReg = LocalDate.parse(fineRegField.getText());
 
-                boolean successo = controller.creaEvento(titolo, sede, dataInizio, dataFine, maxIscritti, dimensione, inizioReg, fineReg);
-                if(successo) {
+                Evento nuovoEvento = controller.creaEvento(titolo, sede, dataInizio, dataFine, maxIscritti, dimensione, inizioReg, fineReg);
+                if(nuovoEvento != null) {
                     JOptionPane.showMessageDialog(frameCreazioneEventi , "Evento creato con successo");
                     frameCreazioneEventi.dispose();
                     AreaOrganizzatore nuovaGUI = new AreaOrganizzatore(controller, organizzatore, frameI, frameA);

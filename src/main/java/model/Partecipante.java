@@ -24,6 +24,10 @@ public class Partecipante extends Utente {
         }
     }
 
+    public Team getTeam() {
+        return team;
+    }
+
     public ArrayList<Evento> getEventi(){
         return this.eventi;
     }

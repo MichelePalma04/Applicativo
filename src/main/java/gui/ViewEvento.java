@@ -11,7 +11,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.time.LocalDate;
-import java.util.ArrayList;
+import java.util.List;
 
 public class ViewEvento {
     private JPanel mainPanel;
@@ -37,7 +37,7 @@ public class ViewEvento {
         frameAreaPartecipante = frame2;
         frameNotifiche = frame3;
         controller.initEventi();
-        ArrayList<Evento> eventi = controller.getEventiDisponibili();
+        List<Evento> eventi = controller.getTuttiEventi();
 
         frameEventi = new JFrame("Eventi");
         frameEventi.setContentPane(mainPanel);
@@ -106,7 +106,43 @@ public class ViewEvento {
                     }
                 }
             });
+            iscrivitiButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    Utente u = controller.getUtenteCorrente();
 
+                    // Verifica se l'utente è già partecipante per questo evento (controllo su DB)
+                    Partecipante p = controller.getPartecipanteDaDB(u.getLogin(), ev.getId());
+                    if (p != null) {
+                        // Già iscritto: mostra solo l'area partecipante
+                        iscrivitiButton.setVisible(false);
+                        visualizzaArea.setVisible(true);
+                        AreaPartecipante areaGUI = new AreaPartecipante(p, ev, frameEventi, frameAccedi, frameNotifiche, frameAreaPartecipante, controller);
+                        areaGUI.frameAreaPartecipante.setVisible(true);
+                        frameEventi.setVisible(false);
+                        return;
+                    }
+
+                    // Tenta iscrizione su DB
+                    boolean successo = controller.iscriviPartecipante(u.getLogin(), ev.getId());
+                    if (successo) {
+                        // Recupera ora il nuovo partecipante dal DB
+                        Partecipante nuovoPartecipante = controller.getPartecipanteDaDB(u.getLogin(), ev.getId());
+                        controller.setPartecipantCorrente(nuovoPartecipante);
+
+                        JOptionPane.showMessageDialog(frameEventi, "Iscrizione completata con successo!");
+                        iscrivitiButton.setVisible(false);
+                        visualizzaArea.setVisible(true);
+
+                        AreaPartecipante areaGUI = new AreaPartecipante(nuovoPartecipante, ev, frameEventi, frameAccedi, frameNotifiche, frameAreaPartecipante, controller);
+                        areaGUI.frameAreaPartecipante.setVisible(true);
+                        frameEventi.setVisible(false);
+                    } else {
+                        JOptionPane.showMessageDialog(frameEventi, "Errore durante l'iscrizione!");
+                    }
+                }
+            });
+/*
             iscrivitiButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
@@ -145,6 +181,8 @@ public class ViewEvento {
                 }
 
             });
+
+ */
             panelEventi.add(eventoPanel);
 
             visualizzaArea.addActionListener(new ActionListener() {

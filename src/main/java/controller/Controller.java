@@ -1,6 +1,9 @@
 package controller;
-import dao.UtenteDAO;
+import dao.*;
 import gui.Invito;
+import implementazionePostgresDAO.IEventoDAO;
+import implementazionePostgresDAO.IOrganizzatoreDAO;
+import implementazionePostgresDAO.IPartecipanteDAO;
 import implementazionePostgresDAO.IUtenteDAO;
 import model .*;
 import javax.swing.*;
@@ -10,7 +13,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Controller {
-    private UtenteDAO utenteDAO = new IUtenteDAO();
+    private UtenteDAO utenteDAO;
+    private OrganizzatoreDAO organizzatoreDAO;
+    private PartecipanteDAO partecipanteDAO;
+    private EventoDAO eventoDAO;
+    private TeamDAO teamDAO;
     private Utente utenteCorrente = null;
     private ArrayList<Utente> utentiRegistrati;
     private ArrayList<Evento> eventiDisponibili;
@@ -19,11 +26,16 @@ public class Controller {
     private ArrayList<InvitoGiudice> invitiPendenti;
     private ArrayList<InvitoGiudice> invitiGiudice;
 
-    public Controller() {
+    public Controller(UtenteDAO utenteDAO, OrganizzatoreDAO organizzatoreDAO, PartecipanteDAO partecipanteDAO, EventoDAO eventoDAO, TeamDAO teamDAO) {
         this.utentiRegistrati = new ArrayList<>();
         this.eventiDisponibili = new ArrayList<>();
         this.invitiPendenti = new ArrayList<>();
         this.invitiGiudice = new ArrayList<>();
+        this.utenteDAO = utenteDAO;
+        this.organizzatoreDAO = organizzatoreDAO;
+        this.partecipanteDAO = partecipanteDAO;
+        this.eventoDAO = eventoDAO;
+        this.teamDAO = teamDAO;
         initEventi();
     }
 
@@ -63,7 +75,7 @@ public class Controller {
         return evento.getTeams();
     }
     */
-
+/*
     public boolean registraUtente (String email, String password) {
         for (Utente u : utentiRegistrati) {
             if (u.getLogin().equals(email)) {
@@ -74,6 +86,9 @@ public class Controller {
         return true;
     }
 
+ */
+
+    /*
     public boolean creaEvento (String titolo, String sede, LocalDate dataInizio, LocalDate dataFine, int nMaxIscritti, int dimMaxTeam, LocalDate inizioRegistrazioni, LocalDate fineRegistrazioni) {
         Evento nuovoEvento = new Evento (titolo, sede, dataInizio, dataFine, nMaxIscritti, dimMaxTeam, inizioRegistrazioni, fineRegistrazioni, organizzatoreCorrente, new ArrayList<>(),  new ArrayList<>());
         if(!eventiDisponibili.contains(nuovoEvento)) {
@@ -85,7 +100,9 @@ public class Controller {
         return false;
     }
 
+     */
 
+/*
     public Utente loginUtente (String email, String password) {
         for (Utente u : utentiRegistrati) {
             if (u.getLogin().equals(email) && u.getPassword().equals(password)) {
@@ -110,6 +127,7 @@ public class Controller {
         }
         return null;
     }
+ */
 
     public Utente getUtenteCorrente() {
         return utenteCorrente;
@@ -356,4 +374,80 @@ public class Controller {
         }
         return documento;
     }
+
+
+
+
+    public Utente loginUtente (String login, String password) {
+        Utente u = utenteDAO.getUtentebyLoginAndPassword(login, password);
+
+        if(u==null){
+            return null;
+        }
+
+        if(organizzatoreDAO.isOrganizzatore(u.getLogin())){
+            organizzatoreCorrente = organizzatoreDAO.getOrganizzatore(u.getLogin());
+            utenteCorrente = organizzatoreCorrente;
+            return organizzatoreCorrente;
+        }
+        Evento evento = eventoDAO.getEventoAttivo();
+        if(evento != null) {
+            Partecipante p = partecipanteDAO.getPartecipante(u.getLogin(), evento.getId());
+            if (p != null) {
+                partecipantCorrente = p;
+                utenteCorrente = p;
+                return p;
+            }
+        }
+
+
+        utenteCorrente = u;
+        return u;
+    }
+
+    public boolean registraUtente (String email, String password) {
+       Utente attuale = utenteDAO.getUtentebyLogin(email);
+       if(attuale != null){
+           return false;
+       }
+       Utente nuovoUtente = new Utente(email, password);
+       boolean inserito = utenteDAO.addUtente(nuovoUtente);
+       if(inserito){
+           utentiRegistrati.add(nuovoUtente);
+           return true;
+       }else {
+           return false;
+       }
+    }
+
+    public boolean iscriviPartecipante (String login, int eventoId) {
+        return partecipanteDAO.addPartecipante(login, eventoId);
+    }
+
+    public Partecipante getPartecipanteDaDB(String login, int eventoId) {
+        return partecipanteDAO.getPartecipante(login, eventoId);
+    }
+
+    public Evento creaEvento (String titolo, String sede, LocalDate dataInizio, LocalDate dataFine, int nMaxIscritti, int dimMaxTeam, LocalDate inizioRegistrazioni, LocalDate fineRegistrazioni) {
+        Evento nuovoEvento = new Evento (titolo, sede, dataInizio, dataFine, nMaxIscritti, dimMaxTeam, inizioRegistrazioni, fineRegistrazioni, organizzatoreCorrente, new ArrayList<>(),  new ArrayList<>());
+        // Salva nel DB e ottieni l'evento con id assegnato
+        Evento eventoConId = eventoDAO.aggiungiEvento(nuovoEvento);
+        if (eventoConId != null) {
+            // Puoi opzionalmente aggiornare la lista locale se vuoi una cache
+            // eventiDisponibili.add(eventoConId);
+            organizzatoreCorrente.getEventi().add(eventoConId);
+            eventoConId.setDocumenti(new ArrayList<>());
+            return eventoConId;
+        }
+        return null;
+    }
+
+    public List<Evento> getEventiOrganizzatore(String loginOrganizzatore) {
+        return eventoDAO.getEventiPerOrganizzatore(loginOrganizzatore);
+    }
+
+    public List<Evento> getTuttiEventi() {
+        return eventoDAO.getTuttiEventi();
+    }
 }
+

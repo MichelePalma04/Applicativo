@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class Evento {
+    private int id;
     private String titolo;
     private String sede;
     private LocalDate dataInizio;
@@ -107,6 +108,10 @@ public class Evento {
         return organizzatore;
     }
 
+    public void setOrganizzatore(Organizzatore organizzatore) {
+        this.organizzatore = organizzatore;
+    }
+
     public String getProblema() {
         return problema;
     }
@@ -137,5 +142,13 @@ public class Evento {
 
     public void setDocumenti(ArrayList<Documento> documenti) {
         this.documenti = documenti;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

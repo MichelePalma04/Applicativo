@@ -15,5 +15,13 @@ public class Voto {
         return votazione;
     }
 
+    public Giudice getGiudice() {
+        return giudice;
+    }
+
+    public Team getTeam() {
+        return team;
+    }
+
 
 }

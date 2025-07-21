@@ -9,6 +9,8 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import java.util.List;
+
 public class AreaOrganizzatore {
     private JPanel panel;
     private JLabel benvenuto;
@@ -37,7 +39,8 @@ public class AreaOrganizzatore {
         scroll.getVerticalScrollBar().setUnitIncrement(20);
         panelEventi.setLayout(new BoxLayout(panelEventi, BoxLayout.Y_AXIS));
 
-        for (Evento evento: organizzatore.getEventi()){
+        List <Evento> eventi = controller.getEventiOrganizzatore(organizzatore.getLogin());
+        for (Evento evento: eventi){
             JPanel eventoBox = new JPanel(new BorderLayout());
             JLabel eventoLabel = new JLabel(evento.getTitolo() + " " + evento.getSede());
             JButton infoButton = new JButton("Dettagli");

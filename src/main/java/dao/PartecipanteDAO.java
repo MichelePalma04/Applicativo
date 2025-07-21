@@ -4,9 +4,11 @@ import model.Partecipante;
 import java.util.List;
 
 public interface PartecipanteDAO {
-    Partecipante getPartecipante(String utenteLogin, int eventoId);
+    boolean addPartecipante (String login, int evento_id);
+    Partecipante getPartecipante(String login, int eventoId);
     List<Partecipante> getPartecipantiEvento(int eventoId);
-    List<Partecipante> getPartecipantiUtente(String utenteLogin);
-    boolean aggiungiPartecipante(String utenteLogin, int eventoId, String teamNome);
-    boolean eliminaPartecipante(String utenteLogin, int eventoId);
+    List<Partecipante> getPartecipantiTeam(String nomeTeam, int eventoId);
+    boolean aggiungiPartecipante(Partecipante p, int eventoId);
+    boolean aggiornaPartecipante(Partecipante p, int eventoId);
+    boolean eliminaPartecipante(String login, int eventoId);
 }

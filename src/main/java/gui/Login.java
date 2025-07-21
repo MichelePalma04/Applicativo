@@ -1,5 +1,10 @@
 package gui;
 
+import dao.EventoDAO;
+import dao.OrganizzatoreDAO;
+import dao.PartecipanteDAO;
+import dao.UtenteDAO;
+import implementazionePostgresDAO.*;
 import model .*;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -21,7 +26,13 @@ public class Login {
     private Controller controller;
 
     public Login() {
-        controller = new Controller();
+        IUtenteDAO utenteDAO = new IUtenteDAO();
+        IGiudiceDAO giudiceDAO = new IGiudiceDAO();
+        IPartecipanteDAO partecipanteDAO = new IPartecipanteDAO();
+        IOrganizzatoreDAO organizzatoreDAO = new IOrganizzatoreDAO();
+        IEventoDAO eventoDAO = new IEventoDAO(organizzatoreDAO, giudiceDAO, partecipanteDAO);
+        ITeamDAO teamDAO = new ITeamDAO();
+        controller = new Controller(utenteDAO, organizzatoreDAO, partecipanteDAO, eventoDAO, teamDAO);
         accediButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
