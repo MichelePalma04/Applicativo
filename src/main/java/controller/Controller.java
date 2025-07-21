@@ -1,5 +1,7 @@
 package controller;
+import dao.UtenteDAO;
 import gui.Invito;
+import implementazionePostgresDAO.IUtenteDAO;
 import model .*;
 import javax.swing.*;
 
@@ -8,9 +10,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Controller {
+    private UtenteDAO utenteDAO = new IUtenteDAO();
+    private Utente utenteCorrente = null;
     private ArrayList<Utente> utentiRegistrati;
     private ArrayList<Evento> eventiDisponibili;
-    private Utente utenteCorrente = null;
     private Partecipante partecipantCorrente = null;
     private Organizzatore organizzatoreCorrente = null;
     private ArrayList<InvitoGiudice> invitiPendenti;
@@ -112,8 +115,22 @@ public class Controller {
         return utenteCorrente;
     }
 
+    /*
     public ArrayList<Utente> getUtentiRegistrati() {
         return utentiRegistrati;
+    }
+     */
+
+    public List<Utente> getUtentiRegistrati() {
+        return utenteDAO.getAllUtenti();
+    }
+
+    public boolean eliminaUtente(String login) {
+        return utenteDAO.deleteUtente(login);
+    }
+
+    public boolean aggiornaUtente(Utente utente) {
+        return utenteDAO.updateUtente(utente);
     }
 
     public void setUtenteCorrente(Utente u) {

@@ -15,10 +15,5 @@ public class Voto {
         return votazione;
     }
 
-    /*@Override
-    public String toString () {
-        return "Il giudice "+giudice.getLogin()+" dà " + votazione + " al team " + team.getNomeTeam();
-    }*/
-
 
 }

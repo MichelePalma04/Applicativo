@@ -17,7 +17,7 @@ public class Evento {
     private ArrayList<Giudice> giudici;
     private ArrayList<Partecipante> partecipanti;
     private ArrayList<Team> teams = new ArrayList<>();
-    private  Giudice giudiceDescrizione;
+    private Giudice giudiceDescrizione;
     private ArrayList<Documento> documenti = new ArrayList<>();
 
 
