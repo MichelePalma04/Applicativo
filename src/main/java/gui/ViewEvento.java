@@ -70,14 +70,14 @@ public class ViewEvento {
             classificaButton.setVisible(false);
 
             Utente u = controller.getUtenteCorrente();
-            Partecipante partecipante = controller.getPartecipantCorrente();
+            Partecipante partecipante = controller.getPartecipanteDaDB(u.getLogin(), ev.getId());
             Giudice giudiceCorrente = controller.getGiudiceCorrente(ev);
 
             if(giudiceCorrente != null && controller.isUtenteGiudice(ev, u) && giudiceCorrente.getEventi().contains(ev)) {
                 iscrivitiButton.setVisible(false);
                 visualizzaArea.setVisible(false);
                 areaGiudice.setVisible(true);
-            }else if(partecipante != null && partecipante.getEventi().contains(ev)) {
+            }else if(partecipante != null) {
                 iscrivitiButton.setVisible(false);
                 visualizzaArea.setVisible(true);
             }
@@ -106,6 +106,7 @@ public class ViewEvento {
                     }
                 }
             });
+
             iscrivitiButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
@@ -188,7 +189,7 @@ public class ViewEvento {
             visualizzaArea.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    Partecipante p = controller.getPartecipantCorrente();
+                    Partecipante p = controller.getPartecipanteDaDB(u.getLogin(), ev.getId());
                     AreaPartecipante areaGUI = new AreaPartecipante(p, ev, frameEventi, frameAccedi, frameNotifiche, frameAreaPartecipante, controller);
                     areaGUI.frameAreaPartecipante.setVisible(true);
                     frameEventi.setVisible(false);

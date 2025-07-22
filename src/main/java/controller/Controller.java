@@ -285,7 +285,7 @@ public class Controller {
             System.out.println("Giudice presente: " + g.getLogin());
         }
         ArrayList <Utente> invitabili = new ArrayList <>();
-        for (Utente u : utentiRegistrati) {
+        for (Utente u : utenteDAO.getAllUtenti()) {
             if (u instanceof Organizzatore) {
                 continue;
             }
@@ -389,8 +389,9 @@ public class Controller {
             utenteCorrente = organizzatoreCorrente;
             return organizzatoreCorrente;
         }
-        Evento evento = eventoDAO.getEventoAttivo();
-        if(evento != null) {
+
+        List<Evento> eventi = eventoDAO.getTuttiEventi();
+        for(Evento evento: eventi) {
             Partecipante p = partecipanteDAO.getPartecipante(u.getLogin(), evento.getId());
             if (p != null) {
                 partecipantCorrente = p;
@@ -398,8 +399,6 @@ public class Controller {
                 return p;
             }
         }
-
-
         utenteCorrente = u;
         return u;
     }
