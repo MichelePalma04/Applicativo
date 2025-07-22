@@ -1,6 +1,5 @@
 package implementazionePostgresDAO;
-import dao.EventoDAO;
-import dao.UtenteDAO;
+import dao.*;
 import model.Evento;
 import model.Organizzatore;
 import model.Giudice;
@@ -19,24 +18,24 @@ public class IEventoDAO implements EventoDAO {
     private IGiudiceDAO giudiceDAO;
     private IPartecipanteDAO partecipanteDAO;
 
-    public IEventoDAO(IOrganizzatoreDAO organizzatoreDAO, IGiudiceDAO giudiceDAO, IPartecipanteDAO partecipanteDAO) {
+    public IEventoDAO() {
         try {
             connection = ConnessioneDatabase.getInstance().connection;
-            this.organizzatoreDAO = organizzatoreDAO;
-            this.giudiceDAO = giudiceDAO;
-            this.partecipanteDAO = partecipanteDAO;
+            //this.organizzatoreDAO = organizzatoreDAO;
+            //this.giudiceDAO = giudiceDAO;
+            //this.partecipanteDAO = partecipanteDAO;
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    public Evento getEventoAttivo() {
+    public Evento getEventoAttivo(TeamDAO teamDAO) {
         String sql = "SELECT * FROM evento WHERE CURRENT_DATE BETWEEN inizio_registrazioni AND fine_registrazioni LIMIT 1";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 int eventoId = rs.getInt("id");
-                return getEvento(eventoId); // riusa il tuo metodo esistente
+                return getEvento(eventoId, teamDAO); // riusa il tuo metodo esistente
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -45,7 +44,7 @@ public class IEventoDAO implements EventoDAO {
     }
 
     @Override
-    public Evento getEvento(int eventoId) {
+    public Evento getEvento(int eventoId, TeamDAO teamDAO) {
         String sql = "SELECT * FROM evento WHERE id = ?";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, eventoId);
@@ -61,8 +60,8 @@ public class IEventoDAO implements EventoDAO {
                 LocalDate fineRegistrazioni = rs.getDate("fine_registrazioni").toLocalDate();
 
                 Organizzatore organizzatore = organizzatoreDAO.getOrganizzatore(rs.getString("organizzatore_login"));
-                ArrayList<Giudice> giudici = new ArrayList<>(giudiceDAO.getGiudiciEvento(eventoId));
-                ArrayList<Partecipante> partecipanti = new ArrayList<>(partecipanteDAO.getPartecipantiEvento(eventoId));
+                ArrayList<Giudice> giudici = new ArrayList<>(giudiceDAO.getGiudiciEvento(eventoId, teamDAO));
+                ArrayList<Partecipante> partecipanti = new ArrayList<>(partecipanteDAO.getPartecipantiEvento(eventoId, teamDAO));
 
                 return new Evento(titolo, sede, dataInizio, dataFine, nMaxIscritti, dimMaxTeam, inizioRegistrazioni, fineRegistrazioni, organizzatore, giudici, partecipanti);
             }
@@ -163,5 +162,19 @@ public class IEventoDAO implements EventoDAO {
             e.printStackTrace();
         }
         return eventi;
+    }
+
+    @Override
+    public void setGiudiceDAO (IGiudiceDAO giudiceDAO) {
+        this.giudiceDAO = giudiceDAO;
+    }
+    @Override
+    public void setPartecipanteDAO (IPartecipanteDAO partecipanteDAO) {
+        this.partecipanteDAO = partecipanteDAO;
+    }
+
+    @Override
+    public void setOrganizzatoreDAO (IOrganizzatoreDAO organizzatoreDAO) {
+        this.organizzatoreDAO = organizzatoreDAO;
     }
 }

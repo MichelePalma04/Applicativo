@@ -1,5 +1,6 @@
 package implementazionePostgresDAO;
 import dao.OrganizzatoreDAO;
+import dao.UtenteDAO;
 import model.Organizzatore;
 import model.Evento;
 import model.Giudice;
@@ -12,15 +13,15 @@ import java.util.List;
 public class IOrganizzatoreDAO implements OrganizzatoreDAO {
     private Connection connection;
     private IUtenteDAO utenteDAO;
-    private IEventoDAO eventoDAO;
-    private IGiudiceDAO giudiceDAO;
+   // private IEventoDAO eventoDAO;
+   // private IGiudiceDAO giudiceDAO;
 
-    public IOrganizzatoreDAO( ) {
+    public IOrganizzatoreDAO() {
         try {
             connection = ConnessioneDatabase.getInstance().connection;
-            this.utenteDAO = utenteDAO;
-            this.eventoDAO = eventoDAO;
-            this.giudiceDAO = giudiceDAO;
+           // this.utenteDAO = utenteDAO;
+        //    this.eventoDAO = eventoDAO;
+         //   this.giudiceDAO = giudiceDAO;
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -94,5 +95,10 @@ public class IOrganizzatoreDAO implements OrganizzatoreDAO {
             if (rs.next() && rs.getInt(1) > 0) return true;
         } catch (SQLException e) { e.printStackTrace(); }
         return false;
+    }
+
+    @Override
+    public void setUtenteDAO(IUtenteDAO utenteDAO) {
+        this.utenteDAO = utenteDAO;
     }
 }

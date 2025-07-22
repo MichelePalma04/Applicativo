@@ -19,8 +19,8 @@ public class ITeamDAO implements TeamDAO {
     public ITeamDAO() {
         try {
             connection = ConnessioneDatabase.getInstance().connection;
-            this.partecipanteDAO = new IPartecipanteDAO();
-            this.votoDAO = new IVotoDAO();
+            //this.partecipanteDAO = partecipanteDAO;
+           // this.votoDAO = votoDAO;
         } catch (SQLException e) {
             System.out.println("Errore nella connessione al database: " + e.getMessage());
         }
@@ -34,7 +34,7 @@ public class ITeamDAO implements TeamDAO {
             ps.setInt(2, eventoId);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                ArrayList<Partecipante> partecipanti = new ArrayList<>(partecipanteDAO.getPartecipantiTeam(nomeTeam, eventoId));
+                ArrayList<Partecipante> partecipanti = new ArrayList<>(partecipanteDAO.getPartecipantiTeam(nomeTeam, eventoId, this));
                 ArrayList <Voto> voto = new ArrayList <>(votoDAO.getVotiTeam(nomeTeam, eventoId));
                 return new Team(nomeTeam, partecipanti, voto);
             }
@@ -85,5 +85,15 @@ public class ITeamDAO implements TeamDAO {
             System.out.println("Errore nell'eliminazione team: " + e.getMessage());
             return false;
         }
+    }
+
+    @Override
+    public void setVotoDAO(IVotoDAO votoDAO) {
+        this.votoDAO = votoDAO;
+    }
+
+    @Override
+    public void setPartecipanteDAO(IPartecipanteDAO partecipanteDAO) {
+        this.partecipanteDAO = partecipanteDAO;
     }
 }

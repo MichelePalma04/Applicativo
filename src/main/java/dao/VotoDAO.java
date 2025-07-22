@@ -1,5 +1,7 @@
 package dao;
 
+import implementazionePostgresDAO.IGiudiceDAO;
+import implementazionePostgresDAO.ITeamDAO;
 import model.Voto;
 import java.util.List;
 
@@ -10,4 +12,6 @@ public interface VotoDAO {
     boolean aggiungiVoto(Voto voto, int eventoId);
     boolean aggiornaVoto(Voto voto, int id);
     boolean eliminaVoto(int id);
+    void setGiudiceDAO (IGiudiceDAO giudiceDAO);
+    void setTeamDAO (ITeamDAO teamDAO);
 }

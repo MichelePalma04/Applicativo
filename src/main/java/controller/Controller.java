@@ -390,9 +390,9 @@ public class Controller {
             utenteCorrente = organizzatoreCorrente;
             return organizzatoreCorrente;
         }
-        Evento evento = eventoDAO.getEventoAttivo();
+        Evento evento = eventoDAO.getEventoAttivo(teamDAO);
         if(evento != null) {
-            Partecipante p = partecipanteDAO.getPartecipante(u.getLogin(), evento.getId());
+            Partecipante p = partecipanteDAO.getPartecipante(u.getLogin(), evento.getId(), teamDAO);
             if (p != null) {
                 partecipantCorrente = p;
                 utenteCorrente = p;
@@ -425,7 +425,7 @@ public class Controller {
     }
 
     public Partecipante getPartecipanteDaDB(String login, int eventoId) {
-        return partecipanteDAO.getPartecipante(login, eventoId);
+        return partecipanteDAO.getPartecipante(login, eventoId, teamDAO);
     }
 
     public Evento creaEvento (String titolo, String sede, LocalDate dataInizio, LocalDate dataFine, int nMaxIscritti, int dimMaxTeam, LocalDate inizioRegistrazioni, LocalDate fineRegistrazioni) {
