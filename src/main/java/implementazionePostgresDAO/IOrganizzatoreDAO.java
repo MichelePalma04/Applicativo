@@ -13,15 +13,12 @@ import java.util.List;
 public class IOrganizzatoreDAO implements OrganizzatoreDAO {
     private Connection connection;
     private IUtenteDAO utenteDAO;
-   // private IEventoDAO eventoDAO;
-   // private IGiudiceDAO giudiceDAO;
+
 
     public IOrganizzatoreDAO() {
         try {
             connection = ConnessioneDatabase.getInstance().connection;
-           // this.utenteDAO = utenteDAO;
-        //    this.eventoDAO = eventoDAO;
-         //   this.giudiceDAO = giudiceDAO;
+            //this.utenteDAO = utenteDAO;
         } catch (SQLException e) {
             e.printStackTrace();
         }

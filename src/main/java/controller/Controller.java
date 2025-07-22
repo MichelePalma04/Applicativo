@@ -1,10 +1,7 @@
 package controller;
 import dao.*;
 import gui.Invito;
-import implementazionePostgresDAO.IEventoDAO;
-import implementazionePostgresDAO.IOrganizzatoreDAO;
-import implementazionePostgresDAO.IPartecipanteDAO;
-import implementazionePostgresDAO.IUtenteDAO;
+import implementazionePostgresDAO.*;
 import model .*;
 import javax.swing.*;
 
@@ -18,6 +15,7 @@ public class Controller {
     private PartecipanteDAO partecipanteDAO;
     private EventoDAO eventoDAO;
     private TeamDAO teamDAO;
+    private GiudiceDAO giudiceDAO;
     private Utente utenteCorrente = null;
     private ArrayList<Utente> utentiRegistrati;
     private ArrayList<Evento> eventiDisponibili;
@@ -26,7 +24,7 @@ public class Controller {
     private ArrayList<InvitoGiudice> invitiPendenti;
     private ArrayList<InvitoGiudice> invitiGiudice;
 
-    public Controller(UtenteDAO utenteDAO, OrganizzatoreDAO organizzatoreDAO, PartecipanteDAO partecipanteDAO, EventoDAO eventoDAO, TeamDAO teamDAO) {
+    public Controller(UtenteDAO utenteDAO, OrganizzatoreDAO organizzatoreDAO, PartecipanteDAO partecipanteDAO, GiudiceDAO giudiceDAO, EventoDAO eventoDAO, TeamDAO teamDAO) {
         this.utentiRegistrati = new ArrayList<>();
         this.eventiDisponibili = new ArrayList<>();
         this.invitiPendenti = new ArrayList<>();
@@ -36,6 +34,7 @@ public class Controller {
         this.partecipanteDAO = partecipanteDAO;
         this.eventoDAO = eventoDAO;
         this.teamDAO = teamDAO;
+        this.giudiceDAO = giudiceDAO;
         initEventi();
     }
 
@@ -390,9 +389,9 @@ public class Controller {
             utenteCorrente = organizzatoreCorrente;
             return organizzatoreCorrente;
         }
-        Evento evento = eventoDAO.getEventoAttivo(teamDAO);
+        Evento evento = eventoDAO.getEventoAttivo();
         if(evento != null) {
-            Partecipante p = partecipanteDAO.getPartecipante(u.getLogin(), evento.getId(), teamDAO);
+            Partecipante p = partecipanteDAO.getPartecipante(u.getLogin(), evento.getId());
             if (p != null) {
                 partecipantCorrente = p;
                 utenteCorrente = p;
@@ -425,7 +424,7 @@ public class Controller {
     }
 
     public Partecipante getPartecipanteDaDB(String login, int eventoId) {
-        return partecipanteDAO.getPartecipante(login, eventoId, teamDAO);
+        return partecipanteDAO.getPartecipante(login, eventoId);
     }
 
     public Evento creaEvento (String titolo, String sede, LocalDate dataInizio, LocalDate dataFine, int nMaxIscritti, int dimMaxTeam, LocalDate inizioRegistrazioni, LocalDate fineRegistrazioni) {

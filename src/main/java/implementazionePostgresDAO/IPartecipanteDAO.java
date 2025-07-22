@@ -17,15 +17,15 @@ public class IPartecipanteDAO implements PartecipanteDAO{
 
     private Connection connection;
     private IUtenteDAO utenteDAO;
-   // private ITeamDAO teamDAO;
-    private IEventoDAO eventoDAO;
+    private ITeamDAO teamDAO;
+   // private IEventoDAO eventoDAO;
 
     public IPartecipanteDAO() {
         try{
             connection = ConnessioneDatabase.getInstance().connection;
-            //this.utenteDAO = utenteDAO;
+           // this.utenteDAO = utenteDAO;
            // this.teamDAO = teamDAO;
-            //this.eventoDAO = eventoDAO;
+          //  this.eventoDAO = eventoDAO;
         }catch(SQLException e){
             System.out.println("Errore nella connessione al database: "+ e.getMessage());
         }
@@ -44,7 +44,7 @@ public class IPartecipanteDAO implements PartecipanteDAO{
         }
     }
 
-    public Partecipante getPartecipante(String login, int evento_id, TeamDAO teamDAO) {
+    public Partecipante getPartecipante(String login, int evento_id) {
         String sql = "SELECT * FROM partecipante WHERE utente_login = ? AND evento_id = ?";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setString(1, login);
@@ -62,14 +62,14 @@ public class IPartecipanteDAO implements PartecipanteDAO{
     }
 
     @Override
-    public List<Partecipante> getPartecipantiEvento(int eventoId, TeamDAO teamDAO) {
+    public List<Partecipante> getPartecipantiEvento(int eventoId) {
         List<Partecipante> lista = new ArrayList<>();
         String sql = "SELECT * FROM partecipante WHERE evento_id = ?";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, eventoId);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                lista.add(getPartecipante(rs.getString("utente_login"), eventoId, teamDAO));
+                lista.add(getPartecipante(rs.getString("utente_login"), eventoId));
             }
         } catch (SQLException e) {
             System.out.println("Errore nel recupero partecipanti: " + e.getMessage());
@@ -78,7 +78,7 @@ public class IPartecipanteDAO implements PartecipanteDAO{
     }
 
     @Override
-    public List<Partecipante> getPartecipantiTeam(String nomeTeam, int eventoId, TeamDAO teamDAO) {
+    public List<Partecipante> getPartecipantiTeam(String nomeTeam, int eventoId) {
         List<Partecipante> lista = new ArrayList<>();
         String sql = "SELECT utente_login FROM partecipante WHERE team_nome = ? AND evento_id = ?";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -86,7 +86,7 @@ public class IPartecipanteDAO implements PartecipanteDAO{
             ps.setInt(2, eventoId);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                lista.add(getPartecipante(rs.getString("utente_login"), eventoId, teamDAO));
+                lista.add(getPartecipante(rs.getString("utente_login"), eventoId));
             }
         } catch (SQLException e) {}
         return lista;
@@ -131,13 +131,21 @@ public class IPartecipanteDAO implements PartecipanteDAO{
         }
     }
 
+    /*
     @Override
     public void setEventoDAO (IEventoDAO eventoDAO) {
         this.eventoDAO = eventoDAO;
     }
+     */
 
     @Override
     public void setUtenteDAO (IUtenteDAO utenteDAO) {
         this.utenteDAO = utenteDAO;
     }
+
+    @Override
+    public void setTeamDAO (ITeamDAO teamDAO){
+        this.teamDAO = teamDAO;
+    }
+
 }

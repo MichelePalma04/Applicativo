@@ -28,26 +28,27 @@ public class Login {
     public Login() {
         IUtenteDAO utenteDAO = new IUtenteDAO();
         IOrganizzatoreDAO organizzatoreDAO = new IOrganizzatoreDAO();
-        IEventoDAO eventoDAO = new IEventoDAO();
-        IGiudiceDAO giudiceDAO = new IGiudiceDAO();
         IPartecipanteDAO partecipanteDAO = new IPartecipanteDAO();
+        IEventoDAO eventoDAO = new IEventoDAO();
         ITeamDAO teamDAO = new ITeamDAO();
+        IGiudiceDAO giudiceDAO = new IGiudiceDAO();
         IVotoDAO votoDAO = new IVotoDAO();
-        eventoDAO.setGiudiceDAO(giudiceDAO);
-        eventoDAO.setPartecipanteDAO(partecipanteDAO);
-        eventoDAO.setOrganizzatoreDAO(organizzatoreDAO);
-        giudiceDAO.setEventoDAO(eventoDAO);
-        giudiceDAO.setUtenteDAO(utenteDAO);
-        giudiceDAO.setVotoDAO(votoDAO);
-        giudiceDAO.setOrganizzatoreDAO(organizzatoreDAO);
         organizzatoreDAO.setUtenteDAO(utenteDAO);
-        partecipanteDAO.setEventoDAO(eventoDAO);
         partecipanteDAO.setUtenteDAO(utenteDAO);
+        partecipanteDAO.setTeamDAO(teamDAO);
+        eventoDAO.setPartecipanteDAO(partecipanteDAO);
+        eventoDAO.setTeamDAO(teamDAO);
+        eventoDAO.setGiudiceDAO(giudiceDAO);
+        eventoDAO.setOrganizzatoreDAO(organizzatoreDAO);
         teamDAO.setPartecipanteDAO(partecipanteDAO);
         teamDAO.setVotoDAO(votoDAO);
+        giudiceDAO.setUtenteDAO(utenteDAO);
+        giudiceDAO.setOrganizzatoreDAO(organizzatoreDAO);
+        giudiceDAO.setVotoDAO(votoDAO);
+        giudiceDAO.setEventoDAO(eventoDAO);
         votoDAO.setGiudiceDAO(giudiceDAO);
         votoDAO.setTeamDAO(teamDAO);
-        controller = new Controller(utenteDAO, organizzatoreDAO, partecipanteDAO, eventoDAO, teamDAO);
+        controller = new Controller(utenteDAO, organizzatoreDAO, partecipanteDAO, giudiceDAO, eventoDAO, teamDAO);
 
         accediButton.addActionListener(new ActionListener() {
             @Override

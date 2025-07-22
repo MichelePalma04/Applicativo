@@ -34,7 +34,7 @@ public class ITeamDAO implements TeamDAO {
             ps.setInt(2, eventoId);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                ArrayList<Partecipante> partecipanti = new ArrayList<>(partecipanteDAO.getPartecipantiTeam(nomeTeam, eventoId, this));
+                ArrayList<Partecipante> partecipanti = new ArrayList<>(partecipanteDAO.getPartecipantiTeam(nomeTeam, eventoId));
                 ArrayList <Voto> voto = new ArrayList <>(votoDAO.getVotiTeam(nomeTeam, eventoId));
                 return new Team(nomeTeam, partecipanti, voto);
             }
@@ -96,4 +96,5 @@ public class ITeamDAO implements TeamDAO {
     public void setPartecipanteDAO(IPartecipanteDAO partecipanteDAO) {
         this.partecipanteDAO = partecipanteDAO;
     }
+
 }

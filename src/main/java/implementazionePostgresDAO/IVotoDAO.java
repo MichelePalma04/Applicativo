@@ -1,5 +1,7 @@
 package implementazionePostgresDAO;
 
+import dao.GiudiceDAO;
+import dao.PartecipanteDAO;
 import dao.VotoDAO;
 import model.Voto;
 import model.Giudice;
@@ -18,7 +20,7 @@ public class IVotoDAO implements VotoDAO {
     public IVotoDAO() {
         try {
             connection = ConnessioneDatabase.getInstance().connection;
-           // this.giudiceDAO = giudiceDAO;
+            //this.giudiceDAO = giudiceDAO;
             //this.teamDAO = teamDAO;
         } catch (SQLException e) {}
     }

@@ -8,12 +8,13 @@ import java.util.List;
 
 public interface PartecipanteDAO {
     boolean addPartecipante (String login, int evento_id);
-    Partecipante getPartecipante(String login, int eventoId, TeamDAO teamDAO);
-    List<Partecipante> getPartecipantiEvento(int eventoId, TeamDAO teamDAO);
-    List<Partecipante> getPartecipantiTeam(String nomeTeam, int eventoId, TeamDAO teamDAO);
+    Partecipante getPartecipante(String login, int eventoId);
+    List<Partecipante> getPartecipantiEvento(int eventoId);
+    List<Partecipante> getPartecipantiTeam(String nomeTeam, int eventoId);
     boolean aggiungiPartecipante(Partecipante p, int eventoId);
     boolean aggiornaPartecipante(Partecipante p, int eventoId);
     boolean eliminaPartecipante(String login, int eventoId);
-    void setEventoDAO (IEventoDAO eventoDAO);
+    //void setEventoDAO (IEventoDAO eventoDAO);
     void setUtenteDAO (IUtenteDAO utenteDAO);
+    void setTeamDAO (ITeamDAO teamDAO);
 }

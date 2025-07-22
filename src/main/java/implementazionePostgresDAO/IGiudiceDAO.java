@@ -1,5 +1,6 @@
 package implementazionePostgresDAO;
 import dao.GiudiceDAO;
+import dao.PartecipanteDAO;
 import dao.TeamDAO;
 import model.Giudice;
 import model.Evento;
@@ -21,11 +22,13 @@ public class IGiudiceDAO implements GiudiceDAO {
     public IGiudiceDAO() {
         try {
             connection = ConnessioneDatabase.getInstance().connection;
-            //this.utenteDAO = utenteDAO;
-            //this.eventoDAO = eventoDAO;
-            //this.votoDAO = votoDAO;
-            //this.organizzatoreDAO = organizzatoreDAO;
-        } catch (SQLException e) {}
+           // this.utenteDAO = utenteDAO;
+           // this.eventoDAO = eventoDAO;
+           // this.votoDAO = votoDAO;
+           // this.organizzatoreDAO = organizzatoreDAO;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -38,7 +41,7 @@ public class IGiudiceDAO implements GiudiceDAO {
             if (rs.next()) {
                 String password = utenteDAO.getUtentebyLogin(login).getPassword();
                 ArrayList<Evento> eventi = new ArrayList<>();
-                eventi.add(eventoDAO.getEvento(eventoId, teamDAO));
+                eventi.add(eventoDAO.getEvento(eventoId));
                 ArrayList<Voto> voti = new ArrayList<>(votoDAO.getVotiGiudice(login));
                 ArrayList<Organizzatore> organizzatori = new ArrayList<>(organizzatoreDAO.getOrganizzatoriEvento(eventoId));
                 return new Giudice(login, password, eventi, voti, organizzatori);
@@ -95,14 +98,17 @@ public class IGiudiceDAO implements GiudiceDAO {
         this.eventoDAO = eventoDAO;
     }
 
+    @Override
     public void setVotoDAO(IVotoDAO votoDAO) {
         this.votoDAO = votoDAO;
     }
 
+    @Override
     public void setOrganizzatoreDAO (IOrganizzatoreDAO organizzatoreDAO) {
         this.organizzatoreDAO = organizzatoreDAO;
     }
 
+    @Override
     public void setUtenteDAO(IUtenteDAO utenteDAO) {
         this.utenteDAO = utenteDAO;
     }

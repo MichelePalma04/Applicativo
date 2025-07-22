@@ -17,6 +17,7 @@ public class IEventoDAO implements EventoDAO {
     private IOrganizzatoreDAO organizzatoreDAO;
     private IGiudiceDAO giudiceDAO;
     private IPartecipanteDAO partecipanteDAO;
+    private ITeamDAO teamDAO;
 
     public IEventoDAO() {
         try {
@@ -24,18 +25,19 @@ public class IEventoDAO implements EventoDAO {
             //this.organizzatoreDAO = organizzatoreDAO;
             //this.giudiceDAO = giudiceDAO;
             //this.partecipanteDAO = partecipanteDAO;
+            //this.teamDAO = teamDAO;
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    public Evento getEventoAttivo(TeamDAO teamDAO) {
+    public Evento getEventoAttivo() {
         String sql = "SELECT * FROM evento WHERE CURRENT_DATE BETWEEN inizio_registrazioni AND fine_registrazioni LIMIT 1";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 int eventoId = rs.getInt("id");
-                return getEvento(eventoId, teamDAO); // riusa il tuo metodo esistente
+                return getEvento(eventoId); // riusa il tuo metodo esistente
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -44,7 +46,7 @@ public class IEventoDAO implements EventoDAO {
     }
 
     @Override
-    public Evento getEvento(int eventoId, TeamDAO teamDAO) {
+    public Evento getEvento(int eventoId) {
         String sql = "SELECT * FROM evento WHERE id = ?";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, eventoId);
@@ -61,7 +63,7 @@ public class IEventoDAO implements EventoDAO {
 
                 Organizzatore organizzatore = organizzatoreDAO.getOrganizzatore(rs.getString("organizzatore_login"));
                 ArrayList<Giudice> giudici = new ArrayList<>(giudiceDAO.getGiudiciEvento(eventoId, teamDAO));
-                ArrayList<Partecipante> partecipanti = new ArrayList<>(partecipanteDAO.getPartecipantiEvento(eventoId, teamDAO));
+                ArrayList<Partecipante> partecipanti = new ArrayList<>(partecipanteDAO.getPartecipantiEvento(eventoId));
 
                 return new Evento(titolo, sede, dataInizio, dataFine, nMaxIscritti, dimMaxTeam, inizioRegistrazioni, fineRegistrazioni, organizzatore, giudici, partecipanti);
             }
@@ -176,5 +178,10 @@ public class IEventoDAO implements EventoDAO {
     @Override
     public void setOrganizzatoreDAO (IOrganizzatoreDAO organizzatoreDAO) {
         this.organizzatoreDAO = organizzatoreDAO;
+    }
+
+    @Override
+    public void setTeamDAO (ITeamDAO teamDAO){
+        this.teamDAO = teamDAO;
     }
 }
