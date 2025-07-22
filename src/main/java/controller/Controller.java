@@ -487,6 +487,14 @@ public class Controller {
 
     public boolean accettaInvitoGiudice(InvitoGiudice invito, Utente utente) {
         // Imposta lo stato
+        Partecipante partecipante = partecipanteDAO.getPartecipante(utente.getLogin(), invito.getEvento().getId());
+        if(partecipante != null){
+            JOptionPane.showMessageDialog(null, "Non puoi accettare l'invito come giudice: sei già partecipante di questo evento", "error", JOptionPane.ERROR_MESSAGE);
+            invito.setAccettato(false);
+            invito.setRifiutato(true);
+            invitoGiudiceDAO.updateInvitoGiudice(invito);
+            return false;
+        }
         invito.setAccettato(true);
         invito.setRifiutato(false);
         // Aggiorna nel database tramite DAO
