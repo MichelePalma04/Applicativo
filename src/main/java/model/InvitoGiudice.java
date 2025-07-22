@@ -5,12 +5,22 @@ public class InvitoGiudice {
     private Utente utente;
     private boolean accettato;
     private boolean rifiutato;
+    private int id;
 
-    public InvitoGiudice(Evento evento, Utente utente) {
+    //Costruttore per nuovo invito
+    public InvitoGiudice(Evento evento, Utente utente, boolean accettato, boolean rifiutato) {
         this.evento = evento;
         this.utente = utente;
         this.accettato = false;
         this.rifiutato = false;
+    }
+
+    public InvitoGiudice(int id, Evento evento, Utente utente, boolean accettato, boolean rifiutato) {
+        this.evento = evento;
+        this.id = id;
+        this.utente = utente;
+        this.accettato = accettato;
+        this.rifiutato = rifiutato;
     }
 
 
@@ -34,7 +44,19 @@ public class InvitoGiudice {
         this.accettato = true;
     }
 
-    public void setRifiutato() {
-        this.rifiutato = true;
+    public void setRifiutato(boolean rifiutato) {
+        this.rifiutato = rifiutato;
+    }
+
+    public void setAccettato(boolean accettato) {
+        this.accettato = accettato;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getId() {
+        return id;
     }
 }

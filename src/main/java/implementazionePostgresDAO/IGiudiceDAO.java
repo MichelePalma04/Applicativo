@@ -65,14 +65,16 @@ public class IGiudiceDAO implements GiudiceDAO {
     }
 
     @Override
-    public boolean aggiungiGiudice(Giudice g, int eventoId) {
+    public boolean aggiungiGiudice(String login, int eventoId) {
         String sql = "INSERT INTO giudice (utente_login, evento_id) VALUES (?, ?)";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
-            ps.setString(1, g.getLogin());
+            ps.setString(1, login);
             ps.setInt(2, eventoId);
             ps.executeUpdate();
             return true;
-        } catch (SQLException e) {}
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return false;
     }
 

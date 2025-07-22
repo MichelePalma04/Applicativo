@@ -16,6 +16,7 @@ public class Controller {
     private EventoDAO eventoDAO;
     private TeamDAO teamDAO;
     private GiudiceDAO giudiceDAO;
+    private InvitoGiudiceDAO invitoGiudiceDAO;
     private Utente utenteCorrente = null;
     private ArrayList<Utente> utentiRegistrati;
     private ArrayList<Evento> eventiDisponibili;
@@ -24,7 +25,7 @@ public class Controller {
     private ArrayList<InvitoGiudice> invitiPendenti;
     private ArrayList<InvitoGiudice> invitiGiudice;
 
-    public Controller(UtenteDAO utenteDAO, OrganizzatoreDAO organizzatoreDAO, PartecipanteDAO partecipanteDAO, GiudiceDAO giudiceDAO, EventoDAO eventoDAO, TeamDAO teamDAO) {
+    public Controller(UtenteDAO utenteDAO, OrganizzatoreDAO organizzatoreDAO, PartecipanteDAO partecipanteDAO, GiudiceDAO giudiceDAO, EventoDAO eventoDAO, TeamDAO teamDAO, InvitoGiudiceDAO invitoGiudiceDAO) {
         this.utentiRegistrati = new ArrayList<>();
         this.eventiDisponibili = new ArrayList<>();
         this.invitiPendenti = new ArrayList<>();
@@ -35,6 +36,7 @@ public class Controller {
         this.eventoDAO = eventoDAO;
         this.teamDAO = teamDAO;
         this.giudiceDAO = giudiceDAO;
+        this.invitoGiudiceDAO = invitoGiudiceDAO;
         initEventi();
     }
 
@@ -179,10 +181,11 @@ public class Controller {
         }
     }
 
+    /*
     public boolean invitaGiudicePendente(Evento evento, Utente utente) {
-        /*if((utente instanceof Partecipante)) {
+        if((utente instanceof Partecipante)) {
             return false;
-        }*/
+
 
         for(Giudice giudice: evento.getGiudici()) {
             if(giudice.getLogin().equals(utente.getLogin())) {
@@ -197,7 +200,9 @@ public class Controller {
         invitiPendenti.add(new InvitoGiudice(evento, utente));
         return true;
     }
+    */
 
+    /*
     public boolean accettaInvitoGiudice(Evento evento, Utente utente) {
         InvitoGiudice invitoTrovato = null;
         for (InvitoGiudice invito: invitiPendenti) {
@@ -269,6 +274,7 @@ public class Controller {
         }
         return false;
     }
+    */
 
     public boolean isUtenteGiudice(Evento evento, Utente utente) {
         for (Giudice g : evento.getGiudici()) {
@@ -286,7 +292,7 @@ public class Controller {
         }
         ArrayList <Utente> invitabili = new ArrayList <>();
         for (Utente u : utenteDAO.getAllUtenti()) {
-            if (u instanceof Organizzatore) {
+            if (organizzatoreDAO.isOrganizzatore(u.getLogin())) {
                 continue;
             }
             boolean giaGiudiceInQuestoEvento = false;
@@ -300,16 +306,20 @@ public class Controller {
                 }
             }
 
-            for (Partecipante p: evento.getPartecipanti()) {
+            for (Partecipante p: partecipanteDAO.getPartecipantiEvento(evento.getId())) {
                 if(p.getLogin().equals(u.getLogin())) {
                     giaPartecipanteInQuestoEvento = true;
                     break;
                 }
             }
 
+            if(invitoGiudiceDAO.esisteInvitoPendentePerUtenteEvento(u.getLogin(), evento.getId())) {
+                continue;
+            }
 
-            for (InvitoGiudice invito: invitiPendenti) {
-                if(invito.getEvento().equals(evento) && invito.getUtente().getLogin().equals(u.getLogin()) && !invito.isAccettato() && !invito.isRifiutato()) {
+
+            for (InvitoGiudice invito: invitoGiudiceDAO.getInvitiPendentiPerUtente(u.getLogin())) {
+                if(invito.getEvento().getId() == evento.getId()){
                     giaInvitatoAQuestoEvento = true;
                     break;
                 }
@@ -322,9 +332,11 @@ public class Controller {
         return invitabili;
     }
 
+    /*
     public void aggiungiInvitoGiudice (InvitoGiudice invito){
         invitiGiudice.add(invito);
     }
+     */
 
     public ArrayList <Evento> getInvitiUtente(Utente utente) {
         ArrayList <Evento> invitiUtente = new ArrayList <>();
@@ -434,6 +446,7 @@ public class Controller {
             // Puoi opzionalmente aggiornare la lista locale se vuoi una cache
             // eventiDisponibili.add(eventoConId);
             organizzatoreCorrente.getEventi().add(eventoConId);
+            organizzatoreDAO.aggiungiOrganizzatore(organizzatoreCorrente, eventoConId.getId());
             eventoConId.setDocumenti(new ArrayList<>());
             return eventoConId;
         }
@@ -446,6 +459,61 @@ public class Controller {
 
     public List<Evento> getTuttiEventi() {
         return eventoDAO.getTuttiEventi();
+    }
+
+    /*
+    public List <Partecipante> getPartecipantiEvento(int eventoId) {
+        return partecipanteDAO.getPartecipantiEvento(eventoId);
+    }
+
+     */
+
+    public List<InvitoGiudice> getInvitiPendentiUtente(String login) {
+        return invitoGiudiceDAO.getInvitiPendentiPerUtente(login);
+    }
+
+    public boolean aggiungiInvitoGiudice(InvitoGiudice invito) {
+        return invitoGiudiceDAO.addInvitoGiudice(invito);
+    }
+
+    public boolean accettaInvitoGiudice(InvitoGiudice invito, Utente utente) {
+        // Imposta lo stato
+        invito.setAccettato(true);
+        invito.setRifiutato(false);
+        // Aggiorna nel database tramite DAO
+        boolean invitoOK = invitoGiudiceDAO.updateInvitoGiudice(invito);
+        if(invitoOK){
+            System.out.println("ID evento per aggiungiGiudice: " + invito.getEvento().getId());
+            return giudiceDAO.aggiungiGiudice(utente.getLogin(), invito.getEvento().getId());
+        }
+        return false;
+    }
+
+    public boolean rifiutaInvitoGiudice(InvitoGiudice invito, Utente utente) {
+        invito.setAccettato(false);
+        invito.setRifiutato(true);
+        return invitoGiudiceDAO.updateInvitoGiudice(invito);
+    }
+
+    public boolean invitaGiudicePendente(Evento evento, Utente utente) {
+        // Controlla se l'utente è già giudice dell'evento
+        for (Giudice giudice : evento.getGiudici()) {
+            if (giudice.getLogin().equals(utente.getLogin())) {
+                return false;
+            }
+        }
+
+        // Controlla se esiste già un invito pendente per questo utente e questo evento
+        List<InvitoGiudice> inviti = invitoGiudiceDAO.getInvitiPendentiPerUtente(utente.getLogin());
+        for (InvitoGiudice invito : inviti) {
+            if (invito.getEvento().getId() == evento.getId()) {
+                return false; // già invitato e pendente
+            }
+        }
+
+        // Crea un nuovo invito e aggiungilo tramite il DAO
+        InvitoGiudice nuovoInvito = new InvitoGiudice(evento, utente, false, false);
+        return invitoGiudiceDAO.addInvitoGiudice(nuovoInvito);
     }
 }
 

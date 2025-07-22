@@ -43,14 +43,16 @@ public class IOrganizzatoreDAO implements OrganizzatoreDAO {
     @Override
     public List<Organizzatore> getOrganizzatoriEvento(int eventoId) {
         List<Organizzatore> lista = new ArrayList<>();
-        String sql = "SELECT utente_login FROM organizzatore WHERE evento_id = ?";
+        String sql = "SELECT utente_login FROM organizzatore_evento WHERE evento_id = ?";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, eventoId);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 lista.add(getOrganizzatore(rs.getString("utente_login")));
             }
-        } catch (SQLException e) {}
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return lista;
     }
 
@@ -74,12 +76,14 @@ public class IOrganizzatoreDAO implements OrganizzatoreDAO {
 
     @Override
     public boolean eliminaOrganizzatore(String login, int eventoId) {
-        String sql = "DELETE FROM organizzatore WHERE utente_login = ? AND evento_id = ?";
+        String sql = "DELETE FROM organizzatore_evento WHERE utente_login = ? AND evento_id = ?";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setString(1, login);
             ps.setInt(2, eventoId);
             return ps.executeUpdate() > 0;
-        } catch (SQLException e) {}
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return false;
     }
 
@@ -90,7 +94,9 @@ public class IOrganizzatoreDAO implements OrganizzatoreDAO {
             ps.setString(1, login);
             ResultSet rs = ps.executeQuery();
             if (rs.next() && rs.getInt(1) > 0) return true;
-        } catch (SQLException e) { e.printStackTrace(); }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return false;
     }
 

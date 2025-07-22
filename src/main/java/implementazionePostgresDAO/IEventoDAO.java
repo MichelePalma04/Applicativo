@@ -52,6 +52,7 @@ public class IEventoDAO implements EventoDAO {
             ps.setInt(1, eventoId);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
+                int id = rs.getInt("id");
                 String titolo = rs.getString("titolo");
                 String sede = rs.getString("sede");
                 LocalDate dataInizio = rs.getDate("data_inizio").toLocalDate();
@@ -65,7 +66,7 @@ public class IEventoDAO implements EventoDAO {
                 ArrayList<Giudice> giudici = new ArrayList<>(giudiceDAO.getGiudiciEvento(eventoId, teamDAO));
                 ArrayList<Partecipante> partecipanti = new ArrayList<>(partecipanteDAO.getPartecipantiEvento(eventoId));
 
-                return new Evento(titolo, sede, dataInizio, dataFine, nMaxIscritti, dimMaxTeam, inizioRegistrazioni, fineRegistrazioni, organizzatore, giudici, partecipanti);
+                return new Evento(id, titolo, sede, dataInizio, dataFine, nMaxIscritti, dimMaxTeam, inizioRegistrazioni, fineRegistrazioni, organizzatore, giudici, partecipanti);
             }
         } catch (SQLException e) {}
         return null;
@@ -78,8 +79,7 @@ public class IEventoDAO implements EventoDAO {
         try (PreparedStatement ps = connection.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
             while (rs.next()){
-                Evento evento = new Evento(rs.getString("titolo"), rs.getString("sede"),rs.getDate("data_inizio").toLocalDate(), rs.getDate("data_fine").toLocalDate(),  rs.getInt("n_max_iscritti"),  rs.getInt("dim_max_team"),  rs.getDate("inizio_registrazioni").toLocalDate(),  rs.getDate("fine_registrazioni").toLocalDate(), null, new ArrayList<>(), new ArrayList<>());
-                evento.setId(rs.getInt("id"));
+                Evento evento = new Evento(rs.getInt("id"), rs.getString("titolo"), rs.getString("sede"),rs.getDate("data_inizio").toLocalDate(), rs.getDate("data_fine").toLocalDate(),  rs.getInt("n_max_iscritti"),  rs.getInt("dim_max_team"),  rs.getDate("inizio_registrazioni").toLocalDate(),  rs.getDate("fine_registrazioni").toLocalDate(), null, new ArrayList<>(), new ArrayList<>());
                 String loginOrg = rs.getString("organizzatore_login");
                 Organizzatore organizzatore = organizzatoreDAO.getOrganizzatore(loginOrg);
                 evento.setOrganizzatore(organizzatore);
@@ -156,8 +156,7 @@ public class IEventoDAO implements EventoDAO {
             ps.setString(1, login);
             ResultSet rs = ps.executeQuery();
             while (rs.next()){
-                Evento evento = new Evento(rs.getString("titolo"), rs.getString("sede"),rs.getDate("data_inizio").toLocalDate(), rs.getDate("data_fine").toLocalDate(),  rs.getInt("n_max_iscritti"),  rs.getInt("dim_max_team"),  rs.getDate("inizio_registrazioni").toLocalDate(),  rs.getDate("fine_registrazioni").toLocalDate(), null, new ArrayList<>(), new ArrayList<>());
-                evento.setId(rs.getInt("id"));
+                Evento evento = new Evento(rs.getInt("id"), rs.getString("titolo"), rs.getString("sede"),rs.getDate("data_inizio").toLocalDate(), rs.getDate("data_fine").toLocalDate(),  rs.getInt("n_max_iscritti"),  rs.getInt("dim_max_team"),  rs.getDate("inizio_registrazioni").toLocalDate(),  rs.getDate("fine_registrazioni").toLocalDate(), null, new ArrayList<>(), new ArrayList<>());
                 eventi.add(evento);
             }
         }catch(SQLException e){

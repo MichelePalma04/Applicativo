@@ -1,6 +1,8 @@
 package gui;
 
 import controller.Controller;
+import dao.EventoDAO;
+import implementazionePostgresDAO.IEventoDAO;
 import model.Evento;
 import model.Giudice;
 import model.Utente;

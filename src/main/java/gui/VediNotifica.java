@@ -3,13 +3,14 @@ package gui;
 import controller.Controller;
 import model.Evento;
 import model.Giudice;
+import model.InvitoGiudice;
 import model.Utente;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
+import java.util.List;
 
 public class VediNotifica {
 
@@ -57,14 +58,16 @@ public class VediNotifica {
         });
     }
     private void aggiornaInviti() {
+        Utente utente = controller.getUtenteCorrente();
         panelInviti.removeAll();
 
-        ArrayList<Evento> inviti = controller.getInvitiUtente(controller.getUtenteCorrente());
+        List<InvitoGiudice> inviti = controller.getInvitiPendentiUtente(utente.getLogin());
 
         if (inviti.isEmpty()) {
             panelInviti.add(new JLabel("Nessun invito ricevuto"));
         } else {
-            for (Evento evento : inviti) {
+            for (InvitoGiudice invito : inviti) {
+                Evento evento = invito.getEvento();
                 JPanel riga = new JPanel(new FlowLayout(FlowLayout.LEFT));
                 riga.add(new JLabel("Sei stato invitato da " + evento.getOrganizzatore().getLogin() + " per l'evento " + evento.getTitolo()));
                 JButton accettabutton = new JButton("Accetta");
@@ -77,7 +80,7 @@ public class VediNotifica {
                 accettabutton.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        if(controller.accettaInvitoGiudice(evento, controller.getUtenteCorrente())){
+                        if(controller.accettaInvitoGiudice(invito, utente)){
                             JOptionPane.showMessageDialog(frameNotifiche, "Ora sei giudice dell'evento: " + evento.getTitolo());
                             aggiornaInviti();
                         }
@@ -88,7 +91,7 @@ public class VediNotifica {
                 rifiutabutton.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        controller.rifiutaInvitoGiudice(evento, controller.getUtenteCorrente());
+                        controller.rifiutaInvitoGiudice(invito, utente);
                         aggiornaInviti();
                     }
                 });

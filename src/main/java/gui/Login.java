@@ -33,6 +33,7 @@ public class Login {
         ITeamDAO teamDAO = new ITeamDAO();
         IGiudiceDAO giudiceDAO = new IGiudiceDAO();
         IVotoDAO votoDAO = new IVotoDAO();
+        IInvitoGiudiceDAO invitoGiudiceDAO = new IInvitoGiudiceDAO();
         organizzatoreDAO.setUtenteDAO(utenteDAO);
         partecipanteDAO.setUtenteDAO(utenteDAO);
         partecipanteDAO.setTeamDAO(teamDAO);
@@ -48,7 +49,9 @@ public class Login {
         giudiceDAO.setEventoDAO(eventoDAO);
         votoDAO.setGiudiceDAO(giudiceDAO);
         votoDAO.setTeamDAO(teamDAO);
-        controller = new Controller(utenteDAO, organizzatoreDAO, partecipanteDAO, giudiceDAO, eventoDAO, teamDAO);
+        invitoGiudiceDAO.setUtenteDAO(utenteDAO);
+        invitoGiudiceDAO.setEventoDAO(eventoDAO);
+        controller = new Controller(utenteDAO, organizzatoreDAO, partecipanteDAO, giudiceDAO, eventoDAO, teamDAO, invitoGiudiceDAO);
 
         accediButton.addActionListener(new ActionListener() {
             @Override

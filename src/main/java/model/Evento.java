@@ -35,6 +35,20 @@ public class Evento {
         this.giudici = giudici;
         this.partecipanti = partecipanti;
     }
+    public Evento (int id, String titolo, String sede, LocalDate dataInizio, LocalDate dataFine, int n_Max_Iscritti, int dim_max_team, LocalDate inizio_registrazioni, LocalDate fine_registrazioni, Organizzatore organizzatore, ArrayList<Giudice> giudici, ArrayList<Partecipante> partecipanti) {
+        this.titolo = titolo;
+        this.id = id;
+        this.sede = sede;
+        this.dataInizio = dataInizio;
+        this.dataFine = dataFine;
+        this.n_Max_Iscritti = n_Max_Iscritti;
+        this.dim_max_team = dim_max_team;
+        this.inizio_registrazioni = inizio_registrazioni;
+        this.fine_registrazioni = fine_registrazioni;
+        this.organizzatore = organizzatore;
+        this.giudici = giudici;
+        this.partecipanti = partecipanti;
+    }
 
     public Evento (String titolo, String sede, LocalDate dataInizio, LocalDate dataFine, int n_Max_Iscritti, int dim_max_team, LocalDate inizio_registrazioni, LocalDate fine_registrazioni, Organizzatore organizzatore, Giudice g, Partecipante p) {
         this.titolo = titolo;
