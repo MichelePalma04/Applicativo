@@ -32,7 +32,7 @@ public class IGiudiceDAO implements GiudiceDAO {
     }
 
     @Override
-    public Giudice getGiudice(String login, int eventoId, TeamDAO teamDAO) {
+    public Giudice getGiudice(String login, int eventoId) {
         String sql = "SELECT * FROM giudice WHERE utente_login = ? AND evento_id = ?";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setString(1, login);
@@ -40,25 +40,25 @@ public class IGiudiceDAO implements GiudiceDAO {
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 String password = utenteDAO.getUtentebyLogin(login).getPassword();
-                ArrayList<Evento> eventi = new ArrayList<>();
+                /*ArrayList<Evento> eventi = new ArrayList<>();
                 eventi.add(eventoDAO.getEvento(eventoId));
                 ArrayList<Voto> voti = new ArrayList<>(votoDAO.getVotiGiudice(login));
-                ArrayList<Organizzatore> organizzatori = new ArrayList<>(organizzatoreDAO.getOrganizzatoriEvento(eventoId));
-                return new Giudice(login, password, eventi, voti, organizzatori);
+                ArrayList<Organizzatore> organizzatori = new ArrayList<>(organizzatoreDAO.getOrganizzatoriEvento(eventoId));*/
+                return new Giudice(login, password, new ArrayList<>(), null, null);
             }
         } catch (SQLException e) {}
         return null;
     }
 
     @Override
-    public List<Giudice> getGiudiciEvento(int eventoId, TeamDAO teamDAO) {
+    public List<Giudice> getGiudiciEvento(int eventoId) {
         List<Giudice> lista = new ArrayList<>();
         String sql = "SELECT utente_login FROM giudice WHERE evento_id = ?";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, eventoId);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                lista.add(getGiudice(rs.getString("utente_login"), eventoId, teamDAO));
+                lista.add(getGiudice(rs.getString("utente_login"), eventoId));
             }
         } catch (SQLException e) {}
         return lista;

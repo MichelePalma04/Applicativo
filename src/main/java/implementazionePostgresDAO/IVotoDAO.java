@@ -32,7 +32,7 @@ public class IVotoDAO implements VotoDAO {
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                Giudice giudice = giudiceDAO.getGiudice(rs.getString("giudice_login"), rs.getInt("evento_id"), teamDAO);
+                Giudice giudice = giudiceDAO.getGiudice(rs.getString("giudice_login"), rs.getInt("evento_id"));
                 Team team = teamDAO.getTeam(rs.getString("team_nome"), rs.getInt("evento_id"));
                 int votazione = rs.getInt("votazione");
                 return new Voto(giudice, team, votazione);

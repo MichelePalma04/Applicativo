@@ -58,7 +58,7 @@ public class IOrganizzatoreDAO implements OrganizzatoreDAO {
 
     @Override
     public boolean aggiungiOrganizzatore(Organizzatore o, int eventoId) {
-        String sql = "INSERT INTO organizzatore (utente_login, evento_id) VALUES (?, ?)";
+        String sql = "INSERT INTO organizzatore_evento (utente_login, evento_id) VALUES (?, ?)";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setString(1, o.getLogin());
             ps.setInt(2, eventoId);

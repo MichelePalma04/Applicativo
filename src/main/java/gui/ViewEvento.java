@@ -6,6 +6,7 @@ import model.Giudice;
 import model.Partecipante;
 import model.Utente;
 
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -71,9 +72,9 @@ public class ViewEvento {
 
             Utente u = controller.getUtenteCorrente();
             Partecipante partecipante = controller.getPartecipanteDaDB(u.getLogin(), ev.getId());
-            Giudice giudiceCorrente = controller.getGiudiceCorrente(ev);
+            Giudice giudice = controller.getGiudiceEvento(u.getLogin(), ev.getId());
 
-            if(giudiceCorrente != null && controller.isUtenteGiudice(ev, u) && giudiceCorrente.getEventi().contains(ev)) {
+            if(giudice != null) {
                 iscrivitiButton.setVisible(false);
                 visualizzaArea.setVisible(false);
                 areaGiudice.setVisible(true);

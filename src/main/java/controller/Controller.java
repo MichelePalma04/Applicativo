@@ -287,7 +287,7 @@ public class Controller {
 
     public ArrayList <Utente> getUtentiInvitabili(Evento evento){
         System.out.println("Evento: " + evento.getTitolo());
-        for (Giudice g : evento.getGiudici()) {
+        for (Giudice g :giudiceDAO.getGiudiciEvento(evento.getId())) {
             System.out.println("Giudice presente: " + g.getLogin());
         }
         ArrayList <Utente> invitabili = new ArrayList <>();
@@ -299,11 +299,14 @@ public class Controller {
             boolean giaPartecipanteInQuestoEvento = false;
             boolean giaInvitatoAQuestoEvento = false;
 
-            for (Giudice g: evento.getGiudici()) {
+            for (Giudice g: giudiceDAO.getGiudiciEvento(evento.getId())) {
                 if(g.getLogin().equals(u.getLogin())) {
                     giaGiudiceInQuestoEvento = true;
                     break;
                 }
+            }
+            if(giaGiudiceInQuestoEvento){
+                continue;
             }
 
             for (Partecipante p: partecipanteDAO.getPartecipantiEvento(evento.getId())) {
@@ -312,12 +315,15 @@ public class Controller {
                     break;
                 }
             }
+            if(giaPartecipanteInQuestoEvento){
+                continue;
+            }
 
             if(invitoGiudiceDAO.esisteInvitoPendentePerUtenteEvento(u.getLogin(), evento.getId())) {
                 continue;
             }
 
-
+/*
             for (InvitoGiudice invito: invitoGiudiceDAO.getInvitiPendentiPerUtente(u.getLogin())) {
                 if(invito.getEvento().getId() == evento.getId()){
                     giaInvitatoAQuestoEvento = true;
@@ -328,6 +334,9 @@ public class Controller {
             if(!giaGiudiceInQuestoEvento && !giaPartecipanteInQuestoEvento && !giaInvitatoAQuestoEvento){
                 invitabili.add(u);
             }
+
+ */
+            invitabili.add(u);
         }
         return invitabili;
     }
@@ -514,6 +523,10 @@ public class Controller {
         // Crea un nuovo invito e aggiungilo tramite il DAO
         InvitoGiudice nuovoInvito = new InvitoGiudice(evento, utente, false, false);
         return invitoGiudiceDAO.addInvitoGiudice(nuovoInvito);
+    }
+
+    public Giudice getGiudiceEvento(String login, int eventoId) {
+        return giudiceDAO.getGiudice(login, eventoId);
     }
 }
 
