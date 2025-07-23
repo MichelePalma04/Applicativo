@@ -48,7 +48,7 @@ public class AreaOrganizzatore {
             infoButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    Invito nuovaGUI = new Invito (evento, frameOrganizzatore, controller);
+                    Invito nuovaGUI = new Invito (evento.getId(), frameOrganizzatore, controller);
                     nuovaGUI.frameInvito.setVisible(true);
                     frameOrganizzatore.setVisible(false);
                 }

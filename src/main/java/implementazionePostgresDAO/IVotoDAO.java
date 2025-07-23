@@ -105,6 +105,50 @@ public class IVotoDAO implements VotoDAO {
         return false;
     }
 
+    // Verifica se il giudice ha votato il team
+    @Override
+    public boolean giudiceHaVotatoTeam(String loginGiudice, String nomeTeam, int eventoId) {
+        String sql = "SELECT COUNT(*) AS cnt FROM voto WHERE giudice_login = ? AND team_nome = ? AND evento_id = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, loginGiudice);
+            ps.setString(2, nomeTeam);
+            ps.setInt(3, eventoId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next() && rs.getInt("cnt") > 0) return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    // Restituisce il voto assegnato
+    @Override
+    public int getVotoDiGiudiceTeam(String loginGiudice, String nomeTeam, int eventoId) {
+        String sql = "SELECT votazione FROM voto WHERE giudice_login = ? AND team_nome = ? AND evento_id = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, loginGiudice);
+            ps.setString(2, nomeTeam);
+            ps.setInt(3, eventoId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) return rs.getInt("votazione");
+        } catch (SQLException e) { e.printStackTrace(); }
+        return -1; // Nessun voto trovato
+    }
+
+    // Registra il voto
+    @Override
+    public void votaTeam(String loginGiudice, String nomeTeam, int eventoId, int voto) {
+        String sql = "INSERT INTO voto (giudice_login, team_nome, evento_id, votazione) VALUES (?, ?, ?, ?)";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, loginGiudice);
+            ps.setString(2, nomeTeam);
+            ps.setInt(3, eventoId);
+            ps.setInt(4, voto);
+            ps.executeUpdate();
+        } catch (SQLException e) { e.printStackTrace(); }
+    }
+
+
     @Override
     public void setGiudiceDAO(IGiudiceDAO giudiceDAO) {
         this.giudiceDAO = giudiceDAO;

@@ -14,4 +14,5 @@ public interface TeamDAO {
     int getDimTeam(String nomeTeam, int eventoId);
     void setVotoDAO(IVotoDAO votoDAO);
     void setPartecipanteDAO(IPartecipanteDAO partecipanteDAO);
+    void unisciPartecipanteATeam(String loginPartecipante, String nomeTeam, int eventoId);
 }

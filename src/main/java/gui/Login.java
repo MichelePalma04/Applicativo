@@ -52,7 +52,8 @@ public class Login {
         votoDAO.setTeamDAO(teamDAO);
         invitoGiudiceDAO.setUtenteDAO(utenteDAO);
         invitoGiudiceDAO.setEventoDAO(eventoDAO);
-        controller = new Controller(utenteDAO, organizzatoreDAO, partecipanteDAO, giudiceDAO, eventoDAO, teamDAO, invitoGiudiceDAO, documentoDAO);
+        documentoDAO.setTeamDAO(teamDAO);
+        controller = new Controller(utenteDAO, organizzatoreDAO, partecipanteDAO, giudiceDAO, eventoDAO, teamDAO, invitoGiudiceDAO, documentoDAO, votoDAO);
 
         accediButton.addActionListener(new ActionListener() {
             @Override

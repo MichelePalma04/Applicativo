@@ -26,22 +26,24 @@ public class Invito {
     public JFrame frameOrganizzatore;
     private Controller controller;
 
-    private Evento evento;
+    private int eventoID;
 
-    public Invito(Evento evento, JFrame frame, Controller controller) {
+    public Invito(int eventoID, JFrame frame, Controller controller) {
         this.controller = controller;
         frameOrganizzatore = frame;
-        this.evento = evento;
+        this.eventoID = eventoID;
         frameInvito = new JFrame("Operazioni organizzatore");
         frameInvito.setContentPane(panel);
         frameInvito.pack();
         frameInvito.setSize(500, 500);
         frameInvito.setLocationRelativeTo(null);
 
+        Evento evento = controller.geteventoById(eventoID);
+
         nomeEvento.setText("Evento " + evento.getTitolo());
 
         panelGiudici.setLayout(new BoxLayout(panelGiudici, BoxLayout.Y_AXIS));
-        for(Giudice g : evento.getGiudici()) {
+        for(Giudice g : controller.getGiudiciEvento(eventoID)) {
             JPanel riga = new JPanel();
             riga.setLayout(new FlowLayout(FlowLayout.LEFT));
             JLabel nomiGiudici = new JLabel(g.getLogin());
@@ -49,6 +51,37 @@ public class Invito {
             JLabel ruolo = new JLabel("Ruolo: responsabile del problema");
             ruolo.setVisible(false);
 
+            Giudice responsabile = controller.getGiudiceDescrizione(eventoID);
+            if (responsabile != null && responsabile.getLogin().equals(g.getLogin())) {
+                assegna.setVisible(false);
+                ruolo.setVisible(true);
+            } else if (responsabile != null) {
+                assegna.setVisible(false);
+            } else {
+                assegna.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        boolean ok = controller.assegnaGiudiceDescrizione(eventoID, g.getLogin());
+                        if (ok) {
+                            for (Component comp : panelGiudici.getComponents()) {
+                                if (comp instanceof JPanel rigaPanel) {
+                                    for (Component c : rigaPanel.getComponents()) {
+                                        if (c instanceof JButton) c.setVisible(false);
+                                        if (c instanceof JLabel ruoloLbl && ((JLabel) c).getText().equals("Ruolo: responsabile del problema"))
+                                            ruoloLbl.setVisible(false);
+                                    }
+                                }
+                            }
+                            ruolo.setVisible(true);
+                            JOptionPane.showMessageDialog(frameInvito, g.getLogin() + " è stato assegnato come giudice responsabile della descrizione del problema.");
+                        } else {
+                            JOptionPane.showMessageDialog(frameInvito, "Errore nell'assegnazione del responsabile.");
+                        }
+                    }
+                });
+            }
+
+            /*
             if (evento.getGiudiceDescrizione() != null) {
                 if (evento.getGiudiceDescrizione().equals(g)) {
                     assegna.setVisible(false);
@@ -82,6 +115,8 @@ public class Invito {
                 });
             }
 
+             */
+
             riga.add(nomiGiudici);
             riga.add(ruolo);
             riga.add(assegna);
@@ -101,7 +136,7 @@ public class Invito {
             public void actionPerformed(ActionEvent e) {
                 Utente daInvitare = (Utente) comboBox1.getSelectedItem();
                 if (daInvitare != null) {
-                    if (controller.invitaGiudicePendente(evento, daInvitare)) {
+                    if (controller.invitaGiudicePendente(eventoID, daInvitare.getLogin())) {
                         JOptionPane.showMessageDialog(frameInvito, "Giudice invitato con sucesso!");
                         aggiornaListaInvitabili();
                     } else {
@@ -116,7 +151,7 @@ public class Invito {
 
     private void aggiornaListaInvitabili() {
         comboBox1.removeAllItems();
-        for (Utente u : controller.getUtentiInvitabili(evento)) {
+        for (Utente u : controller.getUtentiInvitabili(eventoID)) {
             comboBox1.addItem(u);
         }
     }

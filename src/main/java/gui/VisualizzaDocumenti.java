@@ -20,7 +20,7 @@ public class VisualizzaDocumenti {
     private Controller controller;
     public JFrame frameGiudice;
 
-    public VisualizzaDocumenti(Controller controller, Team team, Evento evento,JFrame frame) {
+    public VisualizzaDocumenti(Controller controller, String nomeTeam, int eventoId, JFrame frame) {
         this.controller = controller;
         frameGiudice = frame;
         frameDocumenti = new JFrame("Documenti");
@@ -28,11 +28,11 @@ public class VisualizzaDocumenti {
         frameDocumenti.pack();
         frameDocumenti.setSize(500, 500);
         frameDocumenti.setLocationRelativeTo(null);
-        documentiTeam.setText("Documenti del team: " + team.getNomeTeam());
+        documentiTeam.setText("Documenti del team: " + nomeTeam);
         scroll.getVerticalScrollBar().setUnitIncrement(20);
 
         panelDocumenti.setLayout(new BoxLayout(panelDocumenti, BoxLayout.Y_AXIS));
-        for(Documento doc: controller.getDocumentoTeam(evento, team)) {
+        for(Documento doc: controller.getDocumentiTeamEvento(nomeTeam, eventoId)) {
             JPanel rigaDocumenti = new JPanel(new FlowLayout(FlowLayout.LEFT));
             JLabel nomeDoc = new JLabel(doc.getFile().getName());
             JButton visualizzaDoc = new JButton("Visualizza");

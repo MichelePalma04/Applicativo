@@ -80,7 +80,7 @@ public class VediNotifica {
                 accettabutton.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        if(controller.accettaInvitoGiudice(invito, utente)){
+                        if(controller.accettaInvitoGiudice(invito.getId(), loginUtente)) {
                             JOptionPane.showMessageDialog(frameNotifiche, "Ora sei giudice dell'evento: " + evento.getTitolo());
                             aggiornaInviti();
                         }
@@ -91,7 +91,7 @@ public class VediNotifica {
                 rifiutabutton.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        controller.rifiutaInvitoGiudice(invito, utente);
+                        controller.rifiutaInvitoGiudice(invito.getId(), loginUtente);
                         aggiornaInviti();
                     }
                 });

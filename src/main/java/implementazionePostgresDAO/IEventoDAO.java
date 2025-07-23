@@ -164,6 +164,51 @@ public class IEventoDAO implements EventoDAO {
         }
         return eventi;
     }
+    // Restituisce la descrizione del problema per un evento
+    @Override
+    public String getProblemaEvento(int eventoId) {
+        String sql = "SELECT problema FROM evento WHERE id = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, eventoId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) return rs.getString("problema");
+        } catch (SQLException e) { e.printStackTrace(); }
+        return null;
+    }
+
+    // Aggiorna la descrizione del problema per un evento
+    @Override
+    public void setProblemaEvento(int eventoId, String descrizione) {
+        String sql = "UPDATE evento SET problema = ? WHERE id = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, descrizione);
+            ps.setInt(2, eventoId);
+            ps.executeUpdate();
+        } catch (SQLException e) { e.printStackTrace(); }
+    }
+
+    // Restituisce il login del giudice responsabile
+    @Override
+    public String getLoginGiudiceDescrizione(int eventoId) {
+        String sql = "SELECT giudice_descrizione_login FROM evento WHERE id = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, eventoId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) return rs.getString("giudice_descrizione_login");
+        } catch (SQLException e) { e.printStackTrace(); }
+        return null;
+    }
+
+    @Override
+    public boolean setGiudiceDescrizione(int eventoId, String loginGiudice) {
+        String sql = "UPDATE evento SET giudice_descrizione_login = ? WHERE id = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, loginGiudice);
+            ps.setInt(2, eventoId);
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) { e.printStackTrace(); }
+        return false;
+    }
 
     @Override
     public void setGiudiceDAO (IGiudiceDAO giudiceDAO) {

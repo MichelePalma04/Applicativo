@@ -56,10 +56,11 @@ public class IPartecipanteDAO implements PartecipanteDAO{
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 String password = utenteDAO.getUtentebyLogin(login).getPassword();
-                Team team = teamDAO.getTeam(rs.getString("team_nome"), evento_id);
+                //Team team = teamDAO.getTeam(rs.getString("team_nome"), evento_id);
+                String teamNome = rs.getString("team_nome");
                // ArrayList<Evento> eventi = new ArrayList<>();
                // eventi.add(eventoDAO.getEvento(evento_id, teamDAO));
-                return new Partecipante(login, password, team, new ArrayList<>());
+                return new Partecipante(login, password, teamNome);
             }
         } catch (SQLException e) {
             e.printStackTrace();

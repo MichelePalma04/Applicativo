@@ -103,7 +103,7 @@ public class ViewEvento {
                 public void actionPerformed(ActionEvent e) {
                     Giudice g =  controller.getGiudiceEvento(loginUtente, ev.getId());
                     if(g != null) {
-                        AreaGiudice gui = new AreaGiudice(controller, g, frame, frameEventi, ev);
+                        AreaGiudice gui = new AreaGiudice(controller, loginUtente, ev.getId(), frame, frameEventi);
                         gui.frameGiudice.setVisible(true);
                         frameEventi.setVisible(false);
                     }
@@ -219,8 +219,6 @@ public class ViewEvento {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Utente utente = controller.getUtenteDaDB(loginUtente);
-                System.out.println("Utente corrente: " + utente.getLogin());
-                System.out.println("Inviti trovati: " + controller.getInvitiUtente(utente).size());
                 VediNotifica notifica = new VediNotifica(controller, loginUtente, frameEventi, frameGiudice, frameAccedi, frameAreaPartecipante );
                 notifica.frameNotifiche.setVisible(true);
                 frameEventi.setVisible(false);

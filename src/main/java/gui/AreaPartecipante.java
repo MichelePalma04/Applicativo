@@ -49,7 +49,7 @@ public class AreaPartecipante {
         frameGiudice = frame4;
 
         Partecipante partecipante = controller.getPartecipanteDaDB(loginPartecipante, eventoId);
-        Evento evento = controller.geteventoById(eventoId);
+        //Evento evento = controller.geteventoById(eventoId);
         frameAreaPartecipante = new JFrame("Area Personale " + loginPartecipante);
         frameAreaPartecipante.setContentPane(panel);
         frameAreaPartecipante.pack();
@@ -86,6 +86,14 @@ public class AreaPartecipante {
         }
 
         boolean inTeam = (teamUtente != null);
+        String problemaEvento = controller.getProblemaEvento(eventoId);
+        // DEBUG STATO INIZIALE
+        System.out.println("STATO INIZIALE:");
+        System.out.println("inTeam: " + inTeam);
+        System.out.println("problema: " + (problemaEvento != null ? problemaEvento : "null"));
+        System.out.println("Problema visibile: " + problema.isVisible());
+        System.out.println("SfogliaDocumenti visibile: " + sfogliaDocumenti.isVisible());
+        System.out.println("InserisciDocumento visibile: " + inserisciDocumento.isVisible());
         creaTeamButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -96,9 +104,99 @@ public class AreaPartecipante {
                 }
                 // Crea il team nel DB e unisci subito il partecipante
                 Team nuovoTeam = controller.creaTeam(nome, loginPartecipante, eventoId);
-               // evento.getTeams().add(nuovoTeam);
+                controller.unisciPartecipanteATeam(loginPartecipante, nuovoTeam.getNomeTeam(), eventoId);
                 comboBox1.addItem(nuovoTeam);
 
+                Evento eventoAggiornato = controller.geteventoById(eventoId);
+
+                List<Team> teamsAggiornati = controller.getTeamsEvento(eventoId);
+                Team nuovoTeamUtente = null;
+                for (Team t : teamsAggiornati) {
+                    if (controller.isPartecipanteInTeam(loginPartecipante, t.getNomeTeam(), eventoId)) {
+                        nuovoTeamUtente = t;
+                        break;
+                    }
+                }
+
+                boolean inTeamAggiornato = (nuovoTeamUtente != null);
+                // DEBUG dopo CREA TEAM
+                System.out.println("DOPO CREA TEAM:");
+                System.out.println("inTeamAggiornato: " + inTeamAggiornato);
+                System.out.println("problema: " + (eventoAggiornato.getProblema() != null ? eventoAggiornato.getProblema() : "null"));
+                if (inTeamAggiornato) {
+                    nomeField.setVisible(false);
+                    nomeTeam.setVisible(false);
+                    creaTeamButton.setVisible(false);
+                    teamLabel.setVisible(false);
+                    comboBox1.setVisible(false);
+                    uniscitiButton.setVisible(false);
+                    avviso.setVisible(false);
+                    messaggio.setVisible(true);
+                    messaggio.setText("Ora sei un membro del team " + nuovoTeamUtente.getNomeTeam());
+                    if (eventoAggiornato.getProblema() != null && !eventoAggiornato.getProblema().isEmpty()) {
+                        problema.setText("Problema da risolvere: " + eventoAggiornato.getProblema());
+                        problema.setVisible(true);
+                        sfogliaDocumenti.setVisible(true);
+                        inserisciDocumento.setVisible(true);
+                    }else{
+                        problema.setVisible(false);
+                        sfogliaDocumenti.setVisible(false);
+                        inserisciDocumento.setVisible(false);
+                    }
+                    // DEBUG VISIBILITA' DOPO CREA TEAM
+                    System.out.println("DOPO CREA TEAM - VISIBILITA':");
+                    System.out.println("Problema visibile: " + problema.isVisible());
+                    System.out.println("SfogliaDocumenti visibile: " + sfogliaDocumenti.isVisible());
+                    System.out.println("InserisciDocumento visibile: " + inserisciDocumento.isVisible());
+                }
+            }
+        });
+
+        if (inTeam) {
+            creaTeamButton.setVisible(false);
+            nomeField.setVisible(false);
+            nomeTeam.setVisible(false);
+            uniscitiButton.setVisible(false);
+            comboBox1.setVisible(false);
+            teamLabel.setVisible(false);
+            avviso.setVisible(false);
+            messaggio.setVisible(true);
+            messaggio.setText("Ora sei membro del " + teamUtente.getNomeTeam());
+            if (problemaEvento != null && !problemaEvento.isEmpty()) {
+                problema.setText("Problema da risolvere: " + problemaEvento);
+                problema.setVisible(true);
+                sfogliaDocumenti.setVisible(true);
+                inserisciDocumento.setVisible(true);
+            } else {
+                problema.setVisible(false);
+                sfogliaDocumenti.setVisible(false);
+                inserisciDocumento.setVisible(false);
+            }
+        } else {
+            uniscitiButton.setVisible(true);
+            comboBox1.setVisible(true);
+            teamLabel.setVisible(true);
+            avviso.setVisible(true);
+            messaggio.setVisible(false);
+            problema.setVisible(false);
+            sfogliaDocumenti.setVisible(false);
+            inserisciDocumento.setVisible(false);
+            // DEBUG VISIBILITA' INIZIALE DA ELSE
+            System.out.println("NON INTEAM - VISIBILITA' INIZIALE:");
+            System.out.println("Problema visibile: " + problema.isVisible());
+            System.out.println("SfogliaDocumenti visibile: " + sfogliaDocumenti.isVisible());
+            System.out.println("InserisciDocumento visibile: " + inserisciDocumento.isVisible());
+        }
+
+        homeButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ViewEvento gui = new ViewEvento(controller, loginPartecipante, frameAccedi, frameAreaPartecipante, frameNotifica, frameGiudice);
+                gui.frameAreaPartecipante.setVisible(false);
+                frameEventi.setVisible(true);
+            }
+        });
+/*
                 nomeField.setVisible(false);
                 nomeTeam.setVisible(false);
                 creaTeamButton.setVisible(false);
@@ -162,6 +260,8 @@ public class AreaPartecipante {
 
             }
         });
+
+ */
         uniscitiButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -188,11 +288,54 @@ public class AreaPartecipante {
                 }
 
                 // Verifica la dimensione massima tramite Controller
-                if (controller.getDimTeam(teamSelected.getNomeTeam(), eventoId) >= evento.getDim_max_team()) {
+                if (controller.getDimTeam(teamSelected.getNomeTeam(), eventoId) >= eventoAggiornato.getDim_max_team()) {
                     JOptionPane.showMessageDialog(frameAreaPartecipante, "Il team " + teamSelected.getNomeTeam() + " è pieno.");
                     return;
                 }
+                controller.unisciPartecipanteATeam(loginPartecipante, teamSelected.getNomeTeam(), eventoId);
+                Evento eventoAggiornato = controller.geteventoById(eventoId);
 
+                // Aggiorna la visibilità dopo l'unione
+                List<Team> teamsAggiornati = controller.getTeamsEvento(eventoId);
+                Team nuovoTeamUtente = null;
+                for (Team t : teamsAggiornati) {
+                    if (controller.isPartecipanteInTeam(loginPartecipante, t.getNomeTeam(), eventoId)) {
+                        nuovoTeamUtente = t;
+                        break;
+                    }
+                }
+                boolean inTeamAggiornato = (nuovoTeamUtente != null);
+                System.out.println("DOPO UNISCI TEAM:");
+                System.out.println("inTeamAggiornato: " + inTeamAggiornato);
+                System.out.println("problema: " + (eventoAggiornato.getProblema() != null ? eventoAggiornato.getProblema() : "null"));
+
+                if (inTeamAggiornato) {
+                    creaTeamButton.setVisible(false);
+                    nomeField.setVisible(false);
+                    nomeTeam.setVisible(false);
+                    comboBox1.setVisible(false);
+                    teamLabel.setVisible(false);
+                    uniscitiButton.setVisible(false);
+                    avviso.setVisible(false);
+                    messaggio.setVisible(true);
+                    messaggio.setText("Ora sei un membro del " + nuovoTeamUtente.getNomeTeam());
+                    if (eventoAggiornato.getProblema() != null && !eventoAggiornato.getProblema().isEmpty()) {
+                        problema.setText("Problema da risolvere: " + eventoAggiornato.getProblema());
+                        problema.setVisible(true);
+                        sfogliaDocumenti.setVisible(true);
+                        inserisciDocumento.setVisible(true);
+                    } else {
+                        problema.setVisible(false);
+                        sfogliaDocumenti.setVisible(false);
+                        inserisciDocumento.setVisible(false);
+                    }
+                    // DEBUG VISIBILITA' DOPO UNISCI TEAM
+                    System.out.println("DOPO UNISCI TEAM - VISIBILITA':");
+                    System.out.println("Problema visibile: " + problema.isVisible());
+                    System.out.println("SfogliaDocumenti visibile: " + sfogliaDocumenti.isVisible());
+                    System.out.println("InserisciDocumento visibile: " + inserisciDocumento.isVisible());
+
+/*
                 // Unisci il partecipante al team tramite Controller
                 controller.unisciPartecipanteATeam(loginPartecipante, teamSelected.getNomeTeam(), eventoId);
                 creaTeamButton.setVisible(false);
@@ -212,11 +355,11 @@ public class AreaPartecipante {
                 }else{
                     problema.setVisible(false);
                     sfogliaDocumenti.setVisible(false);
-                    inserisciDocumento.setVisible(false);
+                    inserisciDocumento.setVisible(false);*/
                 }
             }
         });
-        controller.stampaUtentiRegistrati();
+
 
 
         sfogliaDocumenti.addActionListener(new ActionListener() {

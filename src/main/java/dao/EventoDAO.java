@@ -19,4 +19,8 @@ public interface EventoDAO {
     void setGiudiceDAO (IGiudiceDAO giudiceDAO);
     void setPartecipanteDAO (IPartecipanteDAO partecipanteDAO);
     void setTeamDAO (ITeamDAO teamDAO);
+    String getProblemaEvento(int eventoId);
+    void setProblemaEvento(int eventoId, String descrizione);
+    String getLoginGiudiceDescrizione (int eventoId);
+    boolean setGiudiceDescrizione (int eventoId, String loginGiudice);
 }
