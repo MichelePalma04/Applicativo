@@ -9,6 +9,9 @@ public interface TeamDAO {
     List<Team> getTeamEvento(int eventoId);
     boolean aggiungiTeam(Team team, int eventoId);
     boolean eliminaTeam(String nomeTeam, int eventoId);
+    Team getTeamByNomeEvento(String nomeTeam, int eventoId);
+    boolean isPartecipanteInTeam(String loginPartecipante, String nomeTeam, int eventoId);
+    int getDimTeam(String nomeTeam, int eventoId);
     void setVotoDAO(IVotoDAO votoDAO);
     void setPartecipanteDAO(IPartecipanteDAO partecipanteDAO);
 }

@@ -31,6 +31,8 @@ public class IPartecipanteDAO implements PartecipanteDAO{
         }
     }
 
+    // Crea nuovo partecipante per evento (senza team)
+    @Override
     public boolean addPartecipante (String login, int evento_id) {
         String sql = "INSERT INTO partecipante (utente_login, evento_id) VALUES (?, ?)";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -44,6 +46,8 @@ public class IPartecipanteDAO implements PartecipanteDAO{
         }
     }
 
+    // Recupera partecipante
+    @Override
     public Partecipante getPartecipante(String login, int evento_id) {
         String sql = "SELECT * FROM partecipante WHERE utente_login = ? AND evento_id = ?";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -57,8 +61,24 @@ public class IPartecipanteDAO implements PartecipanteDAO{
                // eventi.add(eventoDAO.getEvento(evento_id, teamDAO));
                 return new Partecipante(login, password, team, new ArrayList<>());
             }
-        } catch (SQLException e) {}
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return null;
+    }
+
+    // Unisci partecipante a team
+    @Override
+    public void joinTeam(String loginPartecipante, String nomeTeam, int eventoId) {
+        String sqlUpdate = "UPDATE partecipante SET team_nome = ? WHERE utente_login = ? AND evento_id = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sqlUpdate)) {
+            ps.setString(1, nomeTeam);
+            ps.setString(2, loginPartecipante);
+            ps.setInt(3, eventoId);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println("Errore nell'unione al team: " + e.getMessage());
+        }
     }
 
     @Override
@@ -88,7 +108,9 @@ public class IPartecipanteDAO implements PartecipanteDAO{
             while (rs.next()) {
                 lista.add(getPartecipante(rs.getString("utente_login"), eventoId));
             }
-        } catch (SQLException e) {}
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return lista;
     }
 

@@ -33,6 +33,7 @@ public class Login {
         ITeamDAO teamDAO = new ITeamDAO();
         IGiudiceDAO giudiceDAO = new IGiudiceDAO();
         IVotoDAO votoDAO = new IVotoDAO();
+        IDocumentoDAO documentoDAO = new IDocumentoDAO();
         IInvitoGiudiceDAO invitoGiudiceDAO = new IInvitoGiudiceDAO();
         organizzatoreDAO.setUtenteDAO(utenteDAO);
         partecipanteDAO.setUtenteDAO(utenteDAO);
@@ -51,7 +52,7 @@ public class Login {
         votoDAO.setTeamDAO(teamDAO);
         invitoGiudiceDAO.setUtenteDAO(utenteDAO);
         invitoGiudiceDAO.setEventoDAO(eventoDAO);
-        controller = new Controller(utenteDAO, organizzatoreDAO, partecipanteDAO, giudiceDAO, eventoDAO, teamDAO, invitoGiudiceDAO);
+        controller = new Controller(utenteDAO, organizzatoreDAO, partecipanteDAO, giudiceDAO, eventoDAO, teamDAO, invitoGiudiceDAO, documentoDAO);
 
         accediButton.addActionListener(new ActionListener() {
             @Override
@@ -71,7 +72,7 @@ public class Login {
                         QuartaGUI.frameOrganizzatore.setVisible(true);
                         frame.setVisible(false);
                     }else {
-                        ViewEvento terzaGUI = new ViewEvento(controller, frame, null, null, null);
+                        ViewEvento terzaGUI = new ViewEvento(controller, nome, frame, null, null, null);
                         terzaGUI.frameEventi.setVisible(true);
                         frame.setVisible(false);
                     }

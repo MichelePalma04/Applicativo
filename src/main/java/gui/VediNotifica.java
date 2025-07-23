@@ -18,6 +18,7 @@ public class VediNotifica {
     private JPanel panelInviti;
     private JPanel panelbottone;
     private JButton backButton;
+    private String loginUtente;
     private JScrollPane scroll;
     private Controller controller;
     public JFrame frameNotifiche;
@@ -27,8 +28,9 @@ public class VediNotifica {
     public JFrame frameAreaPartecipante;
     private Evento evento;
 
-    public VediNotifica(Controller controller, JFrame frame, JFrame frame2, JFrame frame3, JFrame frame4) {
+    public VediNotifica(Controller controller, String loginUtente, JFrame frame, JFrame frame2, JFrame frame3, JFrame frame4) {
         this.controller = controller;
+        this.loginUtente = loginUtente;
         frameEventi = frame;
         frameGiudice = frame2;
         frameAccesso = frame3;
@@ -50,18 +52,16 @@ public class VediNotifica {
             public void actionPerformed(ActionEvent e) {
                 frameNotifiche.setVisible(false);
                 frameEventi.dispose();
-                ViewEvento nuovo = new ViewEvento(controller, frameAccesso, frameAreaPartecipante, frameNotifiche, frameGiudice);
+                ViewEvento nuovo = new ViewEvento(controller, loginUtente, frameAccesso, frameAreaPartecipante, frameNotifiche, frameGiudice);
                 nuovo.frameEventi.setVisible(true);
-               // frameEventi.setVisible(true);
-                //frameNotifiche.setVisible(false);
             }
         });
     }
     private void aggiornaInviti() {
-        Utente utente = controller.getUtenteCorrente();
+        Utente utente = controller.getUtenteDaDB(loginUtente);
         panelInviti.removeAll();
 
-        List<InvitoGiudice> inviti = controller.getInvitiPendentiUtente(utente.getLogin());
+        List<InvitoGiudice> inviti = controller.getInvitiPendentiUtente(loginUtente);
 
         if (inviti.isEmpty()) {
             panelInviti.add(new JLabel("Nessun invito ricevuto"));

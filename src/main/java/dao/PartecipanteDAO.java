@@ -17,4 +17,5 @@ public interface PartecipanteDAO {
     //void setEventoDAO (IEventoDAO eventoDAO);
     void setUtenteDAO (IUtenteDAO utenteDAO);
     void setTeamDAO (ITeamDAO teamDAO);
+    void joinTeam(String loginPartecipante, String nomeTeam, int eventoId);
 }

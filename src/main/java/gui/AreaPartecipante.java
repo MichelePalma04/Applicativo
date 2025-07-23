@@ -11,6 +11,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
 
 public class AreaPartecipante {
     private JLabel avviso;
@@ -18,6 +19,8 @@ public class AreaPartecipante {
     private JComboBox <Team> comboBox1;
     private JButton uniscitiButton;
     private JLabel benvenuto;
+    private String loginPartecipante;
+    private int eventoId;
     private JLabel teamLabel;
     private JPanel panel;
     private JLabel messaggio;
@@ -36,13 +39,18 @@ public class AreaPartecipante {
     public JFrame frameGiudice;
 
 
-    public AreaPartecipante(Partecipante partecipante, Evento evento, JFrame frame, JFrame frame2, JFrame frame3, JFrame frame4, Controller controller) {
+    public AreaPartecipante(String loginPartecipante, int eventoId, JFrame frame, JFrame frame2, JFrame frame3, JFrame frame4, Controller controller) {
         this.controller = controller;
+        this.loginPartecipante = loginPartecipante;
+        this.eventoId = eventoId;
         frameEventi = frame;
         frameAccedi = frame2;
         frameNotifica = frame3;
         frameGiudice = frame4;
-        frameAreaPartecipante = new JFrame("Area Personale " + partecipante.getLogin());
+
+        Partecipante partecipante = controller.getPartecipanteDaDB(loginPartecipante, eventoId);
+        Evento evento = controller.geteventoById(eventoId);
+        frameAreaPartecipante = new JFrame("Area Personale " + loginPartecipante);
         frameAreaPartecipante.setContentPane(panel);
         frameAreaPartecipante.pack();
         frameAreaPartecipante.setSize(600, 600);
@@ -51,11 +59,11 @@ public class AreaPartecipante {
         messaggio.setVisible(false);
 
         avviso.setText("Iscrizione avvenuta con successo!");
-        benvenuto.setText("Benvenuto, " + partecipante.getLogin());
+        benvenuto.setText("Benvenuto, " + loginPartecipante);
 
 
 
-        ArrayList<Team> teams = evento.getTeams();
+        List<Team> teams = controller.getTeamsEvento(eventoId);
         if (teams.isEmpty()) {
             uniscitiButton.setEnabled(false);
             comboBox1.setEnabled(false);
@@ -66,16 +74,18 @@ public class AreaPartecipante {
             }
         }
 
-
-        boolean inTeam = false;
+       // boolean inTeam = false;
+        // Verifica se il partecipante è già in un team
         Team teamUtente = null;
-        for (Team team : evento.getTeams()) {
-            if (team.getPartecipanti().contains(partecipante)) {
-                inTeam = true;
+        for (Team team : teams) {
+            if (controller.isPartecipanteInTeam(loginPartecipante, team.getNomeTeam(), eventoId)) {
+                //inTeam = true;
                 teamUtente = team;
                 break;
             }
         }
+
+        boolean inTeam = (teamUtente != null);
         creaTeamButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -84,9 +94,9 @@ public class AreaPartecipante {
                     JOptionPane.showMessageDialog(frameAreaPartecipante, "Inserire un nome valido.", "Error", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
-
-                Team nuovoTeam = new Team(nome, partecipante, null);
-                evento.getTeams().add(nuovoTeam);
+                // Crea il team nel DB e unisci subito il partecipante
+                Team nuovoTeam = controller.creaTeam(nome, loginPartecipante, eventoId);
+               // evento.getTeams().add(nuovoTeam);
                 comboBox1.addItem(nuovoTeam);
 
                 nomeField.setVisible(false);
@@ -146,7 +156,7 @@ public class AreaPartecipante {
         homeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ViewEvento gui = new ViewEvento(controller, frameAccedi, frameAreaPartecipante, frameNotifica, frameGiudice);
+                ViewEvento gui = new ViewEvento(controller, loginPartecipante, frameAccedi, frameAreaPartecipante, frameNotifica, frameGiudice);
                 gui.frameAreaPartecipante.setVisible(false);
                 frameEventi.setVisible(true);
 
@@ -156,7 +166,7 @@ public class AreaPartecipante {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Team teamSelected = (Team) comboBox1.getSelectedItem();
-
+/*
                 for (Team team : teams) {
                     if (team.getPartecipanti().contains(partecipante)) {
                         JOptionPane.showMessageDialog(frameAreaPartecipante, "Sei già in un team.");
@@ -170,6 +180,21 @@ public class AreaPartecipante {
                 teamSelected.getPartecipanti().add(partecipante);
                 JOptionPane.showMessageDialog(frameAreaPartecipante, "Ti sei unito al team "+ teamSelected.getNomeTeam());
 
+ */
+                // Verifica se già in un team tramite Controller
+                if (controller.isPartecipanteInTeam(loginPartecipante, teamSelected.getNomeTeam(), eventoId)) {
+                    JOptionPane.showMessageDialog(frameAreaPartecipante, "Sei già in un team.");
+                    return;
+                }
+
+                // Verifica la dimensione massima tramite Controller
+                if (controller.getDimTeam(teamSelected.getNomeTeam(), eventoId) >= evento.getDim_max_team()) {
+                    JOptionPane.showMessageDialog(frameAreaPartecipante, "Il team " + teamSelected.getNomeTeam() + " è pieno.");
+                    return;
+                }
+
+                // Unisci il partecipante al team tramite Controller
+                controller.unisciPartecipanteATeam(loginPartecipante, teamSelected.getNomeTeam(), eventoId);
                 creaTeamButton.setVisible(false);
                 nomeField.setVisible(false);
                 nomeTeam.setVisible(false);
@@ -202,15 +227,17 @@ public class AreaPartecipante {
                 if (risultato == JFileChooser.APPROVE_OPTION) {
                     java.io.File file = fileChooser.getSelectedFile();
 
+                    //Trova il team dell'utente tramite controller
                     Team teamUser = null;
-                    for (Team t: evento.getTeams()) {
-                        if (t.getPartecipanti().contains(partecipante)) {
+                    List<Team> teams = controller.getTeamsEvento(eventoId);
+                    for (Team t: teams) {
+                        if (controller.isPartecipanteInTeam(loginPartecipante, t.getNomeTeam(), eventoId)) {
                             teamUser = t;
                             break;
                         }
                     }
                     Documento documento = new Documento(LocalDate.now(), file, teamUser);
-                    controller.caricaDocumento (evento, documento);
+                    controller.caricaDocumento (documento, teamUser.getNomeTeam(), eventoId);
                     JOptionPane.showMessageDialog(frameAreaPartecipante, "Documento caricato con successo!");
                 }
             }

@@ -23,17 +23,19 @@ public class ViewEvento {
     private JLabel notifiche;
     private JPanel panelBottoni;
     private Controller controller;
+    private String loginUtente;
     public JFrame frameEventi;
     public JFrame frameAccedi;
     public JFrame frameAreaPartecipante;
     public JFrame frameNotifiche;
     public JFrame frameGiudice;
 
-    public ViewEvento(Controller controller, JFrame frame, JFrame frame2, JFrame frame3, JFrame frame4) {
+    public ViewEvento(Controller controller, String loginUtente, JFrame frame, JFrame frame2, JFrame frame3, JFrame frame4) {
         scroll.getVerticalScrollBar().setUnitIncrement(20); //abbiamo aumentato la sensibilità dello scroll
         frameAccedi = frame;
         frameGiudice = frame4;
         this.controller = controller;
+        this.loginUtente = loginUtente;
 
         frameAreaPartecipante = frame2;
         frameNotifiche = frame3;
@@ -70,9 +72,9 @@ public class ViewEvento {
             eventoPanel.add(classificaButton);
             classificaButton.setVisible(false);
 
-            Utente u = controller.getUtenteCorrente();
-            Partecipante partecipante = controller.getPartecipanteDaDB(u.getLogin(), ev.getId());
-            Giudice giudice = controller.getGiudiceEvento(u.getLogin(), ev.getId());
+            Utente u = controller.getUtenteDaDB(loginUtente);
+            Partecipante partecipante = controller.getPartecipanteDaDB(loginUtente, ev.getId());
+            Giudice giudice = controller.getGiudiceEvento(loginUtente, ev.getId());
 
             if(giudice != null) {
                 iscrivitiButton.setVisible(false);
@@ -99,7 +101,7 @@ public class ViewEvento {
             areaGiudice.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    Giudice g =  controller.getGiudiceCorrente(ev);
+                    Giudice g =  controller.getGiudiceEvento(loginUtente, ev.getId());
                     if(g != null) {
                         AreaGiudice gui = new AreaGiudice(controller, g, frame, frameEventi, ev);
                         gui.frameGiudice.setVisible(true);
@@ -111,32 +113,32 @@ public class ViewEvento {
             iscrivitiButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    Utente u = controller.getUtenteCorrente();
+                    Utente u = controller.getUtenteDaDB(loginUtente);
 
                     // Verifica se l'utente è già partecipante per questo evento (controllo su DB)
-                    Partecipante p = controller.getPartecipanteDaDB(u.getLogin(), ev.getId());
+                    Partecipante p = controller.getPartecipanteDaDB(loginUtente, ev.getId());
                     if (p != null) {
                         // Già iscritto: mostra solo l'area partecipante
                         iscrivitiButton.setVisible(false);
                         visualizzaArea.setVisible(true);
-                        AreaPartecipante areaGUI = new AreaPartecipante(p, ev, frameEventi, frameAccedi, frameNotifiche, frameAreaPartecipante, controller);
+                        AreaPartecipante areaGUI = new AreaPartecipante(loginUtente, ev.getId(), frameEventi, frameAccedi, frameNotifiche, frameAreaPartecipante, controller);
                         areaGUI.frameAreaPartecipante.setVisible(true);
                         frameEventi.setVisible(false);
                         return;
                     }
 
                     // Tenta iscrizione su DB
-                    boolean successo = controller.iscriviPartecipante(u.getLogin(), ev.getId());
+                    boolean successo = controller.iscriviPartecipante(loginUtente, ev.getId());
                     if (successo) {
                         // Recupera ora il nuovo partecipante dal DB
-                        Partecipante nuovoPartecipante = controller.getPartecipanteDaDB(u.getLogin(), ev.getId());
-                        controller.setPartecipantCorrente(nuovoPartecipante);
+                       // Partecipante nuovoPartecipante = controller.getPartecipanteDaDB(loginUtente, ev.getId());
+                        //controller.setPartecipantCorrente(nuovoPartecipante);
 
                         JOptionPane.showMessageDialog(frameEventi, "Iscrizione completata con successo!");
                         iscrivitiButton.setVisible(false);
                         visualizzaArea.setVisible(true);
 
-                        AreaPartecipante areaGUI = new AreaPartecipante(nuovoPartecipante, ev, frameEventi, frameAccedi, frameNotifiche, frameAreaPartecipante, controller);
+                        AreaPartecipante areaGUI = new AreaPartecipante(loginUtente, ev.getId(), frameEventi, frameAccedi, frameNotifiche, frameAreaPartecipante, controller);
                         areaGUI.frameAreaPartecipante.setVisible(true);
                         frameEventi.setVisible(false);
                     } else {
@@ -190,8 +192,8 @@ public class ViewEvento {
             visualizzaArea.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    Partecipante p = controller.getPartecipanteDaDB(u.getLogin(), ev.getId());
-                    AreaPartecipante areaGUI = new AreaPartecipante(p, ev, frameEventi, frameAccedi, frameNotifiche, frameAreaPartecipante, controller);
+                    //Partecipante p = controller.getPartecipanteDaDB(loginUtente, ev.getId());
+                    AreaPartecipante areaGUI = new AreaPartecipante(loginUtente, ev.getId(), frameEventi, frameAccedi, frameNotifiche, frameAreaPartecipante, controller);
                     areaGUI.frameAreaPartecipante.setVisible(true);
                     frameEventi.setVisible(false);
                 }
@@ -207,8 +209,8 @@ public class ViewEvento {
         logOutButton1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                controller.setPartecipantCorrente(null);
-                controller.setUtenteCorrente(null);
+                //controller.setPartecipantCorrente(null);
+                //controller.setUtenteCorrente(null);
                 frameEventi.setVisible(false);
                 frameAccedi.setVisible(true);
             }
@@ -216,10 +218,10 @@ public class ViewEvento {
         visualizzaButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Utente utente = controller.getUtenteCorrente();
+                Utente utente = controller.getUtenteDaDB(loginUtente);
                 System.out.println("Utente corrente: " + utente.getLogin());
                 System.out.println("Inviti trovati: " + controller.getInvitiUtente(utente).size());
-                VediNotifica notifica = new VediNotifica(controller, frameEventi, frameGiudice, frameAccedi, frameAreaPartecipante );
+                VediNotifica notifica = new VediNotifica(controller, loginUtente, frameEventi, frameGiudice, frameAccedi, frameAreaPartecipante );
                 notifica.frameNotifiche.setVisible(true);
                 frameEventi.setVisible(false);
 

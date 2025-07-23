@@ -17,6 +17,7 @@ public class Controller {
     private TeamDAO teamDAO;
     private GiudiceDAO giudiceDAO;
     private InvitoGiudiceDAO invitoGiudiceDAO;
+    private DocumentoDAO documentoDAO;
     private Utente utenteCorrente = null;
     private ArrayList<Utente> utentiRegistrati;
     private ArrayList<Evento> eventiDisponibili;
@@ -25,7 +26,7 @@ public class Controller {
     private ArrayList<InvitoGiudice> invitiPendenti;
     private ArrayList<InvitoGiudice> invitiGiudice;
 
-    public Controller(UtenteDAO utenteDAO, OrganizzatoreDAO organizzatoreDAO, PartecipanteDAO partecipanteDAO, GiudiceDAO giudiceDAO, EventoDAO eventoDAO, TeamDAO teamDAO, InvitoGiudiceDAO invitoGiudiceDAO) {
+    public Controller(UtenteDAO utenteDAO, OrganizzatoreDAO organizzatoreDAO, PartecipanteDAO partecipanteDAO, GiudiceDAO giudiceDAO, EventoDAO eventoDAO, TeamDAO teamDAO, InvitoGiudiceDAO invitoGiudiceDAO, DocumentoDAO documentoDAO) {
         this.utentiRegistrati = new ArrayList<>();
         this.eventiDisponibili = new ArrayList<>();
         this.invitiPendenti = new ArrayList<>();
@@ -37,6 +38,7 @@ public class Controller {
         this.teamDAO = teamDAO;
         this.giudiceDAO = giudiceDAO;
         this.invitoGiudiceDAO = invitoGiudiceDAO;
+        this.documentoDAO = documentoDAO;
         initEventi();
     }
 
@@ -380,10 +382,11 @@ public class Controller {
         }
         return false;
     }
-
+/*
     public void caricaDocumento (Evento e, Documento documento) {
         e.getDocumenti().add(documento);
     }
+ */
 
     public ArrayList <Documento> getDocumentoTeam(Evento evento, Team team) {
         ArrayList <Documento> documento = new ArrayList <>();
@@ -536,5 +539,46 @@ public class Controller {
     public Giudice getGiudiceEvento(String login, int eventoId) {
         return giudiceDAO.getGiudice(login, eventoId);
     }
+
+    public Utente getUtenteDaDB(String login) {
+        return utenteDAO.getUtentebyLogin(login);
+    }
+
+    public Evento geteventoById(int id) {
+        return eventoDAO.getEvento(id);
+    }
+
+    public List<Team> getTeamsEvento (int eventoId) {
+        return teamDAO.getTeamEvento(eventoId);
+    }
+
+    // Crea un nuovo team e lo aggiunge al DB
+    public Team creaTeam(String nomeTeam, String loginPartecipante, int eventoId) {
+        Team team = new Team(nomeTeam, new ArrayList<>(), new ArrayList<>());
+        teamDAO.aggiungiTeam(team, eventoId);
+        // Unisci subito il partecipante al team appena creato
+        partecipanteDAO.joinTeam(loginPartecipante, nomeTeam, eventoId);
+        return teamDAO.getTeam(nomeTeam, eventoId);
+    }
+
+    // Unisci il partecipante a un team
+    public void unisciPartecipanteATeam(String loginPartecipante, String nomeTeam, int eventoId) {
+        partecipanteDAO.joinTeam(loginPartecipante, nomeTeam, eventoId);
+    }
+
+    // Verifica se un partecipante è già in un team
+    public boolean isPartecipanteInTeam(String loginPartecipante, String nomeTeam, int eventoId) {
+        return teamDAO.isPartecipanteInTeam(loginPartecipante, nomeTeam, eventoId);
+    }
+
+    // Dimensione attuale del team
+    public int getDimTeam(String nomeTeam, int eventoId) {
+        return teamDAO.getDimTeam(nomeTeam, eventoId);
+    }
+    // Carica un documento nel DB
+    public void caricaDocumento(Documento documento, String nomeTeam, int eventoId) {
+        documentoDAO.save(documento, nomeTeam, eventoId);
+    }
+
 }
 

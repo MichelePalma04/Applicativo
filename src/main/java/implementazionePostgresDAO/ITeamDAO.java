@@ -75,6 +75,47 @@ public class ITeamDAO implements TeamDAO {
     }
 
     @Override
+    public Team getTeamByNomeEvento(String nomeTeam, int eventoId) {
+        return getTeam(nomeTeam, eventoId);
+    }
+
+    // Controlla se un partecipante è in un team (con nome+evento)
+    @Override
+    public boolean isPartecipanteInTeam(String loginPartecipante, String nomeTeam, int eventoId) {
+        String sql = "SELECT COUNT(*) FROM partecipante WHERE team_nome = ? AND evento_id = ? AND utente_login = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, nomeTeam);
+            ps.setInt(2, eventoId);
+            ps.setString(3, loginPartecipante);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1) > 0;
+            }
+        } catch (SQLException e) {
+            System.out.println("Errore nel controllo partecipante-in-team: " + e.getMessage());
+        }
+        return false;
+    }
+
+    // Ritorna la dimensione del team (con nome+evento)
+    @Override
+    public int getDimTeam(String nomeTeam, int eventoId) {
+        String sql = "SELECT COUNT(*) FROM partecipante WHERE team_nome = ? AND evento_id = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, nomeTeam);
+            ps.setInt(2, eventoId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            System.out.println("Errore nel calcolo dimensione team: " + e.getMessage());
+        }
+        return 0;
+    }
+
+
+    @Override
     public boolean eliminaTeam(String nomeTeam, int eventoId) {
         String sql = "DELETE FROM team WHERE nome_team = ? AND evento_id = ?";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
