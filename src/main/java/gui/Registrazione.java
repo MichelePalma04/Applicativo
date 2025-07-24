@@ -3,6 +3,7 @@ package gui;
 import controller.Controller;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -23,10 +24,49 @@ public class Registrazione {
         this.frameAccedi = frame;
         this.controller = controller;
 
+        // Colori e font personalizzati
+        Color bgColor = new Color(240, 248, 255);       // Azzurrino chiaro
+        Color btnColor = new Color(30, 144, 255);       // Blu moderno
+        Color btnHoverColor = new Color(65, 105, 225);  // Blu scuro
+
+        Font labelFont = new Font("SansSerif", Font.BOLD, 16);
+        Font fieldFont = new Font("SansSerif", Font.PLAIN, 15);
+
+        // Applica i font e colore
+        panel.setBackground(bgColor);
+        nome.setFont(labelFont);
+        password.setFont(labelFont);
+        nomeUtenteField.setFont(fieldFont);
+        passwordField.setFont(fieldFont);
+
+        // Padding ai campi (non bordo arrotondato)
+
+
+        // Stile pulsante
+        registrati.setBackground(btnColor);
+        registrati.setForeground(Color.WHITE);
+        registrati.setFocusPainted(false);
+        registrati.setFont(labelFont);
+        registrati.setBorder(BorderFactory.createEmptyBorder(10, 25, 10, 25));
+
+        // Effetto hover sul bottone
+        registrati.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                registrati.setBackground(btnHoverColor);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                registrati.setBackground(btnColor);
+            }
+        });
+
+        // Padding del pannello principale
+        panel.setBorder(BorderFactory.createEmptyBorder(40, 40, 40, 40));
+
+
         frameRegistrazione = new JFrame("Registrazione");
         frameRegistrazione.setContentPane(panel);
         frameRegistrazione.pack();
-        frameRegistrazione.setSize(500, 500);
+        frameRegistrazione.setSize(600, 600);
         frameRegistrazione.setLocationRelativeTo(null);
 
         frameRegistrazione.addWindowListener(new WindowAdapter() {

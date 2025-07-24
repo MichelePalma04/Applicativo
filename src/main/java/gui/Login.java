@@ -3,6 +3,7 @@ package gui;
 import implementazione_postgres_dao.*;
 import model .*;
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import controller.Controller;
@@ -22,6 +23,56 @@ public class Login {
     private Controller controller;
 
     public Login() {
+        Color bgColor = new Color(240, 248, 255); // Azzurrino molto chiaro
+        Color btnColor = new Color(30, 144, 255); // Blu moderno
+        Color btnHoverColor = new Color(65, 105, 225); // Blu scuro
+
+        Login.setBackground(bgColor);
+        panel.setBackground(bgColor);
+
+        // Font moderni
+        Font labelFont = new Font("SansSerif", Font.BOLD, 16);
+        Font fieldFont = new Font("SansSerif", Font.PLAIN, 15);
+
+        nomeUtenteLabel.setFont(labelFont);
+        passwordLabel.setFont(labelFont);
+        nomeUtenteField.setFont(fieldFont);
+        passwordField.setFont(fieldFont);
+
+        // Pulsanti stilizzati
+        accediButton.setBackground(btnColor);
+        accediButton.setForeground(Color.WHITE);
+        accediButton.setFocusPainted(false);
+        accediButton.setFont(labelFont);
+        accediButton.setBorder(BorderFactory.createEmptyBorder(10, 25, 10, 25));
+
+        registratiButton.setBackground(btnColor);
+        registratiButton.setForeground(Color.WHITE);
+        registratiButton.setFocusPainted(false);
+        registratiButton.setFont(labelFont);
+        registratiButton.setBorder(BorderFactory.createEmptyBorder(10, 25, 10, 25));
+
+        // Effetto hover
+        accediButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                accediButton.setBackground(btnHoverColor);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                accediButton.setBackground(btnColor);
+            }
+        });
+        registratiButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                registratiButton.setBackground(btnHoverColor);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                registratiButton.setBackground(btnColor);
+            }
+        });
+
+        // Migliora layout con padding
+        Login.setBorder(BorderFactory.createEmptyBorder(40, 40, 40, 40));
+
         IUtenteDAO utenteDAO = new IUtenteDAO();
         IOrganizzatoreDAO organizzatoreDAO = new IOrganizzatoreDAO();
         IPartecipanteDAO partecipanteDAO = new IPartecipanteDAO();
@@ -88,7 +139,7 @@ public class Login {
         frame.setContentPane(new Login().Login);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
-        frame.setSize(500, 500);
+        frame.setSize(600, 600);
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
     }
