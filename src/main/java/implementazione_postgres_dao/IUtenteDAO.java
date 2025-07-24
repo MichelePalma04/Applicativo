@@ -1,4 +1,4 @@
-package implementazionePostgresDAO;
+package implementazione_postgres_dao;
 
 import dao.UtenteDAO;
 import model.Utente;
@@ -16,7 +16,7 @@ public class IUtenteDAO implements UtenteDAO {
         try{
             connection = ConnessioneDatabase.getInstance().connection;
         }catch (SQLException e){
-            System.out.println("Errore nella connessione al database: "+e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -29,14 +29,14 @@ public class IUtenteDAO implements UtenteDAO {
             ps.executeUpdate();
             return true;
         }catch(SQLException e){
-            System.out.println("Errore nell'inserimento utente: "+e.getMessage());
+            e.printStackTrace();
             return false;
         }
     }
 
     @Override
     public Utente getUtentebyLogin (String login) {
-        String sql = "SELECT * FROM utente WHERE login = ?";
+        String sql = "SELECT login, password FROM utente WHERE login = ?";
         try (PreparedStatement ps = connection.prepareStatement(sql)){
             ps.setString(1, login);
             ResultSet rs = ps.executeQuery();
@@ -44,13 +44,13 @@ public class IUtenteDAO implements UtenteDAO {
                 return new Utente(rs.getString("login"), rs.getString("password"));
             }
         }catch (SQLException e){
-            System.out.println("Errore nella ricerca utente: "+e.getMessage());
+            e.printStackTrace();
         }
         return null;
     }
 
     public Utente getUtentebyLoginAndPassword (String login, String password) {
-        String sql = "SELECT * FROM utente WHERE login = ? AND password = ?";
+        String sql = "SELECT login, password FROM utente WHERE login = ? AND password = ?";
         try (PreparedStatement ps = connection.prepareStatement(sql)){
             ps.setString(1, login);
             ps.setString(2, password);
@@ -59,7 +59,7 @@ public class IUtenteDAO implements UtenteDAO {
                 return new Utente(rs.getString("login"), rs.getString("password"));
             }
         }catch(SQLException e){
-            System.out.println("Errore nella verifica delle credenziali: "+e.getMessage());
+            e.printStackTrace();
         }
         return null;
     }
@@ -67,14 +67,14 @@ public class IUtenteDAO implements UtenteDAO {
     @Override
     public List<Utente> getAllUtenti() {
         List<Utente> utenti = new ArrayList<>();
-        String sql = "SELECT * FROM utente";
+        String sql = "SELECT login, password FROM utente";
         try (Statement st = connection.createStatement();
              ResultSet rs = st.executeQuery(sql)) {
             while (rs.next()) {
                 utenti.add(new Utente(rs.getString("login"), rs.getString("password")));
             }
         } catch (SQLException e) {
-            System.out.println("Errore nel recupero utenti: " + e.getMessage());
+            e.printStackTrace();
         }
         return utenti;
     }
@@ -86,7 +86,7 @@ public class IUtenteDAO implements UtenteDAO {
             ps.setString(1, login);
             return ps.executeUpdate() > 0;
         } catch (SQLException e) {
-            System.out.println("Errore nell'eliminazione utente: " + e.getMessage());
+            e.printStackTrace();
             return false;
         }
     }
@@ -99,7 +99,7 @@ public class IUtenteDAO implements UtenteDAO {
             ps.setString(2, utente.getLogin());
             return ps.executeUpdate() > 0;
         } catch (SQLException e) {
-            System.out.println("Errore nell'aggiornamento utente: " + e.getMessage());
+            e.printStackTrace();
             return false;
         }
     }

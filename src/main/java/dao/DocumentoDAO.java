@@ -1,8 +1,8 @@
 package dao;
 
-import implementazionePostgresDAO.IDocumentoDAO;
-import implementazionePostgresDAO.IGiudiceDAO;
-import implementazionePostgresDAO.ITeamDAO;
+import implementazione_postgres_dao.IDocumentoDAO;
+import implementazione_postgres_dao.IGiudiceDAO;
+import implementazione_postgres_dao.ITeamDAO;
 import model.CommentoGiudice;
 import model.Documento;
 

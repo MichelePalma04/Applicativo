@@ -1,6 +1,6 @@
 package dao;
-import implementazionePostgresDAO.IPartecipanteDAO;
-import implementazionePostgresDAO.IVotoDAO;
+import implementazione_postgres_dao.IPartecipanteDAO;
+import implementazione_postgres_dao.IVotoDAO;
 import model.Team;
 import java.util.List;
 

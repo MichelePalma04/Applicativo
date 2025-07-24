@@ -1,9 +1,6 @@
-package implementazionePostgresDAO;
+package implementazione_postgres_dao;
 import dao.OrganizzatoreDAO;
-import dao.UtenteDAO;
 import model.Organizzatore;
-import model.Evento;
-import model.Giudice;
 import database.ConnessioneDatabase;
 
 import java.sql.*;
@@ -18,7 +15,6 @@ public class IOrganizzatoreDAO implements OrganizzatoreDAO {
     public IOrganizzatoreDAO() {
         try {
             connection = ConnessioneDatabase.getInstance().connection;
-            //this.utenteDAO = utenteDAO;
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -26,7 +22,7 @@ public class IOrganizzatoreDAO implements OrganizzatoreDAO {
 
     @Override
     public Organizzatore getOrganizzatore(String login) {
-        String sql = "SELECT * FROM organizzatore WHERE utente_login = ?";
+        String sql = "SELECT utente_login FROM organizzatore WHERE utente_login = ?";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setString(1, login);
             ResultSet rs = ps.executeQuery();
@@ -64,15 +60,12 @@ public class IOrganizzatoreDAO implements OrganizzatoreDAO {
             ps.setInt(2, eventoId);
             ps.executeUpdate();
             return true;
-        } catch (SQLException e) {}
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return false;
     }
 
-    @Override
-    public boolean aggiornaOrganizzatore(Organizzatore o, int eventoId) {
-        // Di solito non serve aggiornare la tabella organizzatore, solo aggiungere o eliminare
-        return false;
-    }
 
     @Override
     public boolean eliminaOrganizzatore(String login, int eventoId) {

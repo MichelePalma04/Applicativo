@@ -1,4 +1,4 @@
-package implementazionePostgresDAO;
+package implementazione_postgres_dao;
 
 import dao.TeamDAO;
 import model.Partecipante;
@@ -19,16 +19,14 @@ public class ITeamDAO implements TeamDAO {
     public ITeamDAO() {
         try {
             connection = ConnessioneDatabase.getInstance().connection;
-            //this.partecipanteDAO = partecipanteDAO;
-           // this.votoDAO = votoDAO;
         } catch (SQLException e) {
-            System.out.println("Errore nella connessione al database: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
     @Override
     public Team getTeam(String nomeTeam, int eventoId) {
-        String sql = "SELECT * FROM team WHERE nome_team = ? AND evento_id = ?";
+        String sql = "SELECT nome_team, evento_id FROM team WHERE nome_team = ? AND evento_id = ?";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setString(1, nomeTeam);
             ps.setInt(2, eventoId);
@@ -39,7 +37,7 @@ public class ITeamDAO implements TeamDAO {
                 return new Team(nomeTeam, partecipanti, voto);
             }
         } catch (SQLException e) {
-            System.out.println("Errore nella ricerca team: " + e.getMessage());
+            e.printStackTrace();
         }
         return null;
     }
@@ -55,7 +53,7 @@ public class ITeamDAO implements TeamDAO {
                 lista.add(getTeam(rs.getString("nome_team"), eventoId));
             }
         } catch (SQLException e) {
-            System.out.println("Errore nel recupero team: " + e.getMessage());
+            e.printStackTrace();
         }
         return lista;
     }
@@ -69,7 +67,7 @@ public class ITeamDAO implements TeamDAO {
             ps.executeUpdate();
             return true;
         } catch (SQLException e) {
-            System.out.println("Errore nell'inserimento team: " + e.getMessage());
+            e.printStackTrace();
             return false;
         }
     }
@@ -92,7 +90,7 @@ public class ITeamDAO implements TeamDAO {
                 return rs.getInt(1) > 0;
             }
         } catch (SQLException e) {
-            System.out.println("Errore nel controllo partecipante-in-team: " + e.getMessage());
+            e.printStackTrace();
         }
         return false;
     }
@@ -109,7 +107,7 @@ public class ITeamDAO implements TeamDAO {
                 return rs.getInt(1);
             }
         } catch (SQLException e) {
-            System.out.println("Errore nel calcolo dimensione team: " + e.getMessage());
+            e.printStackTrace();
         }
         return 0;
     }
@@ -123,7 +121,7 @@ public class ITeamDAO implements TeamDAO {
             ps.setInt(2, eventoId);
             return ps.executeUpdate() > 0;
         } catch (SQLException e) {
-            System.out.println("Errore nell'eliminazione team: " + e.getMessage());
+            e.printStackTrace();
             return false;
         }
     }

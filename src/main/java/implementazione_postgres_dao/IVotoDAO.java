@@ -1,7 +1,5 @@
-package implementazionePostgresDAO;
+package implementazione_postgres_dao;
 
-import dao.GiudiceDAO;
-import dao.PartecipanteDAO;
 import dao.VotoDAO;
 import model.Voto;
 import model.Giudice;
@@ -15,25 +13,23 @@ import java.util.List;
 public class IVotoDAO implements VotoDAO {
     private Connection connection;
     private IGiudiceDAO giudiceDAO;
-    private ITeamDAO teamDAO;
 
     public IVotoDAO() {
         try {
             connection = ConnessioneDatabase.getInstance().connection;
-            //this.giudiceDAO = giudiceDAO;
-            //this.teamDAO = teamDAO;
-        } catch (SQLException e) {}
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public Voto getVoto(int id) {
-        String sql = "SELECT * FROM voto WHERE id = ?";
+        String sql = "SELECT id, giudice_login, team_nome, evento_id, votazione FROM voto WHERE id = ?";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 Giudice giudice = giudiceDAO.getGiudice(rs.getString("giudice_login"), rs.getInt("evento_id"));
-                //Team team = teamDAO.getTeam(rs.getString("team_nome"), rs.getInt("evento_id"));
                 Team team = new Team(rs.getString("team_nome"), new ArrayList<>(), new ArrayList<>());
                 int votazione = rs.getInt("votazione");
                 return new Voto(giudice, team, votazione);
@@ -55,7 +51,9 @@ public class IVotoDAO implements VotoDAO {
             while (rs.next()) {
                 lista.add(getVoto(rs.getInt("id")));
             }
-        } catch (SQLException e) {}
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return lista;
     }
 
@@ -69,7 +67,9 @@ public class IVotoDAO implements VotoDAO {
             while (rs.next()) {
                 lista.add(getVoto(rs.getInt("id")));
             }
-        } catch (SQLException e) {}
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return lista;
     }
 
@@ -83,7 +83,9 @@ public class IVotoDAO implements VotoDAO {
             ps.setInt(4, voto.getVotazione());
             ps.executeUpdate();
             return true;
-        } catch (SQLException e) {}
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return false;
     }
 
@@ -94,7 +96,9 @@ public class IVotoDAO implements VotoDAO {
             ps.setInt(1, voto.getVotazione());
             ps.setInt(2, id);
             return ps.executeUpdate() > 0;
-        } catch (SQLException e) {}
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return false;
     }
 
@@ -104,7 +108,9 @@ public class IVotoDAO implements VotoDAO {
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, id);
             return ps.executeUpdate() > 0;
-        } catch (SQLException e) {}
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return false;
     }
 
@@ -157,8 +163,4 @@ public class IVotoDAO implements VotoDAO {
         this.giudiceDAO = giudiceDAO;
     }
 
-    @Override
-    public void setTeamDAO(ITeamDAO teamDAO) {
-        this.teamDAO = teamDAO;
-    }
 }

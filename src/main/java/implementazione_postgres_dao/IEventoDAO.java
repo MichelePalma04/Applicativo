@@ -1,9 +1,7 @@
-package implementazionePostgresDAO;
+package implementazione_postgres_dao;
 import dao.*;
 import model.Evento;
 import model.Organizzatore;
-import model.Giudice;
-import model.Partecipante;
 import database.ConnessioneDatabase;
 
 
@@ -15,24 +13,18 @@ import java.util.List;
 public class IEventoDAO implements EventoDAO {
     private Connection connection;
     private IOrganizzatoreDAO organizzatoreDAO;
-    private IGiudiceDAO giudiceDAO;
-    private IPartecipanteDAO partecipanteDAO;
-    private ITeamDAO teamDAO;
+
 
     public IEventoDAO() {
         try {
             connection = ConnessioneDatabase.getInstance().connection;
-            //this.organizzatoreDAO = organizzatoreDAO;
-            //this.giudiceDAO = giudiceDAO;
-            //this.partecipanteDAO = partecipanteDAO;
-            //this.teamDAO = teamDAO;
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
     public Evento getEventoAttivo() {
-        String sql = "SELECT * FROM evento WHERE CURRENT_DATE BETWEEN inizio_registrazioni AND fine_registrazioni LIMIT 1";
+        String sql = "SELECT id, titolo, sede, data_inizio, data_fine, n_max_iscritti, dim_max_team, inizio_registrazioni, fine_registrazioni, problema, organizzatore_login, giudice_descrizione_login FROM evento WHERE CURRENT_DATE BETWEEN inizio_registrazioni AND fine_registrazioni LIMIT 1";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
@@ -47,7 +39,7 @@ public class IEventoDAO implements EventoDAO {
 
     @Override
     public Evento getEvento(int eventoId) {
-        String sql = "SELECT * FROM evento WHERE id = ?";
+        String sql = "SELECT id, titolo, sede, data_inizio, data_fine, n_max_iscritti, dim_max_team, inizio_registrazioni, fine_registrazioni, problema, organizzatore_login, giudice_descrizione_login FROM evento WHERE id = ?";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, eventoId);
             ResultSet rs = ps.executeQuery();
@@ -63,23 +55,23 @@ public class IEventoDAO implements EventoDAO {
                 LocalDate fineRegistrazioni = rs.getDate("fine_registrazioni").toLocalDate();
 
                 Organizzatore organizzatore = organizzatoreDAO.getOrganizzatore(rs.getString("organizzatore_login"));
-               // ArrayList<Giudice> giudici = new ArrayList<>(giudiceDAO.getGiudiciEvento(eventoId));
-               // ArrayList<Partecipante> partecipanti = new ArrayList<>(partecipanteDAO.getPartecipantiEvento(eventoId));
 
                 return new Evento(id, titolo, sede, dataInizio, dataFine, nMaxIscritti, dimMaxTeam, inizioRegistrazioni, fineRegistrazioni, organizzatore, null, null);
             }
-        } catch (SQLException e) {}
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return null;
     }
 
     @Override
     public List<Evento> getTuttiEventi() {
         List<Evento> lista = new ArrayList<>();
-        String sql = "SELECT * FROM evento";
+        String sql = "SELECT id, titolo, sede, data_inizio, data_fine, n_max_iscritti, dim_max_team, inizio_registrazioni, fine_registrazioni, problema, organizzatore_login, giudice_descrizione_login FROM evento";
         try (PreparedStatement ps = connection.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
-            while (rs.next()){
-                Evento evento = new Evento(rs.getInt("id"), rs.getString("titolo"), rs.getString("sede"),rs.getDate("data_inizio").toLocalDate(), rs.getDate("data_fine").toLocalDate(),  rs.getInt("n_max_iscritti"),  rs.getInt("dim_max_team"),  rs.getDate("inizio_registrazioni").toLocalDate(),  rs.getDate("fine_registrazioni").toLocalDate(), null, new ArrayList<>(), new ArrayList<>());
+            while (rs.next()) {
+                Evento evento = new Evento(rs.getInt("id"), rs.getString("titolo"), rs.getString("sede"), rs.getDate("data_inizio").toLocalDate(), rs.getDate("data_fine").toLocalDate(), rs.getInt("n_max_iscritti"), rs.getInt("dim_max_team"), rs.getDate("inizio_registrazioni").toLocalDate(), rs.getDate("fine_registrazioni").toLocalDate(), null, new ArrayList<>(), new ArrayList<>());
                 String loginOrg = rs.getString("organizzatore_login");
                 Organizzatore organizzatore = organizzatoreDAO.getOrganizzatore(loginOrg);
                 evento.setOrganizzatore(organizzatore);
@@ -108,7 +100,7 @@ public class IEventoDAO implements EventoDAO {
             ps.setString(10, evento.getOrganizzatore().getLogin());
             ps.setString(11, evento.getGiudici().isEmpty() ? null : evento.getGiudici().get(0).getLogin());
             ResultSet rs = ps.executeQuery();
-            if(rs.next()) {
+            if (rs.next()) {
                 evento.setId(rs.getInt("id"));
                 return evento;
             }
@@ -135,7 +127,9 @@ public class IEventoDAO implements EventoDAO {
             ps.setString(11, evento.getGiudici().isEmpty() ? null : evento.getGiudici().get(0).getLogin());
             ps.setInt(12, evento.getId());
             return ps.executeUpdate() > 0;
-        } catch (SQLException e) {}
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return false;
     }
 
@@ -145,25 +139,28 @@ public class IEventoDAO implements EventoDAO {
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, eventoId);
             return ps.executeUpdate() > 0;
-        } catch (SQLException e) {}
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return false;
     }
 
     public List<Evento> getEventiPerOrganizzatore(String login) {
         List<Evento> eventi = new ArrayList<>();
-        String sql = "SELECT * FROM evento WHERE organizzatore_login = ?";
-        try (PreparedStatement ps = connection.prepareStatement(sql)){
+        String sql = "SELECT id, titolo, sede, data_inizio, data_fine, n_max_iscritti, dim_max_team, inizio_registrazioni, fine_registrazioni, problema, organizzatore_login, giudice_descrizione_login FROM evento WHERE organizzatore_login = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setString(1, login);
             ResultSet rs = ps.executeQuery();
-            while (rs.next()){
-                Evento evento = new Evento(rs.getInt("id"), rs.getString("titolo"), rs.getString("sede"),rs.getDate("data_inizio").toLocalDate(), rs.getDate("data_fine").toLocalDate(),  rs.getInt("n_max_iscritti"),  rs.getInt("dim_max_team"),  rs.getDate("inizio_registrazioni").toLocalDate(),  rs.getDate("fine_registrazioni").toLocalDate(), null, new ArrayList<>(), new ArrayList<>());
+            while (rs.next()) {
+                Evento evento = new Evento(rs.getInt("id"), rs.getString("titolo"), rs.getString("sede"), rs.getDate("data_inizio").toLocalDate(), rs.getDate("data_fine").toLocalDate(), rs.getInt("n_max_iscritti"), rs.getInt("dim_max_team"), rs.getDate("inizio_registrazioni").toLocalDate(), rs.getDate("fine_registrazioni").toLocalDate(), null, new ArrayList<>(), new ArrayList<>());
                 eventi.add(evento);
             }
-        }catch(SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         return eventi;
     }
+
     // Restituisce la descrizione del problema per un evento
     @Override
     public String getProblemaEvento(int eventoId) {
@@ -172,7 +169,9 @@ public class IEventoDAO implements EventoDAO {
             ps.setInt(1, eventoId);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) return rs.getString("problema");
-        } catch (SQLException e) { e.printStackTrace(); }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return null;
     }
 
@@ -184,7 +183,9 @@ public class IEventoDAO implements EventoDAO {
             ps.setString(1, descrizione);
             ps.setInt(2, eventoId);
             ps.executeUpdate();
-        } catch (SQLException e) { e.printStackTrace(); }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     // Restituisce il login del giudice responsabile
@@ -195,7 +196,9 @@ public class IEventoDAO implements EventoDAO {
             ps.setInt(1, eventoId);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) return rs.getString("giudice_descrizione_login");
-        } catch (SQLException e) { e.printStackTrace(); }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return null;
     }
 
@@ -206,26 +209,15 @@ public class IEventoDAO implements EventoDAO {
             ps.setString(1, loginGiudice);
             ps.setInt(2, eventoId);
             return ps.executeUpdate() > 0;
-        } catch (SQLException e) { e.printStackTrace(); }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return false;
     }
 
     @Override
-    public void setGiudiceDAO (IGiudiceDAO giudiceDAO) {
-        this.giudiceDAO = giudiceDAO;
-    }
-    @Override
-    public void setPartecipanteDAO (IPartecipanteDAO partecipanteDAO) {
-        this.partecipanteDAO = partecipanteDAO;
-    }
-
-    @Override
-    public void setOrganizzatoreDAO (IOrganizzatoreDAO organizzatoreDAO) {
+    public void setOrganizzatoreDAO(IOrganizzatoreDAO organizzatoreDAO) {
         this.organizzatoreDAO = organizzatoreDAO;
     }
 
-    @Override
-    public void setTeamDAO (ITeamDAO teamDAO){
-        this.teamDAO = teamDAO;
-    }
 }

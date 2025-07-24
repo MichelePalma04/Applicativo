@@ -169,7 +169,6 @@ public class Evento {
 
     public void validaDate() {
         LocalDate oggi = LocalDate.now();
-
         // 1. Durata evento = 2 giorni
         if (!dataInizio.plusDays(2).isEqual(dataFine)) {
             throw new IllegalArgumentException("La durata dell'evento deve essere di esattamente 2 giorni.");

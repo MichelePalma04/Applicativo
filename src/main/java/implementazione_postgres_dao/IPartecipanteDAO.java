@@ -1,10 +1,7 @@
-package implementazionePostgresDAO;
+package implementazione_postgres_dao;
 import dao.PartecipanteDAO;
-import dao.TeamDAO;
 import database.ConnessioneDatabase;
-import model.Evento;
 import model.Partecipante;
-import model.Team;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -17,27 +14,22 @@ public class IPartecipanteDAO implements PartecipanteDAO{
 
     private Connection connection;
     private IUtenteDAO utenteDAO;
-    private ITeamDAO teamDAO;
-   // private IEventoDAO eventoDAO;
+
 
     public IPartecipanteDAO() {
         try{
             connection = ConnessioneDatabase.getInstance().connection;
-           // this.utenteDAO = utenteDAO;
-           // this.teamDAO = teamDAO;
-          //  this.eventoDAO = eventoDAO;
         }catch(SQLException e){
-            System.out.println("Errore nella connessione al database: "+ e.getMessage());
+            e.printStackTrace();
         }
     }
 
-    // Crea nuovo partecipante per evento (senza team)
     @Override
-    public boolean addPartecipante (String login, int evento_id) {
+    public boolean addPartecipante (String login, int eventoId) {
         String sql = "INSERT INTO partecipante (utente_login, evento_id) VALUES (?, ?)";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setString(1, login);
-            ps.setInt(2, evento_id);
+            ps.setInt(2, eventoId);
             ps.executeUpdate();
             return true;
         } catch (SQLException e) {
@@ -46,20 +38,16 @@ public class IPartecipanteDAO implements PartecipanteDAO{
         }
     }
 
-    // Recupera partecipante
     @Override
-    public Partecipante getPartecipante(String login, int evento_id) {
-        String sql = "SELECT * FROM partecipante WHERE utente_login = ? AND evento_id = ?";
+    public Partecipante getPartecipante(String login, int eventoId) {
+        String sql = "SELECT utente_login, evento_id, team_nome FROM partecipante WHERE utente_login = ? AND evento_id = ?";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setString(1, login);
-            ps.setInt(2, evento_id);
+            ps.setInt(2, eventoId);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 String password = utenteDAO.getUtentebyLogin(login).getPassword();
-                //Team team = teamDAO.getTeam(rs.getString("team_nome"), evento_id);
                 String teamNome = rs.getString("team_nome");
-               // ArrayList<Evento> eventi = new ArrayList<>();
-               // eventi.add(eventoDAO.getEvento(evento_id, teamDAO));
                 return new Partecipante(login, password, teamNome);
             }
         } catch (SQLException e) {
@@ -78,14 +66,14 @@ public class IPartecipanteDAO implements PartecipanteDAO{
             ps.setInt(3, eventoId);
             ps.executeUpdate();
         } catch (SQLException e) {
-            System.out.println("Errore nell'unione al team: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
     @Override
     public List<Partecipante> getPartecipantiEvento(int eventoId) {
         List<Partecipante> lista = new ArrayList<>();
-        String sql = "SELECT * FROM partecipante WHERE evento_id = ?";
+        String sql = "SELECT utente_login, evento_id, team_nome FROM partecipante WHERE evento_id = ?";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, eventoId);
             ResultSet rs = ps.executeQuery();
@@ -93,7 +81,7 @@ public class IPartecipanteDAO implements PartecipanteDAO{
                 lista.add(getPartecipante(rs.getString("utente_login"), eventoId));
             }
         } catch (SQLException e) {
-            System.out.println("Errore nel recupero partecipanti: " + e.getMessage());
+            e.printStackTrace();
         }
         return lista;
     }
@@ -124,10 +112,11 @@ public class IPartecipanteDAO implements PartecipanteDAO{
             ps.setString(3, p.getTeam().getNomeTeam());
             ps.executeUpdate();
             return true;
-        } catch (SQLException e) {}
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return false;
     }
-
 
     @Override
     public boolean aggiornaPartecipante(Partecipante p, int eventoId) {
@@ -137,7 +126,9 @@ public class IPartecipanteDAO implements PartecipanteDAO{
             ps.setString(2, p.getLogin());
             ps.setInt(3, eventoId);
             return ps.executeUpdate() > 0;
-        } catch (SQLException e) {}
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return false;
     }
 
@@ -149,26 +140,15 @@ public class IPartecipanteDAO implements PartecipanteDAO{
             ps.setInt(2, eventoId);
             return ps.executeUpdate() > 0;
         } catch (SQLException e) {
-            System.out.println("Errore nell'eliminazione partecipante: " + e.getMessage());
+            e.printStackTrace();
             return false;
         }
     }
-
-    /*
-    @Override
-    public void setEventoDAO (IEventoDAO eventoDAO) {
-        this.eventoDAO = eventoDAO;
-    }
-     */
 
     @Override
     public void setUtenteDAO (IUtenteDAO utenteDAO) {
         this.utenteDAO = utenteDAO;
     }
 
-    @Override
-    public void setTeamDAO (ITeamDAO teamDAO){
-        this.teamDAO = teamDAO;
-    }
 
 }

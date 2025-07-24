@@ -1,6 +1,6 @@
 package dao;
 
-import implementazionePostgresDAO.IUtenteDAO;
+import implementazione_postgres_dao.IUtenteDAO;
 import model.Organizzatore;
 import java.util.List;
 
@@ -9,7 +9,6 @@ public interface OrganizzatoreDAO {
     boolean isOrganizzatore (String login);
     List<Organizzatore> getOrganizzatoriEvento(int eventoId);
     boolean aggiungiOrganizzatore(Organizzatore o, int eventoId);
-    boolean aggiornaOrganizzatore(Organizzatore o, int eventoId);
     boolean eliminaOrganizzatore(String login, int eventoId);
     void setUtenteDAO(IUtenteDAO utenteDAO);
 }

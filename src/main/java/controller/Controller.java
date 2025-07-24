@@ -4,7 +4,6 @@ import dao.*;
 import model .*;
 import javax.swing.*;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -87,20 +86,16 @@ public class Controller {
         return eventoDAO.getEvento(id);
     }
 
-    public Evento creaEvento (String titolo, String sede, LocalDate dataInizio, LocalDate dataFine, int nMaxIscritti, int dimMaxTeam, LocalDate inizioRegistrazioni, LocalDate fineRegistrazioni, Organizzatore organizzatore) {
-        Evento nuovoEvento = new Evento (titolo, sede, dataInizio, dataFine, nMaxIscritti, dimMaxTeam, inizioRegistrazioni, fineRegistrazioni, organizzatore, new ArrayList<>(),  new ArrayList<>());
-        // Salva nel DB e ottieni l'evento con id assegnato
+    public Evento creaEvento(Evento nuovoEvento) {
         try {
             nuovoEvento.validaDate();
         } catch (IllegalArgumentException e) {
-            // Puoi gestire l'errore come preferisci (esempio: mostrare un messaggio di errore)
             JOptionPane.showMessageDialog(null, e.getMessage(), "Errore date evento", JOptionPane.ERROR_MESSAGE);
             return null;
         }
-
         Evento eventoConId = eventoDAO.aggiungiEvento(nuovoEvento);
         if (eventoConId != null) {
-            organizzatoreDAO.aggiungiOrganizzatore(organizzatore, eventoConId.getId());
+            organizzatoreDAO.aggiungiOrganizzatore(nuovoEvento.getOrganizzatore(), eventoConId.getId());
             eventoConId.setDocumenti(new ArrayList<>());
             return eventoConId;
         }
@@ -118,41 +113,34 @@ public class Controller {
     public List<InvitoGiudice> getInvitiPendentiUtente(String login) {
         return invitoGiudiceDAO.getInvitiPendentiPerUtente(login);
     }
-    public List <Utente> getUtentiInvitabili(int eventoId){
-        ArrayList <Utente> invitabili = new ArrayList <>();
+
+    public List<Utente> getUtentiInvitabili(int eventoId) {
+        List<Giudice> giudiciEvento = giudiceDAO.getGiudiciEvento(eventoId);
+        List<Partecipante> partecipantiEvento = partecipanteDAO.getPartecipantiEvento(eventoId);
+
+        List<Utente> invitabili = new ArrayList<>();
         for (Utente u : utenteDAO.getAllUtenti()) {
-            if (organizzatoreDAO.isOrganizzatore(u.getLogin())) {
-                continue;
-            }
-            boolean giaGiudiceInQuestoEvento = false;
-            for (Giudice g: giudiceDAO.getGiudiciEvento(eventoId)) {
-                if(g.getLogin().equals(u.getLogin())) {
-                    giaGiudiceInQuestoEvento = true;
-                    break;
-                }
-            }
-            if(giaGiudiceInQuestoEvento){
-                continue;
-            }
+            boolean invita = !organizzatoreDAO.isOrganizzatore(u.getLogin()) && !isGiudiceInEvento(u, giudiciEvento) && !isPartecipanteInEvento(u, partecipantiEvento) && !invitoGiudiceDAO.esisteInvitoPendentePerUtenteEvento(u.getLogin(), eventoId);
 
-            boolean giaPartecipanteInQuestoEvento = false;
-            for (Partecipante p: partecipanteDAO.getPartecipantiEvento(eventoId)) {
-                if(p.getLogin().equals(u.getLogin())) {
-                    giaPartecipanteInQuestoEvento = true;
-                    break;
-                }
+            if (invita) {
+                invitabili.add(u);
             }
-            if(giaPartecipanteInQuestoEvento){
-                continue;
-            }
-
-            if(invitoGiudiceDAO.esisteInvitoPendentePerUtenteEvento(u.getLogin(),eventoId)) {
-                continue;
-            }
-
-            invitabili.add(u);
         }
         return invitabili;
+    }
+
+    private boolean isGiudiceInEvento(Utente u, List<Giudice> giudiciEvento) {
+        for (Giudice g : giudiciEvento) {
+            if (g.getLogin().equals(u.getLogin())) return true;
+        }
+        return false;
+    }
+
+    private boolean isPartecipanteInEvento(Utente u, List<Partecipante> partecipantiEvento) {
+        for (Partecipante p : partecipantiEvento) {
+            if (p.getLogin().equals(u.getLogin())) return true;
+        }
+        return false;
     }
 
     public boolean accettaInvitoGiudice(int idInvito, String login) {

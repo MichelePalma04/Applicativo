@@ -1,6 +1,6 @@
 package gui;
 
-import implementazionePostgresDAO.*;
+import implementazione_postgres_dao.*;
 import model .*;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -33,19 +33,11 @@ public class Login {
         IInvitoGiudiceDAO invitoGiudiceDAO = new IInvitoGiudiceDAO();
         organizzatoreDAO.setUtenteDAO(utenteDAO);
         partecipanteDAO.setUtenteDAO(utenteDAO);
-        partecipanteDAO.setTeamDAO(teamDAO);
-        eventoDAO.setPartecipanteDAO(partecipanteDAO);
-        eventoDAO.setTeamDAO(teamDAO);
-        eventoDAO.setGiudiceDAO(giudiceDAO);
         eventoDAO.setOrganizzatoreDAO(organizzatoreDAO);
         teamDAO.setPartecipanteDAO(partecipanteDAO);
         teamDAO.setVotoDAO(votoDAO);
         giudiceDAO.setUtenteDAO(utenteDAO);
-        giudiceDAO.setOrganizzatoreDAO(organizzatoreDAO);
-        giudiceDAO.setVotoDAO(votoDAO);
-        giudiceDAO.setEventoDAO(eventoDAO);
         votoDAO.setGiudiceDAO(giudiceDAO);
-        votoDAO.setTeamDAO(teamDAO);
         invitoGiudiceDAO.setUtenteDAO(utenteDAO);
         invitoGiudiceDAO.setEventoDAO(eventoDAO);
         documentoDAO.setTeamDAO(teamDAO);

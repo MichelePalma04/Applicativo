@@ -1,4 +1,4 @@
-package implementazionePostgresDAO;
+package implementazione_postgres_dao;
 
 import dao.InvitoGiudiceDAO;
 import database.ConnessioneDatabase;
@@ -43,13 +43,11 @@ public class IInvitoGiudiceDAO implements InvitoGiudiceDAO {
     @Override
     public List<InvitoGiudice> getInvitiPendentiPerUtente(String loginUtente) {
         List<InvitoGiudice> lista = new ArrayList<>();
-        String sql = "SELECT * FROM invito_giudice WHERE utente_login = ? AND accettato = false AND rifiutato = false";
+        String sql = "SELECT id, evento_id, utente_login, accettato, rifiutato FROM invito_giudice WHERE utente_login = ? AND accettato = false AND rifiutato = false";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setString(1, loginUtente);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                // Qui devi ricostruire l'oggetto InvitoGiudice (recuperando Evento e Utente dai rispettivi DAO)
-                // Esempio:
                 Evento evento = eventoDAO.getEvento(rs.getInt("evento_id"));
                 Utente utente = utenteDAO.getUtentebyLogin(rs.getString("utente_login"));
                 InvitoGiudice invito = new InvitoGiudice(rs.getInt("evento_id"), rs.getInt("id"), evento, utente, rs.getBoolean("accettato"), rs.getBoolean("rifiutato"));
@@ -63,7 +61,7 @@ public class IInvitoGiudiceDAO implements InvitoGiudiceDAO {
 
     @Override
     public InvitoGiudice getInvitoById(int idInvito) {
-        String sql = "SELECT * FROM invito_giudice WHERE id = ?";
+        String sql = "SELECT id, evento_id, utente_login, accettato, rifiutato  FROM invito_giudice WHERE id = ?";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, idInvito);
             ResultSet rs = ps.executeQuery();
@@ -72,9 +70,7 @@ public class IInvitoGiudiceDAO implements InvitoGiudiceDAO {
                 Utente utente = utenteDAO.getUtentebyLogin(rs.getString("utente_login"));
                 boolean accettato = rs.getBoolean("accettato");
                 boolean rifiutato = rs.getBoolean("rifiutato");
-                InvitoGiudice invito = new InvitoGiudice(rs.getInt("evento_id"), rs.getInt("id"), evento, utente, accettato, rifiutato);
-                // se vuoi puoi aggiungere setId se usi id anche nel modello
-                return invito;
+                return new InvitoGiudice(rs.getInt("evento_id"), rs.getInt("id"), evento, utente, accettato, rifiutato);
             }
         } catch (SQLException e) {
             e.printStackTrace();

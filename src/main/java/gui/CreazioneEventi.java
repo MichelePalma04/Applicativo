@@ -8,6 +8,7 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.time.LocalDate;
+import java.util.ArrayList;
 
 public class CreazioneEventi {
     private JPanel mainPanel;
@@ -60,7 +61,7 @@ public class CreazioneEventi {
             }
         });
 
-        creaEventoButton.addActionListener(new ActionListener() {
+       /* creaEventoButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String titolo = titoloField.getText();
@@ -79,6 +80,42 @@ public class CreazioneEventi {
                     AreaOrganizzatore nuovaGUI = new AreaOrganizzatore(controller, organizzatore, frameI, frameA);
                     nuovaGUI.frameOrganizzatore.setVisible(true);
                 }else{
+                    JOptionPane.showMessageDialog(frameCreazioneEventi, "Errore nella creazione evento", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+        */
+
+        creaEventoButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String titolo = titoloField.getText();
+                String sede = sedeField.getText();
+
+                // Controlli di validità e parsing sicuro!
+                LocalDate dataInizio, dataFine, inizioReg, fineReg;
+                int maxIscritti, dimensione;
+                try {
+                    dataInizio = LocalDate.parse(dataInizioField.getText());
+                    dataFine = LocalDate.parse(dataFineField.getText());
+                    inizioReg = LocalDate.parse(inizoRegField.getText());
+                    fineReg = LocalDate.parse(fineRegField.getText());
+                    maxIscritti = Integer.parseInt(maxIscrittiField.getText());
+                    dimensione = Integer.parseInt(dimensioneField.getText());
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(frameCreazioneEventi, "Controlla i campi: errore di formato.", "Errore", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                Evento nuovoEvento = new Evento(titolo, sede, dataInizio, dataFine, maxIscritti, dimensione, inizioReg, fineReg, organizzatore, new ArrayList<>(), new ArrayList<>());
+
+                Evento eventoCreato = controller.creaEvento(nuovoEvento);
+                if(eventoCreato != null) {
+                    JOptionPane.showMessageDialog(frameCreazioneEventi , "Evento creato con successo");
+                    frameCreazioneEventi.dispose();
+                    AreaOrganizzatore nuovaGUI = new AreaOrganizzatore(controller, organizzatore, frameI, frameA);
+                    nuovaGUI.frameOrganizzatore.setVisible(true);
+                } else {
                     JOptionPane.showMessageDialog(frameCreazioneEventi, "Errore nella creazione evento", "Error", JOptionPane.ERROR_MESSAGE);
                 }
             }

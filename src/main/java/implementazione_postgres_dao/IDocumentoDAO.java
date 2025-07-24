@@ -1,4 +1,4 @@
-package implementazionePostgresDAO;
+package implementazione_postgres_dao;
 
 import dao.DocumentoDAO;
 import database.ConnessioneDatabase;
@@ -26,14 +26,14 @@ public class IDocumentoDAO implements DocumentoDAO {
         try{
             connection = ConnessioneDatabase.getInstance().connection;
         }catch (SQLException e){
-            System.out.println("Errore nella connessione al database: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
     @Override
     public List<Documento> getDocumentiTeamEvento(int eventoId, String nomeTeam) {
         List<Documento> docs = new ArrayList<>();
-        String query = "SELECT * FROM documento WHERE team_nome = ? AND evento_id = ?";
+        String query = "SELECT id, data, nome_file, percorso_file, team_nome, evento_id, partecipante_login FROM documento WHERE team_nome = ? AND evento_id = ?";
         try (PreparedStatement ps = connection.prepareStatement(query)) {
             ps.setString(1, nomeTeam);
             ps.setInt(2, eventoId);
@@ -56,7 +56,7 @@ public class IDocumentoDAO implements DocumentoDAO {
     }
     @Override
     public Documento getDocumentoById(int idDocumento) {
-        String sql = "SELECT * FROM documento WHERE id = ?";
+        String sql = "SELECT id, data, nome_file, percorso_file, team_nome, evento_id, partecipante_login FROM documento WHERE id = ?";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, idDocumento);
             ResultSet rs = ps.executeQuery();
@@ -89,7 +89,7 @@ public class IDocumentoDAO implements DocumentoDAO {
             ps.setString(6, login);
             ps.executeUpdate();
         } catch (SQLException e) {
-            System.out.println("Errore nel salvataggio documento: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -102,7 +102,9 @@ public class IDocumentoDAO implements DocumentoDAO {
             ps.setInt(2, eventoId);
             ResultSet rs = ps.executeQuery();
             if (rs.next() && rs.getInt("cnt") > 0) return true;
-        } catch (SQLException e) { e.printStackTrace(); }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return false;
     }
 
@@ -110,7 +112,7 @@ public class IDocumentoDAO implements DocumentoDAO {
     @Override
     public List<Documento> getDocumentiEvento(int eventoId) {
         List<Documento> docs = new ArrayList<>();
-        String sql = "SELECT * FROM documento WHERE evento_id = ?";
+        String sql = "SELECT id, data, nome_file, percorso_file, team_nome, evento_id, partecipante_login FROM documento WHERE evento_id = ?";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, eventoId);
             ResultSet rs = ps.executeQuery();
@@ -127,14 +129,16 @@ public class IDocumentoDAO implements DocumentoDAO {
                 doc.setCommentiGiudici(getCommentiDocumento(doc.getId(), eventoId));
                 docs.add(doc);
             }
-        } catch (SQLException e) { e.printStackTrace(); }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return docs;
     }
 
     @Override
     public List<Documento> getDocumentiTeamEventoPartecipante(int eventoId, String nomeTeam, String login) {
         List<Documento> docs = new ArrayList<>();
-        String query = "SELECT * FROM documento WHERE team_nome = ? AND evento_id = ? AND partecipante_login = ?";
+        String query = "SELECT id, data, nome_file, percorso_file, team_nome, evento_id, partecipante_login FROM documento WHERE team_nome = ? AND evento_id = ? AND partecipante_login = ?";
         try (PreparedStatement ps = connection.prepareStatement(query)) {
             ps.setString(1, nomeTeam);
             ps.setInt(2, eventoId);
