@@ -49,6 +49,8 @@ public class Login {
         invitoGiudiceDAO.setUtenteDAO(utenteDAO);
         invitoGiudiceDAO.setEventoDAO(eventoDAO);
         documentoDAO.setTeamDAO(teamDAO);
+        documentoDAO.setDocumentoDAO(documentoDAO);
+        documentoDAO.setGiudiceDAO(giudiceDAO);
         controller = new Controller(utenteDAO, organizzatoreDAO, partecipanteDAO, giudiceDAO, eventoDAO, teamDAO, invitoGiudiceDAO, documentoDAO, votoDAO);
 
         accediButton.addActionListener(new ActionListener() {

@@ -10,15 +10,21 @@ public class Documento {
     private LocalDate data;
     private File file;
     private List<CommentoGiudice> commentiGiudici = new ArrayList<>();
-    private boolean commentato;
     private Team team;
     private int id;
+    private String loginPartecipante;
+
+    public Documento (LocalDate data, File file, Team team, String loginPartecipante) {
+        this.data = data;
+        this.team = team;
+        this.file = file;
+        this.loginPartecipante = loginPartecipante;
+    }
 
     public Documento (LocalDate data, File file, Team team) {
         this.data = data;
         this.team = team;
         this.file = file;
-        this.commentato = false;
     }
     public LocalDate getData() {
         return data;
@@ -31,7 +37,6 @@ public class Documento {
     public Team getTeam() {
         return team;
     }
-
 
     public int getId() {
         return id;
@@ -49,12 +54,10 @@ public class Documento {
         this.commentiGiudici = commentiGiudici;
     }
 
-    public List<CommentoGiudice> getCommentiGiudice() {
-        return commentiGiudici;
-    }
-
     public void aggiungiCommentoGiudice(CommentoGiudice commento) {
         this.commentiGiudici.add(commento);
     }
+    public String getLoginPartecipante() { return loginPartecipante; }
+    public void setLoginPartecipante(String loginPartecipante) { this.loginPartecipante = loginPartecipante; }
 }
 

@@ -1,12 +1,13 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Organizzatore extends Utente {
-    private ArrayList<Evento> eventi;
-    private ArrayList<Giudice> giudici;
+    private List<Evento> eventi;
+    private List<Giudice> giudici;
 
-    public Organizzatore(String login, String password, ArrayList<Evento> eventi, ArrayList<Giudice> giudici) {
+    public Organizzatore(String login, String password, List<Evento> eventi, List<Giudice> giudici) {
         super(login, password);
         this.eventi = eventi;
         this.giudici = giudici;
@@ -32,20 +33,13 @@ public class Organizzatore extends Utente {
         }
     }
 
-    public ArrayList<Giudice> getGiudici() {
+    public List<Giudice> getGiudici() {
         return this.giudici;
     }
 
-    public ArrayList<Evento> getEventi() {
+    public List<Evento> getEventi() {
         return this.eventi;
     }
 
-    /*@Override
-    public String toString() {
-        return getLogin();
-    }*/
-
-    public void invitoGiudici(){}
-    public void aperturaRegistrazione(){}
 
 }

@@ -147,14 +147,6 @@ public class Controller {
         return invitabili;
     }
 
-
-    /* NON USO
-    public boolean aggiungiInvitoGiudice(InvitoGiudice invito) {
-        return invitoGiudiceDAO.addInvitoGiudice(invito);
-    }
-
-     */
-
     public boolean accettaInvitoGiudice(int idInvito, String login) {
         // Imposta lo stato
         InvitoGiudice invito = invitoGiudiceDAO.getInvitoById(idInvito);
@@ -221,16 +213,6 @@ public class Controller {
     public void unisciPartecipanteATeam (String loginPartecipante, String nomeTeam, int eventoId) {
         teamDAO.unisciPartecipanteATeam(loginPartecipante, nomeTeam, eventoId);
     }
-
-    // Unisci il partecipante a un team
-    /*NON USO
-    public void unisciPartecipanteATeam(String loginPartecipante, String nomeTeam, int eventoId) {
-        partecipanteDAO.joinTeam(loginPartecipante, nomeTeam, eventoId);
-    }
-
-     */
-
-    // Verifica se un partecipante è già in un team
     public boolean isPartecipanteInTeam(String loginPartecipante, String nomeTeam, int eventoId) {
         return teamDAO.isPartecipanteInTeam(loginPartecipante, nomeTeam, eventoId);
     }
@@ -240,8 +222,8 @@ public class Controller {
         return teamDAO.getDimTeam(nomeTeam, eventoId);
     }
     // Carica un documento nel DB
-    public void caricaDocumento(Documento documento, String nomeTeam, int eventoId) {
-        documentoDAO.save(documento, nomeTeam, eventoId);
+    public void caricaDocumento(Documento documento, String nomeTeam, int eventoId, String login) {
+        documentoDAO.save(documento, nomeTeam, eventoId, login);
     }
 
     public List<Documento> getDocumentiEvento(int eventoId) {
@@ -250,6 +232,10 @@ public class Controller {
 
     public List<Documento> getDocumentiTeamEvento(String nomeTeam, int eventoId) {
         return documentoDAO.getDocumentiTeamEvento(eventoId, nomeTeam);
+    }
+
+    public List<Documento> getDocumentiTeamEventoPartecipante(int eventoId, String nomeTeam, String login) {
+        return documentoDAO.getDocumentiTeamEventoPartecipante(eventoId, nomeTeam, login);
     }
 
     public boolean teamHaDocumenti(String nomeTeam, int eventoId) {

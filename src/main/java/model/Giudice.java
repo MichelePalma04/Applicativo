@@ -1,13 +1,14 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Giudice extends Utente {
-    private ArrayList<Evento> eventi;
-    private ArrayList<Voto> voti;
-    private ArrayList <Organizzatore> organizzatori;
+    private List<Evento> eventi;
+    private List<Voto> voti;
+    private List <Organizzatore> organizzatori;
 
-    public Giudice(String login, String password, ArrayList<Evento> eventi, ArrayList<Voto> voti, ArrayList<Organizzatore> organizzatori) {
+    public Giudice(String login, String password, List<Evento> eventi, List<Voto> voti, List<Organizzatore> organizzatori) {
         super(login, password);
         this.eventi = eventi;
         this.voti = voti;
@@ -42,23 +43,15 @@ public class Giudice extends Utente {
         }
     }
 
-    public ArrayList<Evento> getEventi() {
+    public List<Evento> getEventi() {
         return this.eventi;
     }
-    public ArrayList<Voto> getVoti() {
+    public List<Voto> getVoti() {
         return this.voti;
     }
 
-    public ArrayList<Organizzatore> getOrganizzatori() {
+    public List<Organizzatore> getOrganizzatori() {
         return this.organizzatori;
     }
 
-    /*@Override
-    public String toString(){
-        return getLogin();
-    }*/
-
-    public void esaminaDocumento() {}
-
-    public void pubblicaProblema() {}
 }

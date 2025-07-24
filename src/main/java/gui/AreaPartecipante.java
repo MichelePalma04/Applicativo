@@ -48,7 +48,6 @@ public class AreaPartecipante {
         frameGiudice = frame4;
 
         Partecipante partecipante = controller.getPartecipanteDaDB(loginPartecipante, eventoId);
-        //Evento evento = controller.geteventoById(eventoId);
         frameAreaPartecipante = new JFrame("Area Personale " + loginPartecipante);
         frameAreaPartecipante.setContentPane(panel);
         frameAreaPartecipante.pack();
@@ -114,16 +113,20 @@ public class AreaPartecipante {
 
             // --- Visualizzazione documenti e commenti ---
             documentiPanel.removeAll();
-            List<Documento> documenti = controller.getDocumentiTeamEvento(teamUtente.getNomeTeam(), eventoId);
+            List<Documento> documenti = controller.getDocumentiTeamEventoPartecipante(eventoId, teamUtente.getNomeTeam(), loginPartecipante);
             if (documenti.isEmpty()) {
                 JLabel noDocLabel = new JLabel("Nessun documento caricato dal tuo team.");
                 documentiPanel.add(noDocLabel);
             } else {
+                documentiPanel.removeAll();
+                documentiPanel.setLayout(new BoxLayout(documentiPanel, BoxLayout.Y_AXIS));
                 for (Documento doc : documenti) {
                     JPanel docPanel = new JPanel();
                     docPanel.setLayout(new BoxLayout(docPanel, BoxLayout.Y_AXIS));
+                    JPanel rigaPanel = new JPanel();
+                    rigaPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
                     JLabel nomeDocLabel = new JLabel("Documento caricato: " + doc.getFile().getName());
-                    docPanel.add(nomeDocLabel);
+                    //rigaPanel.add(nomeDocLabel);
 
                     JButton visualizzaDocButton = new JButton("Visualizza");
                     visualizzaDocButton.addActionListener(e -> {
@@ -133,7 +136,9 @@ public class AreaPartecipante {
                             JOptionPane.showMessageDialog(frameAreaPartecipante, "Impossibile aprire il documento.", "Errore", JOptionPane.ERROR_MESSAGE);
                         }
                     });
-                    docPanel.add(visualizzaDocButton);
+                    rigaPanel.add(nomeDocLabel);
+                    rigaPanel.add(visualizzaDocButton);
+                    docPanel.add(rigaPanel);
 
                    /* StringBuilder commentiSb = new StringBuilder("<html>");
                     List<CommentoGiudice> commenti = doc.getCommentiGiudici();
@@ -160,7 +165,7 @@ public class AreaPartecipante {
                         docPanel.add(nessunCommento);
                     } else {
                         for (CommentoGiudice c : commenti) {
-                            JLabel commentoLabel = new JLabel(c.getNomeGiudice() + ": " + c.getTesto()+"\n");
+                            JLabel commentoLabel = new JLabel(c.getGiudice() + ": " + c.getTesto()+"\n");
                             commentoLabel.setFont(commentoLabel.getFont().deriveFont(Font.PLAIN));
                             //commentoLabel.setAlignmentX(Component.LEFT_ALIGNMENT);// Puoi personalizzare il font qui
                             docPanel.add(commentoLabel);
@@ -301,7 +306,7 @@ public class AreaPartecipante {
 
                 // Verifica la dimensione massima tramite Controller
                 String problemaEvento = controller.getProblemaEvento(eventoId);
-                if (controller.getDimTeam(teamSelected.getNomeTeam(), eventoId) >= controller.getEventoById(eventoId).getDim_max_team()) {
+                if (controller.getDimTeam(teamSelected.getNomeTeam(), eventoId) >= controller.getEventoById(eventoId).getDMaxTeam()) {
                     JOptionPane.showMessageDialog(frameAreaPartecipante, "Il team " + teamSelected.getNomeTeam() + " è pieno.");
                     return;
                 }
@@ -392,8 +397,53 @@ public class AreaPartecipante {
                         }
                     }
                     Documento documento = new Documento(LocalDate.now(), file, teamUser);
-                    controller.caricaDocumento(documento, teamUser.getNomeTeam(), eventoId);
+                    controller.caricaDocumento(documento, teamUser.getNomeTeam(), eventoId, loginPartecipante);
                     JOptionPane.showMessageDialog(frameAreaPartecipante, "Documento caricato con successo!");
+                  //  --- AGGIUNGI QUESTO BLOCCO PER AGGIORNARE LA LISTA DOCUMENTI ---
+                            // Recupera di nuovo la lista dei documenti del team
+                            List<Documento> documentiAggiornati = controller.getDocumentiTeamEventoPartecipante(eventoId, teamUser.getNomeTeam(), loginPartecipante);
+
+                    documentiPanel.removeAll(); // pulisci il pannello
+                    if (documentiAggiornati.isEmpty()) {
+                        JLabel noDocLabel = new JLabel("Nessun documento caricato dal tuo team.");
+                        documentiPanel.add(noDocLabel);
+                    } else {
+                        for (Documento doc : documentiAggiornati) {
+                            JPanel docPanel = new JPanel();
+                            docPanel.setLayout(new BoxLayout(docPanel, BoxLayout.Y_AXIS));
+                            JPanel rigaPanel = new JPanel();
+                            rigaPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+                            JLabel nomeDocLabel = new JLabel("Documento caricato: " + doc.getFile().getName());
+
+                            JButton visualizzaDocButton = new JButton("Visualizza");
+                            visualizzaDocButton.addActionListener(ev -> {
+                                try {
+                                    Desktop.getDesktop().open(doc.getFile());
+                                } catch (IOException ex) {
+                                    JOptionPane.showMessageDialog(frameAreaPartecipante, "Impossibile aprire il documento.", "Errore", JOptionPane.ERROR_MESSAGE);
+                                }
+                            });
+                            rigaPanel.add(nomeDocLabel);
+                            rigaPanel.add(visualizzaDocButton);
+                            docPanel.add(rigaPanel);
+
+                            List<CommentoGiudice> commenti = doc.getCommentiGiudici();
+                            if (commenti == null || commenti.isEmpty()) {
+                                JLabel nessunCommento = new JLabel("Nessun commento dai giudici.");
+                                docPanel.add(nessunCommento);
+                            } else {
+                                for (CommentoGiudice c : commenti) {
+                                    JLabel commentoLabel = new JLabel(c.getGiudice() + ": " + c.getTesto());
+                                    commentoLabel.setFont(commentoLabel.getFont().deriveFont(Font.PLAIN));
+                                    docPanel.add(commentoLabel);
+                                }
+                            }
+                            documentiPanel.add(docPanel);
+                        }
+                    }
+                    documentiPanel.revalidate();
+                    documentiPanel.repaint();
+                    // --- FINE BLOCCO AGGIORNAMENTO ---
                 }
             }
         });

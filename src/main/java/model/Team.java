@@ -1,16 +1,15 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Team {
     private String nomeTeam;
-    private ArrayList<Documento> documenti;
-    private ArrayList<Partecipante> partecipanti;
-    private ArrayList<Voto> voti;
-    private ArrayList <Integer> votiAssegnati = new ArrayList();
-    private ArrayList <Giudice> giudiciCheHannoVotato = new ArrayList();
+    private List<Documento> documenti;
+    private List<Partecipante> partecipanti;
+    private List<Voto> voti;
 
-    public Team (String nomeTeam, ArrayList<Partecipante> partecipanti, ArrayList<Voto> voti) {
+    public Team (String nomeTeam, List<Partecipante> partecipanti, List<Voto> voti) {
         this.nomeTeam = nomeTeam;
         this.partecipanti = partecipanti;
         this.documenti = new ArrayList<>();
@@ -32,10 +31,6 @@ public class Team {
         }
     }
 
-    public void setVoti(int voto) {
-        this.voti = voti;
-    }
-
     public void addPartecipanti(Partecipante newP) {
         if (!partecipanti.contains(newP)) {
             partecipanti.add(newP);
@@ -48,7 +43,7 @@ public class Team {
         }
     }
 
-    public ArrayList<Partecipante> getPartecipanti() {
+    public List<Partecipante> getPartecipanti() {
         return partecipanti;
     }
 
@@ -56,35 +51,13 @@ public class Team {
         return nomeTeam;
     }
 
-    public ArrayList<Documento> getDocumenti() {
+    public List<Documento> getDocumenti() {
         return documenti;
     }
 
    @Override
     public String toString() {
         return nomeTeam;
-    }
-
-    public boolean haVotato(Giudice g) {
-        return giudiciCheHannoVotato.contains(g);
-    }
-
-    public int getVotoDiGiudici(Giudice g) {
-        int index = giudiciCheHannoVotato.indexOf(g);
-        if (index != -1) {
-            return votiAssegnati.get(index);
-        }
-        return -1;
-    }
-
-    public void setVotoDiGiudice(Giudice g, int voto) {
-        int index = giudiciCheHannoVotato.indexOf(g);
-        if (index != -1) {
-            votiAssegnati.set(index, voto);
-        } else {
-            giudiciCheHannoVotato.add(g);
-            votiAssegnati.add(voto);
-        }
     }
 
     public double mediaVoti() {

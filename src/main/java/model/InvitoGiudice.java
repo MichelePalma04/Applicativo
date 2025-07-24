@@ -12,8 +12,8 @@ public class InvitoGiudice {
     public InvitoGiudice(Evento evento, Utente utente, boolean accettato, boolean rifiutato) {
         this.evento = evento;
         this.utente = utente;
-        this.accettato = false;
-        this.rifiutato = false;
+        this.accettato = accettato;
+        this.rifiutato = rifiutato;
     }
 
     public InvitoGiudice(int eventoId, int id, Evento evento, Utente utente, boolean accettato, boolean rifiutato) {
@@ -40,10 +40,6 @@ public class InvitoGiudice {
 
     public boolean isRifiutato() {
         return rifiutato;
-    }
-
-    public void accetta(){
-        this.accettato = true;
     }
 
     public void setRifiutato(boolean rifiutato) {

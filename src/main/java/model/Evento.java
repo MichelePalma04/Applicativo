@@ -2,6 +2,7 @@ package model;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Evento {
     private int id;
@@ -9,56 +10,56 @@ public class Evento {
     private String sede;
     private LocalDate dataInizio;
     private LocalDate dataFine;
-    private int n_Max_Iscritti;
-    private int dim_max_team;
-    private LocalDate inizio_registrazioni;
-    private LocalDate fine_registrazioni;
+    private int maxIscritti;
+    private int dimMaxTeam;
+    private LocalDate inizioRegistrazioni;
+    private LocalDate fineRegistrazioni;
     private String problema;
     private Organizzatore organizzatore;
-    private ArrayList<Giudice> giudici;
-    private ArrayList<Partecipante> partecipanti;
-    private ArrayList<Team> teams = new ArrayList<>();
+    private List<Giudice> giudici;
+    private List<Partecipante> partecipanti;
+    private List<Team> teams = new ArrayList<>();
     private Giudice giudiceDescrizione;
-    private ArrayList<Documento> documenti = new ArrayList<>();
+    private List<Documento> documenti = new ArrayList<>();
 
 
-    public Evento (String titolo, String sede, LocalDate dataInizio, LocalDate dataFine, int n_Max_Iscritti, int dim_max_team, LocalDate inizio_registrazioni, LocalDate fine_registrazioni, Organizzatore organizzatore, ArrayList<Giudice> giudici, ArrayList<Partecipante> partecipanti) {
+    public Evento (String titolo, String sede, LocalDate dataInizio, LocalDate dataFine,int maxIscritti, int dimMaxTeam, LocalDate inizioRegistrazioni, LocalDate fineRegistrazioni, Organizzatore organizzatore, List<Giudice> giudici, List<Partecipante> partecipanti) {
         this.titolo = titolo;
         this.sede = sede;
         this.dataInizio = dataInizio;
         this.dataFine = dataFine;
-        this.n_Max_Iscritti = n_Max_Iscritti;
-        this.dim_max_team = dim_max_team;
-        this.inizio_registrazioni = inizio_registrazioni;
-        this.fine_registrazioni = fine_registrazioni;
+        this.maxIscritti = maxIscritti;
+        this.dimMaxTeam = dimMaxTeam;
+        this.inizioRegistrazioni = inizioRegistrazioni;
+        this.fineRegistrazioni = fineRegistrazioni;
         this.organizzatore = organizzatore;
         this.giudici = giudici;
         this.partecipanti = partecipanti;
     }
-    public Evento (int id, String titolo, String sede, LocalDate dataInizio, LocalDate dataFine, int n_Max_Iscritti, int dim_max_team, LocalDate inizio_registrazioni, LocalDate fine_registrazioni, Organizzatore organizzatore, ArrayList<Giudice> giudici, ArrayList<Partecipante> partecipanti) {
+    public Evento (int id, String titolo, String sede, LocalDate dataInizio, LocalDate dataFine,int maxIscritti, int dimMaxTeam, LocalDate inizioRegistrazioni, LocalDate fineRegistrazioni, Organizzatore organizzatore, List<Giudice> giudici, List<Partecipante> partecipanti) {
         this.titolo = titolo;
         this.id = id;
         this.sede = sede;
         this.dataInizio = dataInizio;
         this.dataFine = dataFine;
-        this.n_Max_Iscritti = n_Max_Iscritti;
-        this.dim_max_team = dim_max_team;
-        this.inizio_registrazioni = inizio_registrazioni;
-        this.fine_registrazioni = fine_registrazioni;
+        this.maxIscritti = maxIscritti;
+        this.dimMaxTeam = dimMaxTeam;
+        this.inizioRegistrazioni = inizioRegistrazioni;
+        this.fineRegistrazioni = fineRegistrazioni;
         this.organizzatore = organizzatore;
         this.giudici = giudici;
         this.partecipanti = partecipanti;
     }
 
-    public Evento (String titolo, String sede, LocalDate dataInizio, LocalDate dataFine, int n_Max_Iscritti, int dim_max_team, LocalDate inizio_registrazioni, LocalDate fine_registrazioni, Organizzatore organizzatore, Giudice g, Partecipante p) {
+    public Evento (String titolo, String sede, LocalDate dataInizio, LocalDate dataFine, int maxIscritti, int dimMaxTeam, LocalDate inizioRegistrazioni, LocalDate fineRegistrazioni, Organizzatore organizzatore, Giudice g, Partecipante p) {
         this.titolo = titolo;
         this.sede = sede;
         this.dataInizio = dataInizio;
         this.dataFine = dataFine;
-        this.n_Max_Iscritti = n_Max_Iscritti;
-        this.dim_max_team = dim_max_team;
-        this.inizio_registrazioni = inizio_registrazioni;
-        this.fine_registrazioni = fine_registrazioni;
+        this.maxIscritti = maxIscritti;
+        this.dimMaxTeam = dimMaxTeam;
+        this.inizioRegistrazioni = inizioRegistrazioni;
+        this.fineRegistrazioni = fineRegistrazioni;
         this.organizzatore = organizzatore;
         giudici = new ArrayList<>();
         giudici.add(g);
@@ -78,11 +79,11 @@ public class Evento {
         }
     }
 
-    public ArrayList<Giudice> getGiudici() {
+    public List<Giudice> getGiudici() {
         return giudici;
     }
 
-    public ArrayList<Partecipante> getPartecipanti() {
+    public List<Partecipante> getPartecipanti() {
         return partecipanti;
     }
 
@@ -102,20 +103,20 @@ public class Evento {
         return dataFine;
     }
 
-    public int getN_Max_Iscritti() {
-        return n_Max_Iscritti;
+    public int getMaxIscritti() {
+        return maxIscritti;
     }
 
-    public int getDim_max_team() {
-        return dim_max_team;
+    public int getDMaxTeam() {
+        return dimMaxTeam;
     }
 
-    public LocalDate getInizio_registrazioni() {
-        return inizio_registrazioni;
+    public LocalDate getInizioReg() {
+        return inizioRegistrazioni;
     }
 
-    public LocalDate getFine_registrazioni() {
-        return fine_registrazioni;
+    public LocalDate getFineReg() {
+        return fineRegistrazioni;
     }
 
     public Organizzatore getOrganizzatore() {
@@ -134,11 +135,11 @@ public class Evento {
         this.problema = problema;
     }
 
-    public ArrayList<Team> getTeams() {
+    public List<Team> getTeams() {
         return teams;
     }
 
-    public void setTeams(ArrayList<Team> teams) {
+    public void setTeams(List<Team> teams) {
         this.teams = teams;
     }
 
@@ -150,11 +151,11 @@ public class Evento {
         this.giudiceDescrizione = giudiceDescrizione;
     }
 
-    public ArrayList<Documento> getDocumenti() {
+    public List<Documento> getDocumenti() {
         return documenti;
     }
 
-    public void setDocumenti(ArrayList<Documento> documenti) {
+    public void setDocumenti(List<Documento> documenti) {
         this.documenti = documenti;
     }
 

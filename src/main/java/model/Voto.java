@@ -22,6 +22,4 @@ public class Voto {
     public Team getTeam() {
         return team;
     }
-
-
 }

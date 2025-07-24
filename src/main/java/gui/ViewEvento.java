@@ -57,8 +57,8 @@ public class ViewEvento {
             eventoPanel.add(new JLabel("Sede: " + ev.getSede()));
             eventoPanel.add(new JLabel("Data Inizio: " + ev.getDataInizio()));
             eventoPanel.add(new JLabel("Data Fine: " + ev.getDataFine()));
-            eventoPanel.add(new JLabel("Data apertura registrazione: " +ev.getInizio_registrazioni()));
-            eventoPanel.add(new JLabel("Data fine registrazione: " +ev.getFine_registrazioni()));
+            eventoPanel.add(new JLabel("Data apertura registrazione: " +ev.getInizioReg()));
+            eventoPanel.add(new JLabel("Data fine registrazione: " +ev.getFineReg()));
             eventoPanel.add(new JLabel("Organizzatore: " + ev.getOrganizzatore().getLogin()));
             JButton iscrivitiButton = new JButton("Iscriviti");
             eventoPanel.add(iscrivitiButton);
@@ -103,7 +103,7 @@ public class ViewEvento {
                 public void actionPerformed(ActionEvent e) {
                     Giudice g =  controller.getGiudiceEvento(loginUtente, ev.getId());
                     if(g != null) {
-                        AreaGiudice gui = new AreaGiudice(controller, loginUtente, ev.getId(), frame, frameEventi);
+                        AreaGiudice gui = new AreaGiudice(controller, loginUtente, ev.getId(), frame, frameEventi, loginUtente);
                         gui.frameGiudice.setVisible(true);
                         frameEventi.setVisible(false);
                     }

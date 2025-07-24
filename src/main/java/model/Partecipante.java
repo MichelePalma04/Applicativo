@@ -1,12 +1,13 @@
 package model;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Partecipante extends Utente {
     private Team team;
     private String teamNome;
-    private ArrayList<Evento> eventi;
+    private List<Evento> eventi;
 
-    public Partecipante(String login, String password, Team team, ArrayList<Evento> eventi) {
+    public Partecipante(String login, String password, Team team, List<Evento> eventi) {
         super(login, password);
         this.team = team;
         this.eventi = eventi;
@@ -41,7 +42,7 @@ public class Partecipante extends Utente {
         return team;
     }
 
-    public ArrayList<Evento> getEventi(){
+    public List<Evento> getEventi(){
         return this.eventi;
     }
 }

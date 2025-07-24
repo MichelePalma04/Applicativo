@@ -20,10 +20,12 @@ public class VisualizzaDocumenti {
     private Controller controller;
     public JFrame frameGiudice;
     private String loginGiudice;
+    private String loginPartecipante;
 
-    public VisualizzaDocumenti(Controller controller, String nomeTeam, int eventoId, JFrame frame, String loginGiudice) {
+    public VisualizzaDocumenti(Controller controller, String nomeTeam, int eventoId, JFrame frame, String loginGiudice, String loginPartecipante) {
         this.controller = controller;
         this.loginGiudice = loginGiudice;
+        this.loginPartecipante = loginPartecipante;
         frameGiudice = frame;
         frameDocumenti = new JFrame("Documenti");
         frameDocumenti.setContentPane(mainpanel);

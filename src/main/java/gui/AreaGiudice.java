@@ -21,13 +21,15 @@ public class AreaGiudice {
     public JFrame frameAccesso;
     public JFrame frameEventi;
     private String loginGiudice;
+    private String loginPartecipante;
     private int eventoId;
 
     private Controller controller;
 
-    public AreaGiudice(Controller controller, String loginGiudice, int eventoId, JFrame frame, JFrame eventi) {
+    public AreaGiudice(Controller controller, String loginGiudice, int eventoId, JFrame frame, JFrame eventi, String loginPartecipante) {
         this.controller = controller;
         this.loginGiudice = loginGiudice;
+        this.loginPartecipante = loginPartecipante;
         this.eventoId = eventoId;
         frameAccesso = frame;
         frameEventi = eventi;
@@ -151,7 +153,7 @@ public class AreaGiudice {
                     visualizzaDocumenti.addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
-                            VisualizzaDocumenti nuovaGUI = new VisualizzaDocumenti(controller, t.getNomeTeam(), eventoId, frameGiudice, loginGiudice);
+                            VisualizzaDocumenti nuovaGUI = new VisualizzaDocumenti(controller, t.getNomeTeam(), eventoId, frameGiudice, loginGiudice, loginPartecipante);
                             nuovaGUI.frameDocumenti.setVisible(true);
                             frameGiudice.setVisible(false);
                         }

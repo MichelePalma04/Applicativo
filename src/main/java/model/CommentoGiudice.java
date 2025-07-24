@@ -1,16 +1,22 @@
 package model;
 
 public class CommentoGiudice {
-    private String nomeGiudice;
+    private Giudice giudice;
+    private Documento documento;
     private String testo;
 
-    public CommentoGiudice(String nomeGiudice, String testo) {
-        this.nomeGiudice = nomeGiudice;
+    public CommentoGiudice(Giudice giudice, Documento documento, String testo) {
+        this.giudice = giudice;
+        this.documento = documento;
         this.testo = testo;
     }
 
-    public String getNomeGiudice() {
-        return nomeGiudice;
+    public Giudice getGiudice() {
+        return giudice;
+    }
+
+    public Documento getDocumento() {
+        return documento;
     }
 
     public String getTesto() {
