@@ -166,4 +166,32 @@ public class Evento {
     public void setId(int id) {
         this.id = id;
     }
+
+    public void validaDate() {
+        LocalDate oggi = LocalDate.now();
+
+        // 1. Durata evento = 2 giorni
+        if (!dataInizio.plusDays(2).isEqual(dataFine)) {
+            throw new IllegalArgumentException("La durata dell'evento deve essere di esattamente 2 giorni.");
+        }
+        // 2. Ordine delle date
+        if (!(inizioRegistrazioni.isBefore(fineRegistrazioni)
+                && fineRegistrazioni.isBefore(dataInizio)
+                && dataInizio.isBefore(dataFine))) {
+            throw new IllegalArgumentException("Le date non rispettano l'ordine logico richiesto.");
+        }
+        // 3. Nessuna data nel passato
+        if (inizioRegistrazioni.isBefore(oggi) || fineRegistrazioni.isBefore(oggi) ||
+                dataInizio.isBefore(oggi) || dataFine.isBefore(oggi)) {
+            throw new IllegalArgumentException("Le date non possono essere nel passato.");
+        }
+        // 4. La fine registrazione deve essere prima dell'inizio evento
+        if (!fineRegistrazioni.isBefore(dataInizio)) {
+            throw new IllegalArgumentException("La fine registrazione deve essere prima dell'inizio evento.");
+        }
+        // 5. La durata dell'evento non può essere superiore a una settimana (opzionale)
+        if (dataInizio.plusWeeks(1).isBefore(dataFine)) {
+            throw new IllegalArgumentException("La durata dell'evento non può essere superiore a una settimana.");
+        }
+    }
 }

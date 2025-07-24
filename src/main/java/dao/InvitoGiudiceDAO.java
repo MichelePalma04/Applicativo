@@ -1,7 +1,6 @@
 package dao;
 
 import implementazionePostgresDAO.IEventoDAO;
-import implementazionePostgresDAO.IInvitoGiudiceDAO;
 import implementazionePostgresDAO.IUtenteDAO;
 import model.InvitoGiudice;
 

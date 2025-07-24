@@ -90,6 +90,14 @@ public class Controller {
     public Evento creaEvento (String titolo, String sede, LocalDate dataInizio, LocalDate dataFine, int nMaxIscritti, int dimMaxTeam, LocalDate inizioRegistrazioni, LocalDate fineRegistrazioni, Organizzatore organizzatore) {
         Evento nuovoEvento = new Evento (titolo, sede, dataInizio, dataFine, nMaxIscritti, dimMaxTeam, inizioRegistrazioni, fineRegistrazioni, organizzatore, new ArrayList<>(),  new ArrayList<>());
         // Salva nel DB e ottieni l'evento con id assegnato
+        try {
+            nuovoEvento.validaDate();
+        } catch (IllegalArgumentException e) {
+            // Puoi gestire l'errore come preferisci (esempio: mostrare un messaggio di errore)
+            JOptionPane.showMessageDialog(null, e.getMessage(), "Errore date evento", JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
+
         Evento eventoConId = eventoDAO.aggiungiEvento(nuovoEvento);
         if (eventoConId != null) {
             organizzatoreDAO.aggiungiOrganizzatore(organizzatore, eventoConId.getId());
@@ -169,7 +177,7 @@ public class Controller {
         return false;
     }
 
-    public boolean rifiutaInvitoGiudice(int invitoId, String login) {
+    public boolean rifiutaInvitoGiudice(int invitoId) {
         InvitoGiudice invito = invitoGiudiceDAO.getInvitoById(invitoId);
         invito.setAccettato(false);
         invito.setRifiutato(true);

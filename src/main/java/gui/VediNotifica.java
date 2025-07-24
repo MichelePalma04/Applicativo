@@ -94,7 +94,7 @@ public class VediNotifica {
                 rifiutabutton.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        controller.rifiutaInvitoGiudice(invito.getId(), loginUtente);
+                        controller.rifiutaInvitoGiudice(invito.getId());
                         aggiornaInviti();
                     }
                 });
