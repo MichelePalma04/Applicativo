@@ -1,9 +1,5 @@
 package gui;
 
-import dao.EventoDAO;
-import dao.OrganizzatoreDAO;
-import dao.PartecipanteDAO;
-import dao.UtenteDAO;
 import implementazionePostgresDAO.*;
 import model .*;
 import javax.swing.*;
@@ -58,10 +54,10 @@ public class Login {
         accediButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String nome = new String(nomeUtenteField.getText());
-                String password = new String(passwordField.getText());
+                String nome = nomeUtenteField.getText();
+                String password = passwordField.getText();
 
-                if (nome.isEmpty() || password.isEmpty()) {
+                if (nome.trim().isEmpty() || password.trim().isEmpty()) {
                     JOptionPane.showMessageDialog(frame, "Inserisci sia il nome utente che la password!", "Error", JOptionPane.ERROR_MESSAGE);
                     return;
                 }

@@ -29,7 +29,7 @@ public class Classifica {
         frameClassifica.pack();
         frameClassifica.setSize(500, 500);
         frameClassifica.setLocationRelativeTo(null);
-        Evento evento = controller.geteventoById(eventoId);
+        Evento evento = controller.getEventoById(eventoId);
         ingresso.setText("Classifica finale di "+ evento.getTitolo());
         scroll.getVerticalScrollBar().setUnitIncrement(20);
 

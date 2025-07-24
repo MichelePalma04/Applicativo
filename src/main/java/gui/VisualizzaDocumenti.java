@@ -19,14 +19,16 @@ public class VisualizzaDocumenti {
     public JFrame frameDocumenti;
     private Controller controller;
     public JFrame frameGiudice;
+    private String loginGiudice;
 
-    public VisualizzaDocumenti(Controller controller, String nomeTeam, int eventoId, JFrame frame) {
+    public VisualizzaDocumenti(Controller controller, String nomeTeam, int eventoId, JFrame frame, String loginGiudice) {
         this.controller = controller;
+        this.loginGiudice = loginGiudice;
         frameGiudice = frame;
         frameDocumenti = new JFrame("Documenti");
         frameDocumenti.setContentPane(mainpanel);
         frameDocumenti.pack();
-        frameDocumenti.setSize(500, 500);
+        frameDocumenti.setSize(600, 600);
         frameDocumenti.setLocationRelativeTo(null);
         documentiTeam.setText("Documenti del team: " + nomeTeam);
         scroll.getVerticalScrollBar().setUnitIncrement(20);
@@ -36,6 +38,10 @@ public class VisualizzaDocumenti {
             JPanel rigaDocumenti = new JPanel(new FlowLayout(FlowLayout.LEFT));
             JLabel nomeDoc = new JLabel(doc.getFile().getName());
             JButton visualizzaDoc = new JButton("Visualizza");
+            JButton commentaDoc = new JButton("Commenta");
+            JTextArea commentaDocText = new JTextArea(2,20);
+            JScrollPane commentaDocScrollPane = new JScrollPane(commentaDocText);
+            commentaDocScrollPane.getVerticalScrollBar().setUnitIncrement(20);
 
 
             visualizzaDoc.addActionListener(new ActionListener() {
@@ -44,8 +50,28 @@ public class VisualizzaDocumenti {
                     apriFile (doc.getFile());
                 }
             });
+
+            commentaDoc.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed (ActionEvent e){
+                    String commento = commentaDocText.getText();
+                    if(!commento.trim().isEmpty()) {
+                        boolean ok = controller.aggiungiCommentoGiudice(doc.getId(),loginGiudice, eventoId, commento);
+                        if(ok){
+                            JOptionPane.showMessageDialog(frameDocumenti, "Commento aggiunto con successo.");
+                        }else{
+                            JOptionPane.showMessageDialog(frameDocumenti, "Errore nel salvataggio del commento.", "error", JOptionPane.ERROR_MESSAGE);
+                        }
+                    }else{
+                        JOptionPane.showMessageDialog(frameDocumenti, "Il commento non può essere vuoto!", "error", JOptionPane.ERROR_MESSAGE);
+                    }
+                }
+            });
             rigaDocumenti.add(nomeDoc);
             rigaDocumenti.add(visualizzaDoc);
+            rigaDocumenti.add(commentaDocText);
+            rigaDocumenti.add(commentaDoc);
+            rigaDocumenti.add(commentaDocScrollPane);
             panelDocumenti.add(rigaDocumenti);
         }
 

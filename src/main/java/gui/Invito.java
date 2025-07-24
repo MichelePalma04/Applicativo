@@ -38,7 +38,7 @@ public class Invito {
         frameInvito.setSize(500, 500);
         frameInvito.setLocationRelativeTo(null);
 
-        Evento evento = controller.geteventoById(eventoID);
+        Evento evento = controller.getEventoById(eventoID);
 
         nomeEvento.setText("Evento " + evento.getTitolo());
 

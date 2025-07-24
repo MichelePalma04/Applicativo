@@ -39,7 +39,7 @@ public class ViewEvento {
 
         frameAreaPartecipante = frame2;
         frameNotifiche = frame3;
-        controller.initEventi();
+       // controller.initEventi();
         List<Evento> eventi = controller.getTuttiEventi();
 
         frameEventi = new JFrame("Eventi");

@@ -41,10 +41,10 @@ public class Registrazione {
         registrati.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String nome = new String (nomeUtenteField.getText());
-                String password = new String (passwordField.getPassword());
+                String nome = nomeUtenteField.getText();
+                String password = passwordField.getText();
 
-                if (nome.isEmpty() || password.isEmpty()) {
+                if (nome.trim().isEmpty() || password.trim().isEmpty()) {
                     JOptionPane.showMessageDialog(frame, "Inserisci sia il nome utente che la password!", "Error", JOptionPane.ERROR_MESSAGE);
                     return;
                 }

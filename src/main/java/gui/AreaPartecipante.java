@@ -87,18 +87,12 @@ public class AreaPartecipante {
 
         boolean inTeam = (teamUtente != null);
         String problemaEvento = controller.getProblemaEvento(eventoId);
-        // DEBUG STATO INIZIALE
-        System.out.println("STATO INIZIALE:");
-        System.out.println("inTeam: " + inTeam);
-        System.out.println("problema: " + (problemaEvento != null ? problemaEvento : "null"));
-        System.out.println("Problema visibile: " + problema.isVisible());
-        System.out.println("SfogliaDocumenti visibile: " + sfogliaDocumenti.isVisible());
-        System.out.println("InserisciDocumento visibile: " + inserisciDocumento.isVisible());
+
         creaTeamButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String nome = nomeField.getText();
-                if(nome.isEmpty()) {
+                if(nome.trim().isEmpty()) {
                     JOptionPane.showMessageDialog(frameAreaPartecipante, "Inserire un nome valido.", "Error", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
@@ -120,10 +114,7 @@ public class AreaPartecipante {
 
                 boolean inTeamAggiornato = (nuovoTeamUtente != null);
                 String problemaEvento = controller.getProblemaEvento(eventoId);
-                // DEBUG dopo CREA TEAM
-                System.out.println("DOPO CREA TEAM:");
-                System.out.println("inTeamAggiornato: " + inTeamAggiornato);
-                System.out.println("problema: " + (problemaEvento != null ? problemaEvento : "null"));
+
                 if (inTeamAggiornato) {
                     nomeField.setVisible(false);
                     nomeTeam.setVisible(false);
@@ -202,91 +193,12 @@ public class AreaPartecipante {
                 frameEventi.setVisible(true);
             }
         });
-/*
-                nomeField.setVisible(false);
-                nomeTeam.setVisible(false);
-                creaTeamButton.setVisible(false);
-                teamLabel.setVisible(false);
-                comboBox1.setVisible(false);
-                uniscitiButton.setVisible(false);
-                avviso.setVisible(false);
-                messaggio.setVisible(true);
-                messaggio.setText("Ora sei un membro del team "+ nuovoTeam.getNomeTeam());
-                if(evento.getProblema()!= null && !evento.getProblema().isEmpty()){
-                    problema.setText("Problema da risolvere: " + evento.getProblema());
-                    problema.setVisible(true);
-                    sfogliaDocumenti.setVisible(true);
-                    inserisciDocumento.setVisible(true);
-                }else{
-                    problema.setVisible(false);
-                    sfogliaDocumenti.setVisible(false);
-                    inserisciDocumento.setVisible(false);
-                }
-            }
-        });
 
-        if(inTeam) {
-            creaTeamButton.setVisible(false);
-            nomeField.setVisible(false);
-            nomeTeam.setVisible(false);
-            uniscitiButton.setVisible(false);
-            comboBox1.setVisible(false);
-            teamLabel.setVisible(false);
-            avviso.setVisible(false);
-            messaggio.setVisible(true);
-            messaggio.setText("Ora sei membro del " + teamUtente.getNomeTeam());
-            if(evento.getProblema()!= null && !evento.getProblema().isEmpty()){
-                problema.setText("Problema da risolvere: " + evento.getProblema());
-                problema.setVisible(true);
-                sfogliaDocumenti.setVisible(true);
-                inserisciDocumento.setVisible(true);
-            }else{
-                problema.setVisible(false);
-                sfogliaDocumenti.setVisible(false);
-                inserisciDocumento.setVisible(false);
-            }
-        }else{
-            uniscitiButton.setVisible(true);
-            comboBox1.setVisible(true);
-            teamLabel.setVisible(true);
-            avviso.setVisible(true);
-            messaggio.setVisible(false);
-            problema.setVisible(false);
-            sfogliaDocumenti.setVisible(false);
-            inserisciDocumento.setVisible(false);
-        }
-
-
-        homeButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                ViewEvento gui = new ViewEvento(controller, loginPartecipante, frameAccedi, frameAreaPartecipante, frameNotifica, frameGiudice);
-                gui.frameAreaPartecipante.setVisible(false);
-                frameEventi.setVisible(true);
-
-            }
-        });
-
- */
         uniscitiButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Team teamSelected = (Team) comboBox1.getSelectedItem();
-/*
-                for (Team team : teams) {
-                    if (team.getPartecipanti().contains(partecipante)) {
-                        JOptionPane.showMessageDialog(frameAreaPartecipante, "Sei già in un team.");
-                        return;
-                    }
-                }
-                if (teamSelected.getPartecipanti().size() >= evento.getDim_max_team()) {
-                    JOptionPane.showMessageDialog(frameAreaPartecipante, "Il team "+ teamSelected.getNomeTeam() + " è pieno.");
-                    return;
-                }
-                teamSelected.getPartecipanti().add(partecipante);
-                JOptionPane.showMessageDialog(frameAreaPartecipante, "Ti sei unito al team "+ teamSelected.getNomeTeam());
 
- */
                 // Verifica se già in un team tramite Controller
                 if (controller.isPartecipanteInTeam(loginPartecipante, teamSelected.getNomeTeam(), eventoId)) {
                     JOptionPane.showMessageDialog(frameAreaPartecipante, "Sei già in un team.");
@@ -295,7 +207,7 @@ public class AreaPartecipante {
 
                 // Verifica la dimensione massima tramite Controller
                 String problemaEvento = controller.getProblemaEvento(eventoId);
-                if (controller.getDimTeam(teamSelected.getNomeTeam(), eventoId) >= controller.geteventoById(eventoId).getDim_max_team() ) {
+                if (controller.getDimTeam(teamSelected.getNomeTeam(), eventoId) >= controller.getEventoById(eventoId).getDim_max_team() ) {
                     JOptionPane.showMessageDialog(frameAreaPartecipante, "Il team " + teamSelected.getNomeTeam() + " è pieno.");
                     return;
                 }
@@ -392,6 +304,8 @@ public class AreaPartecipante {
                 }
             }
         });
+
+        
     }
 
 }

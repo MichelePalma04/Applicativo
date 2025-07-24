@@ -2,6 +2,7 @@ package implementazionePostgresDAO;
 
 import dao.DocumentoDAO;
 import database.ConnessioneDatabase;
+import model.CommentoGiudice;
 import model.Documento;
 import model.Team;
 
@@ -73,6 +74,7 @@ public class IDocumentoDAO implements DocumentoDAO {
                 Team team = teamDAO.getTeam(teamNome, eventoId);
 
                 Documento doc = new Documento(dataCaricamento, file, team);
+                doc.setCommentiGiudici(getCommentiDocumento(doc.getId(), eventoId));
                 docs.add(doc);
             }
         } catch (SQLException e) { e.printStackTrace(); }
@@ -93,12 +95,49 @@ public class IDocumentoDAO implements DocumentoDAO {
                 String nometeam = rs.getString("team_nome");
                 Team team = new Team(nometeam, new ArrayList<>(), new ArrayList<>());
                 Documento doc = new Documento(data, file, team);
+                doc.setId(rs.getInt("id"));
+                doc.setCommentiGiudici(getCommentiDocumento(doc.getId(), eventoId));
                 docs.add(doc);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return docs;
+    }
+
+    @Override
+    public List<CommentoGiudice> getCommentiDocumento(int idDocumento, int eventoId) {
+        List<CommentoGiudice> commenti = new ArrayList<>();
+        String sql = "SELECT utente_login, testo_commento FROM commento_documento WHERE id_documento = ? AND evento_id = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, idDocumento);
+            ps.setInt(2, eventoId);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                String loginGiudice = rs.getString("utente_login");
+                String testo = rs.getString("testo_commento");
+                commenti.add(new CommentoGiudice(loginGiudice, testo));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return commenti;
+    }
+
+    @Override
+    public boolean aggiungiCommentoGiudice (int documentoId, String utenteLogin, int eventoId, String testoCommento) {
+        String sql = "INSERT INTO commento_documento (id_documento, utente_login, evento_id, testo_commento) VALUES (?, ?, ?, ?)";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, documentoId);
+            ps.setString(2, utenteLogin);
+            ps.setInt(3, eventoId);
+            ps.setString(4, testoCommento);
+            ps.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     @Override

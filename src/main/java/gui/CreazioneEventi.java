@@ -72,7 +72,7 @@ public class CreazioneEventi {
                 LocalDate inizioReg = LocalDate.parse(inizoRegField.getText());
                 LocalDate fineReg = LocalDate.parse(fineRegField.getText());
 
-                Evento nuovoEvento = controller.creaEvento(titolo, sede, dataInizio, dataFine, maxIscritti, dimensione, inizioReg, fineReg);
+                Evento nuovoEvento = controller.creaEvento(titolo, sede, dataInizio, dataFine, maxIscritti, dimensione, inizioReg, fineReg, organizzatore);
                 if(nuovoEvento != null) {
                     JOptionPane.showMessageDialog(frameCreazioneEventi , "Evento creato con successo");
                     frameCreazioneEventi.dispose();

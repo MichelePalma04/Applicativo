@@ -22,7 +22,7 @@ public class IUtenteDAO implements UtenteDAO {
 
     @Override
     public boolean addUtente(Utente utente) {
-        String sql = "INSERT INTO utente VALUES (?,?)";
+        String sql = "INSERT INTO utente (login, password) VALUES (?,?)";
         try(PreparedStatement ps = connection.prepareStatement(sql)){
             ps.setString (1, utente.getLogin());
             ps.setString(2, utente.getPassword());
