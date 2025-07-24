@@ -7,6 +7,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 
 
 public class Classifica {
@@ -18,8 +19,9 @@ public class Classifica {
     private Controller controller;
     public JFrame frameClassifica;
     private JFrame frameEventi;
+    private int eventoID;
 
-    public Classifica(Evento evento, Controller controller, JFrame frameE) {
+    public Classifica(int eventoId, Controller controller, JFrame frameE) {
         this.controller = controller;
         this.frameEventi = frameE;
         frameClassifica = new JFrame("Classifica");
@@ -27,14 +29,16 @@ public class Classifica {
         frameClassifica.pack();
         frameClassifica.setSize(500, 500);
         frameClassifica.setLocationRelativeTo(null);
+        Evento evento = controller.geteventoById(eventoId);
         ingresso.setText("Classifica finale di "+ evento.getTitolo());
         scroll.getVerticalScrollBar().setUnitIncrement(20);
 
         panelVoti.setLayout(new BoxLayout(panelVoti, BoxLayout.Y_AXIS));
 
-        evento.getTeams().sort((t1, t2) -> Double.compare(t2.mediaVoti(), t1.mediaVoti()));
+        List <Team> teams = controller.getTeamsEvento(eventoId);
+        teams.sort((t1, t2) -> Double.compare(t2.mediaVoti(), t1.mediaVoti()));
         int posizione = 1;
-        for(Team t: evento.getTeams()) {
+        for(Team t: teams) {
             double media = t.mediaVoti();
             JPanel riga = new JPanel(new FlowLayout(FlowLayout.LEFT));
             JLabel posizioneTeam = new JLabel(posizione++ +") ");

@@ -52,7 +52,7 @@ public class IInvitoGiudiceDAO implements InvitoGiudiceDAO {
                 // Esempio:
                 Evento evento = eventoDAO.getEvento(rs.getInt("evento_id"));
                 Utente utente = utenteDAO.getUtentebyLogin(rs.getString("utente_login"));
-                InvitoGiudice invito = new InvitoGiudice(rs.getInt("id"), evento, utente, rs.getBoolean("accettato"), rs.getBoolean("rifiutato"));
+                InvitoGiudice invito = new InvitoGiudice(rs.getInt("evento_id"), rs.getInt("id"), evento, utente, rs.getBoolean("accettato"), rs.getBoolean("rifiutato"));
                 lista.add(invito);
             }
         } catch (SQLException e) {
@@ -72,7 +72,7 @@ public class IInvitoGiudiceDAO implements InvitoGiudiceDAO {
                 Utente utente = utenteDAO.getUtentebyLogin(rs.getString("utente_login"));
                 boolean accettato = rs.getBoolean("accettato");
                 boolean rifiutato = rs.getBoolean("rifiutato");
-                InvitoGiudice invito = new InvitoGiudice(rs.getInt("id"), evento, utente, accettato, rifiutato);
+                InvitoGiudice invito = new InvitoGiudice(rs.getInt("evento_id"), rs.getInt("id"), evento, utente, accettato, rifiutato);
                 // se vuoi puoi aggiungere setId se usi id anche nel modello
                 return invito;
             }

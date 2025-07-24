@@ -33,11 +33,14 @@ public class IVotoDAO implements VotoDAO {
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 Giudice giudice = giudiceDAO.getGiudice(rs.getString("giudice_login"), rs.getInt("evento_id"));
-                Team team = teamDAO.getTeam(rs.getString("team_nome"), rs.getInt("evento_id"));
+                //Team team = teamDAO.getTeam(rs.getString("team_nome"), rs.getInt("evento_id"));
+                Team team = new Team(rs.getString("team_nome"), new ArrayList<>(), new ArrayList<>());
                 int votazione = rs.getInt("votazione");
                 return new Voto(giudice, team, votazione);
             }
-        } catch (SQLException e) {}
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return null;
     }
 

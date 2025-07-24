@@ -96,13 +96,20 @@ public class AreaGiudice {
 
         // 4. Documenti caricati dai team (direttamente da DB)
         List<Team> teams = controller.getTeamsEvento(eventoId);
+        boolean almenoUno = false;
         if (teams != null && !teams.isEmpty()) {
-            JLabel documentiLabel = new JLabel("Documenti caricati dai team: ");
-            panel.add(documentiLabel);
+           // JLabel documentiLabel = new JLabel("Documenti caricati dai team: ");
+           // panel.add(documentiLabel);
 
             for (Team t : teams) {
                 boolean haDocumenti = controller.teamHaDocumenti(t.getNomeTeam(), eventoId);
                 if (haDocumenti) {
+                    if (!almenoUno) {
+                        // Mostra la label una sola volta, appena trovi il primo team con documenti
+                        JLabel documentiLabel = new JLabel("Documenti caricati dai team: ");
+                        panel.add(documentiLabel);
+                        almenoUno = true;
+                    }
                     JLabel nomeTeam = new JLabel(t.getNomeTeam());
                     JButton visualizzaDocumenti = new JButton("Visualizza documenti");
                     JPanel rigaTeam = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -152,10 +159,10 @@ public class AreaGiudice {
                         }
                     });
                 }
+            } if(!almenoUno) {
+                JLabel noDocumenti = new JLabel("Nessun documento caricato dai team.");
+                panel.add(noDocumenti);
             }
-        } else {
-            JLabel noDocumenti = new JLabel("Nessun documento caricato dai team.");
-            panel.add(noDocumenti);
         }
 
         /*if(eventoCorrente.getGiudiceDescrizione() != null && eventoCorrente.getGiudiceDescrizione().getLogin().equals(loginGiudice)) {

@@ -445,9 +445,10 @@ public class Controller {
 
      */
 
-    public boolean accettaInvitoGiudice(int eventoId, String login) {
+    public boolean accettaInvitoGiudice(int idInvito, String login) {
         // Imposta lo stato
-        InvitoGiudice invito = invitoGiudiceDAO.getInvitoById(eventoId);
+        InvitoGiudice invito = invitoGiudiceDAO.getInvitoById(idInvito);
+        int eventoId = invito.getEventoId();
         Partecipante partecipante = partecipanteDAO.getPartecipante(login, eventoId);
         if(partecipante != null){
             JOptionPane.showMessageDialog(null, "Non puoi accettare l'invito come giudice: sei già partecipante di questo evento", "error", JOptionPane.ERROR_MESSAGE);
@@ -461,6 +462,7 @@ public class Controller {
         // Aggiorna nel database tramite DAO
         boolean invitoOK = invitoGiudiceDAO.updateInvitoGiudice(invito);
         if(invitoOK){
+            System.out.println("DEBUG: Sto inserendo giudice per eventoId = " + eventoId);
             return giudiceDAO.aggiungiGiudice(login, eventoId);
         }
         return false;

@@ -89,7 +89,7 @@ public class IDocumentoDAO implements DocumentoDAO {
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 LocalDate data = rs.getDate("data").toLocalDate();
-                File file = new File(rs.getString("path_file"));
+                File file = new File(rs.getString("percorso_file"));
                 String nometeam = rs.getString("team_nome");
                 Team team = new Team(nometeam, new ArrayList<>(), new ArrayList<>());
                 Documento doc = new Documento(data, file, team);

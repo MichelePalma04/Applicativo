@@ -92,7 +92,7 @@ public class ViewEvento {
             classificaButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    Classifica classificaGUI = new Classifica(ev, controller, frameEventi);
+                    Classifica classificaGUI = new Classifica(ev.getId(), controller, frameEventi);
                     classificaGUI.frameClassifica.setVisible(true);
                     frameEventi.setVisible(false);
                 }

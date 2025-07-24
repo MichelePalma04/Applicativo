@@ -82,6 +82,9 @@ public class VediNotifica {
                     public void actionPerformed(ActionEvent e) {
                         if(controller.accettaInvitoGiudice(invito.getId(), loginUtente)) {
                             JOptionPane.showMessageDialog(frameNotifiche, "Ora sei giudice dell'evento: " + evento.getTitolo());
+                            //DEBUG
+                            System.out.println("DEBUG: invito.getId() = " + invito.getEventoId());
+                            System.out.println("DEBUG: loginUtente = " + loginUtente);
                             aggiornaInviti();
                         }
                         aggiornaInviti();

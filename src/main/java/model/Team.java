@@ -88,13 +88,13 @@ public class Team {
     }
 
     public double mediaVoti() {
-        if(votiAssegnati == null || votiAssegnati.isEmpty()) {
+        if(voti == null || voti.isEmpty()) {
             return 0.0;
         }
         int somma = 0;
-        for (int voto: votiAssegnati) {
-            somma += voto;
+        for (Voto v: voti) {
+            somma += v.getVotazione();
         }
-        return (double) somma / votiAssegnati.size();
+        return (double) somma / voti.size();
     }
 }
