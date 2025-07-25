@@ -10,25 +10,65 @@ import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
 import java.io.File;
 import java.io.IOException;
 
+/**
+ * GUI per la visualizzazione e gestione dei documenti di un team da parte di un giudice nell'applicazione Hackaton.
+ * <p>
+ * Permette al giudice di:
+ * <ul>
+ *   <li>Visualizzare la lista dei documenti caricati dal team per un evento</li>
+ *   <li>Aprire i documenti direttamente tramite il pulsante "Visualizza"</li>
+ *   <li>Aggiungere commenti ai documenti tramite il pulsante "Commenta"</li>
+ *   <li>Ricevere feedback tramite messaggi di dialogo</li>
+ *   <li>Tornare all'area personale del giudice</li>
+ * </ul>
+ * <p>
+ * Gli stili grafici e le interazioni sono definiti per garantire coerenza con il resto dell'applicazione.
+ */
 public class VisualizzaDocumenti {
+    /** Label per il titolo della sezione documenti del team. */
     private JLabel documentiTeam;
+
+    /** Pannello principale della GUI documenti. */
     private JPanel mainpanel;
+
+    /** ScrollPane per la lista dei documenti. */
     private JScrollPane scroll;
+
+    /** Pannello che contiene le righe dei documenti. */
     private JPanel panelDocumenti;
+
+    /** Bottone per tornare all'area giudice. */
     private JButton backButton;
+
+    /** Frame principale della schermata documenti. */
     private JFrame frameDocumenti;
+
+    /** Controller logico dell'applicazione. */
     private Controller controller;
+
+    /** Frame dell'area giudice per il ritorno. */
     private JFrame frameGiudice;
+
+    /** Login del giudice attualmente loggato. */
     private String loginGiudice;
 
+    /** Font di default per la GUI. */
     private static final String FONT_FAMILY = "SansSerif";
 
+    /**
+     * Costruisce la GUI per la visualizzazione e commento dei documenti di un team, inizializza gli stili, listeners e popola la schermata.
+     * @param controller Controller logico dell'applicazione
+     * @param nomeTeam nome del team di cui visualizzare i documenti
+     * @param eventoId identificativo dell'evento
+     * @param frameAreaGiudice frame dell'area giudice per il ritorno
+     * @param giudiceLogin login del giudice attualmente loggato
+     */
     public VisualizzaDocumenti(Controller controller, String nomeTeam, int eventoId, JFrame frameAreaGiudice, String giudiceLogin) {
         this.controller = controller;
         this.loginGiudice = giudiceLogin;
         frameGiudice = frameAreaGiudice;
 
-        Color bgColor = new Color(240, 248, 255);      // chiaro azzurrino
+        Color bgColor = new Color(240, 248, 255);
         Color btnColor = new Color(30, 144, 255);
         Color btnHoverColor = new Color(65, 105, 225);
         Font labelFont = new Font(FONT_FAMILY, Font.BOLD, 16);
@@ -50,7 +90,6 @@ public class VisualizzaDocumenti {
         documentiTeam.setFont(labelFont);
         documentiTeam.setHorizontalAlignment(SwingConstants.CENTER);
 
-        // Scroll solo verticale per il panelDocumenti
         scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
         scroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         scroll.getVerticalScrollBar().setUnitIncrement(20);
@@ -155,6 +194,12 @@ public class VisualizzaDocumenti {
         });
     }
 
+    /**
+     * Prova ad aprire il file specificato tramite il sistema operativo.
+     * Mostra un messaggio di errore se il file non può essere aperto.
+     *
+     * @param f file da aprire
+     */
     public void apriFile (File f){
         if (Desktop.isDesktopSupported()) {
             Desktop desktop = Desktop.getDesktop();
@@ -168,6 +213,10 @@ public class VisualizzaDocumenti {
         }
     }
 
+    /**
+     * Restituisce il frame della schermata documenti.
+     * @return frame della schermata documenti
+     */
     public JFrame getFrameDocumenti () {
         return frameDocumenti;
     }

@@ -11,23 +11,68 @@ import java.awt.*;
 import java.util.List;
 import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
 
+/**
+ * GUI per la visualizzazione e gestione degli inviti ricevuti dall'organizzatore come giudice di un evento Hackaton.
+ * <p>
+ * Permette all'utente di:
+ * <ul>
+ *   <li>Visualizzare l'elenco degli inviti pendenti ricevuti dagli organizzatori per eventi specifici</li>
+ *   <li>Accettare o rifiutare ogni invito tramite appositi bottoni</li>
+ *   <li>Ricevere feedback tramite messaggi di dialogo</li>
+ *   <li>Tornare all'area eventi tramite il bottone "Indietro"</li>
+ * </ul>
+ * <p>
+ * Gli stili grafici e le interazioni sono definiti per coerenza con il resto dell'applicazione.
+ */
 public class VediNotifica {
-
+    /** Pannello principale della GUI notifiche. */
     private JPanel mainPanel;
+
+    /** Pannello che contiene la lista degli inviti. */
     private JPanel panelInviti;
+
+    /** Pannello per il bottone "Indietro". */
     private JPanel panelbottone;
+
+    /** Bottone per tornare all'area eventi. */
     private JButton backButton;
+
+    /** Login dell'utente attualmente loggato. */
     private String loginUtente;
+
+    /** ScrollPane per la lista degli inviti. */
     private JScrollPane scroll;
+
+    /** Controller logico dell'applicazione. */
     private Controller controller;
+
+    /** Frame principale della schermata notifiche. */
     private JFrame frameNotifiche;
+
+    /** Frame dell'area eventi per il ritorno. */
     private JFrame frameEventi;
+
+    /** Frame dell'area giudice. */
     private JFrame frameGiudice;
+
+    /** Frame dell'area accesso. */
     private JFrame frameAccesso;
+
+    /** Frame dell'area partecipante. */
     private JFrame framePartecipante;
 
+    /** Font di default per la GUI. */
     private static final String FONT_FAMILY = "SansSerif";
 
+    /**
+     * Costruisce la GUI per la visualizzazione degli inviti ricevuti, inizializza gli stili, listeners e aggiorna la lista degli inviti.
+     * @param controller Controller logico dell'applicazione
+     * @param loginUtente login dell'utente che consulta le notifiche
+     * @param frameAreaEvento frame dell'area eventi per il ritorno
+     * @param frameAreaGiudice frame dell'area giudice
+     * @param frameAreaAccesso frame dell'area accesso
+     * @param frameAreaPartecipante frame dell'area partecipante
+     */
     public VediNotifica(Controller controller, String loginUtente, JFrame frameAreaEvento, JFrame frameAreaGiudice, JFrame frameAreaAccesso, JFrame frameAreaPartecipante) {
         this.controller = controller;
         this.loginUtente = loginUtente;
@@ -89,6 +134,10 @@ public class VediNotifica {
             nuovo.getFrameEventi().setVisible(true);
         });
     }
+
+    /**
+     * Aggiorna la lista degli inviti ricevuti dall'utente, mostrando i dettagli e i bottoni per accettare o rifiutare.
+     */
     private void aggiornaInviti() {
         panelInviti.removeAll();
         Color btnColor = new Color(30, 144, 255);
@@ -162,6 +211,11 @@ public class VediNotifica {
         panelInviti.revalidate();
         panelInviti.repaint();
     }
+
+    /**
+     * Restituisce il frame della schermata notifiche.
+     * @return frame della schermata notifiche
+     */
     public JFrame getFrameNotifiche() {
         return frameNotifiche;
     }

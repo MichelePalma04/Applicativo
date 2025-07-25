@@ -10,41 +10,79 @@ import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
 
 import java.util.List;
 
+/**
+ * GUI dedicata all'organizzatore all'interno dell'applicazione Hackaton.
+ * <p>
+ * Consente all'organizzatore di:
+ * <ul>
+ *   <li>Visualizzare il benvenuto personalizzato con il proprio login</li>
+ *   <li>Visualizzare la lista degli eventi di cui è responsabile tramite card interattive</li>
+ *   <li>Accedere ai dettagli di ciascun evento e gestire gli inviti ai giudici</li>
+ *   <li>Creare nuovi eventi</li>
+ *   <li>Effettuare il logout e tornare all'area di accesso</li>
+ * </ul>
+ * <p>
+ * Gli stili grafici e le interazioni sono gestiti localmente,
+ * con effetti hover e layout responsivi per una migliore esperienza utente.
+ */
 public class AreaOrganizzatore {
+    /** Pannello principale della GUI organizzatore. */
     private JPanel panel;
+
+    /** Label di benvenuto con login dell'organizzatore. */
     private JLabel benvenuto;
+
+    /** Pannello che contiene le card degli eventi. */
     private JPanel panelEventi;
+
+    /** ScrollPane per scorrere tra gli eventi. */
     private JScrollPane scroll;
+
+    /** Bottone per effettuare il logout. */
     private JButton logOutButton;
+
+    /** Bottone per accedere alla creazione di nuovi eventi. */
     private JButton creaEventiButton;
+
+    /** Frame principale dell'area organizzatore. */
     private JFrame frameOrganizzatore;
+
+    /** Frame dell'area accessi (per tornare indietro). */
     private JFrame frameAccessi;
+
+    /** Frame dell'area inviti (per gestire inviti ai giudici). */
     private JFrame frameInviti;
+
+    /** Controller logico dell'applicazione. */
     private Controller controller;
 
+    /** Nome del font da utilizzare per le componenti grafiche. */
     private static final String FONT_FAMILY = "SansSerif";
 
-
+    /**
+     * Costruisce la GUI dell'area organizzatore, inizializzando tutti i componenti grafici e logici.
+     *
+     * @param controller Controller dell'applicazione per la gestione logica
+     * @param organizzatore Organizzatore attualmente loggato
+     * @param frameAreaInviti Frame dell'area inviti (per la gestione inviti ai giudici)
+     * @param frameAreaAccesso Frame dell'area accessi (per tornare al login)
+     */
     public AreaOrganizzatore(Controller controller, Organizzatore organizzatore, JFrame frameAreaInviti, JFrame frameAreaAccesso) {
         this.controller = controller;
         frameInviti = frameAreaInviti;
         frameAccessi = frameAreaAccesso;
 
-        // Color and Font settings
-        Color bgColor = new Color(240, 248, 255);      // chiaro azzurrino
-        Color cardColor = new Color(225, 235, 245);    // più scuro per le card
+        Color bgColor = new Color(240, 248, 255);
+        Color cardColor = new Color(225, 235, 245);
         Color btnColor = new Color(30, 144, 255);
         Color borderColor = new Color(210, 210, 210);
         Color btnHoverColor = new Color(65, 105, 225);
         Font labelFont = new Font(FONT_FAMILY, Font.BOLD, 16);
         Font fieldFont = new Font(FONT_FAMILY, Font.PLAIN, 15);
 
-
-        // Main panel style
         panel.setBackground(bgColor);
         benvenuto.setFont(labelFont);
 
-        // Pulsanti stile
         logOutButton.setBackground(btnColor);
         logOutButton.setForeground(Color.WHITE);
         logOutButton.setFocusPainted(false);
@@ -57,7 +95,6 @@ public class AreaOrganizzatore {
         creaEventiButton.setFont(labelFont);
         creaEventiButton.setBorder(BorderFactory.createEmptyBorder(10, 25, 10, 25));
 
-        // Effetto hover pulsanti
         logOutButton.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mouseEntered(java.awt.event.MouseEvent evt) {
@@ -95,7 +132,6 @@ public class AreaOrganizzatore {
         panelEventi.setLayout(new GridLayout(0, 2, 20, 20));
         panelEventi.setBackground(bgColor);
 
-        // Popola eventi come card
         List<Evento> eventi = controller.getEventiOrganizzatore(organizzatore.getLogin());
         for (Evento evento : eventi) {
             JPanel eventoCard = new JPanel(new BorderLayout());
@@ -103,7 +139,6 @@ public class AreaOrganizzatore {
             eventoCard.setBorder(BorderFactory.createLineBorder(borderColor, 1));
             eventoCard.setPreferredSize(new Dimension(220, 150));
 
-            // Titolo e sede in alto
             JPanel topPanel = new JPanel();
             topPanel.setLayout(new BoxLayout(topPanel, BoxLayout.Y_AXIS));
             topPanel.setOpaque(false);
@@ -119,7 +154,6 @@ public class AreaOrganizzatore {
             topPanel.add(titoloLabel);
             topPanel.add(sedeLabel);
 
-            // Bottone Dettagli in basso, largo quanto la card
             JButton infoButton = new JButton("Dettagli");
             infoButton.setBackground(btnColor);
             infoButton.setForeground(Color.WHITE);
@@ -147,7 +181,7 @@ public class AreaOrganizzatore {
             });
 
             eventoCard.add(topPanel, BorderLayout.NORTH);
-            eventoCard.add(Box.createVerticalGlue(), BorderLayout.CENTER); // Spinge il bottone in basso
+            eventoCard.add(Box.createVerticalGlue(), BorderLayout.CENTER);
             eventoCard.add(infoButton, BorderLayout.SOUTH);
 
             panelEventi.add(eventoCard);
@@ -165,6 +199,12 @@ public class AreaOrganizzatore {
             frameOrganizzatore.setVisible(false);
         });
     }
+
+    /**
+     * Restituisce il frame dell'area organizzatore.
+     *
+     * @return frame dell'area organizzatore
+     */
     public JFrame getFrameOrganizzatore() {
         return frameOrganizzatore;
     }

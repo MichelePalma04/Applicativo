@@ -11,46 +11,139 @@ import java.time.LocalDate;
 import java.util.List;
 import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
 
+/**
+        * GUI dedicata all'area partecipante dell'applicazione Hackaton.
+        * <p>
+ * Permette al partecipante di:
+        * <ul>
+ *   <li>Visualizzare il benvenuto e lo stato dell'iscrizione</li>
+        *   <li>Unirsi a un team esistente oppure crearne uno nuovo</li>
+        *   <li>Visualizzare il problema da risolvere per l'evento</li>
+        *   <li>Caricare documenti e visualizzare quelli da lui già caricati/li>
+        *   <li>Visualizzare eventuali commenti dei giudici sui documenti caricati</li>
+        *   <li>Tornare alla schermata principale o di accesso</li>
+        * </ul>
+        * <p>
+ * Gli stili e le interazioni sono gestiti localmente, con effetti hover, layout responsivo e messaggi di feedback per garantire una buona esperienza utente.
+ */
 public class AreaPartecipante {
+    /** Label di avviso per l'iscrizione. */
     private JLabel avviso;
+
+    /** Bottone per tornare alla home. */
     private JButton homeButton;
+
+    /** ComboBox per la selezione di un team a cui unirsi. */
     private JComboBox <Team> comboBox1;
+
+    /** Bottone per unirsi al team selezionato. */
     private JButton uniscitiButton;
+
+    /** Label di benvenuto per il partecipante. */
     private JLabel benvenuto;
-    private String loginPartecipante;
-    private int eventoId;
+
+    /** Label per la sezione team. */
     private JLabel teamLabel;
+
+    /** Pannello principale della GUI. */
     private JPanel panel;
+
+    /** Label di messaggio per lo stato del team. */
     private JLabel messaggio;
+
+    /** Bottone per sfogliare i documenti da caricare. */
     private JButton sfogliaDocumenti;
+
+    /** Label per la sezione di caricamento documento. */
     private JLabel inserisciDocumento;
+
+    /** Pannello secondario per la gestione dei documenti. */
     private JPanel panel2;
+
+    /** Label del problema da risolvere. */
     private JLabel problema;
+
+    /** Bottone per la creazione di un nuovo team. */
     private JButton creaTeamButton;
+
+    /** Campo di testo per il nome del team da creare. */
     private JTextField nomeField;
+
+    /** Label per il nome del team. */
     private JLabel nomeTeam;
+
+    /** Controller logico dell'applicazione. */
     private Controller controller;
+
+    /** Frame principale dell'area partecipante. */
     private JFrame frameAreaPartecipante;
+
+    /** Frame della schermata eventi. */
     private JFrame frameEventi;
+
+    /** Frame della schermata di accesso. */
     private JFrame frameAccedi;
+
+    /** Frame della schermata notifiche. */
     private JFrame frameNotifica;
+
+    /** Frame della schermata giudice. */
     private JFrame frameGiudice;
 
+    /** Login del partecipante attualmente loggato. */
+    private String loginPartecipante;
+
+    /** Identificativo dell'evento. */
+    private int eventoId;
+
+    /** Font usato per tutti i testi e label della GUI. */
     private static final String FONT_FAMILY = "SansSerif";
+
+    /** Label per la sezione problema da risolvere. */
     private static final String PROBLEMA_LABEL = "Problema da risolvere: ";
+
+    /** Label per la visualizzazione di un documento caricato. */
     private static final String DOCUMENTO_CARICATO_LABEL = "Documento caricato: ";
+
+    /** Messaggio mostrato se il team non ha caricato documenti. */
     private static final String NESSUN_DOCUMENTO_LABEL = "Nessun documento caricato dal tuo team.";
+
+    /** Messaggio mostrato se non ci sono commenti dei giudici. */
     private static final String COMMENTO_GIUDICE_LABEL = "Nessun commento dai giudici.";
 
+    /** Colore di sfondo principale della GUI (azzurrino chiaro). */
     private Color bgColor = new Color(240, 248, 255);
+
+    /** Colore base dei bottoni. */
     private Color btnColor = new Color(30, 144, 255);
+
+    /** Colore dei bottoni in hover (quando il mouse passa sopra). */
     private Color btnHoverColor = new Color(65, 105, 225);
+
+    /** Colore di sfondo dei campi input. */
     private Color fieldBg = Color.WHITE;
+
+    /** Colore del bordo dei campi input. */
     private Color fieldBorder = new Color(210, 210, 210);
+
+    /** Font delle label principali. */
     private Font labelFont = new Font(FONT_FAMILY, Font.BOLD, 16);
+
+    /** Font dei campi di input e dei messaggi. */
     private Font fieldFont = new Font(FONT_FAMILY, Font.PLAIN, 15);
 
 
+    /**
+     * Costruisce la GUI dell'area partecipante, inizializzando tutti i componenti grafici e logici.
+     *
+     * @param partecipanteLogin login del partecipante
+     * @param idEvento id dell'evento associato
+     * @param frameAreaEventi frame della schermata degli eventi
+     * @param frameAreaAccesso frame della schermata di accesso
+     * @param frameAreaNotifiche frame della schermata notifiche
+     * @param frameAreaGiudice frame della schermata giudice
+     * @param controller Controller logico dell'applicazione
+     */
     public AreaPartecipante(String partecipanteLogin, int idEvento, JFrame frameAreaEventi, JFrame frameAreaAccesso, JFrame frameAreaNotifiche, JFrame frameAreaGiudice, Controller controller) {
         this.controller = controller;
         this.loginPartecipante = partecipanteLogin;
@@ -76,15 +169,18 @@ public class AreaPartecipante {
         aggiornaVisibilitaCampi(inTeam, teamUtente);
 
         if (inTeam) {
-            mostraDocumentiTeam(documentiPanel, teamUtente);
+            mostraDocumenti(documentiPanel, teamUtente);
         }
 
         creaTeamButton.addActionListener(e -> azioneCreaTeam(documentiPanel));
-        homeButton.addActionListener(e -> azioneHome());
+        homeButton.addActionListener(e -> tornaHome());
         uniscitiButton.addActionListener(e -> azioneUniscitiTeam(documentiPanel));
         sfogliaDocumenti.addActionListener(e -> azioneCaricaDocumento(documentiPanel));
     }
 
+    /**
+     * Applica gli stili ai componenti della GUI.
+     */
     private void setupStileComponenti() {
         setPanelBg(panel, bgColor);
         setPanelBg(panel2, bgColor);
@@ -106,14 +202,28 @@ public class AreaPartecipante {
         styleField(nomeField, fieldFont, fieldBg, fieldBorder);
     }
 
+    /**
+     * Imposta il colore di sfondo di un pannello.
+     * @param p pannello da modificare
+     * @param color colore di sfondo
+     */
     private void setPanelBg(JPanel p, Color color) {
         if (p != null) p.setBackground(color);
     }
 
+    /**
+     * Imposta il font di una label.
+     * @param l label da modificare
+     * @param font font da applicare
+     */
     private void setLabelFont(JLabel l, Font font) {
         if (l != null) l.setFont(font);
     }
 
+    /**
+     * Applica lo stile ai bottoni.
+     * @param btn bottone da stilizzare
+     */
     private void styleButton(JButton btn) {
         btn.setBackground(btnColor);
         btn.setForeground(Color.WHITE);
@@ -128,6 +238,13 @@ public class AreaPartecipante {
         });
     }
 
+    /**
+     * Applica lo stile ai campi di testo e combo box.
+     * @param f componente da stilizzare
+     * @param font font da applicare
+     * @param bg colore di sfondo
+     * @param borderColor colore bordo
+     */
     private void styleField(JComponent f, Font font, Color bg, Color borderColor) {
         if (f != null) {
             f.setFont(font);
@@ -139,6 +256,10 @@ public class AreaPartecipante {
         }
     }
 
+
+    /**
+     * Inizializza il frame dell'area partecipante.
+     */
     private void setupFrame() {
         frameAreaPartecipante = new JFrame("Area Personale " + loginPartecipante);
         frameAreaPartecipante.setContentPane(panel);
@@ -152,6 +273,10 @@ public class AreaPartecipante {
         benvenuto.setText("Benvenuto, " + loginPartecipante);
     }
 
+    /**
+     * Carica i team nella combo box.
+     * @param teams lista dei team disponibili
+     */
     private void caricaTeamComboBox(List<Team> teams) {
         if (teams.isEmpty()) {
             uniscitiButton.setEnabled(false);
@@ -164,6 +289,11 @@ public class AreaPartecipante {
         }
     }
 
+    /**
+     * Trova il team del partecipante, se presente.
+     * @param teams lista dei team
+     * @return il team del partecipante, oppure null se non è in nessun team
+     */
     private Team trovaTeamUtente(List<Team> teams) {
         for (Team team : teams) {
             if (controller.isPartecipanteInTeam(loginPartecipante, team.getNomeTeam(), eventoId)) {
@@ -173,6 +303,10 @@ public class AreaPartecipante {
         return null;
     }
 
+    /**
+     * Crea il pannello per la visualizzazione dei documenti.
+     * @return pannello documenti
+     */
     private JPanel creaDocumentiPanel() {
         JPanel documentiPanel = new JPanel();
         documentiPanel.setBackground(bgColor);
@@ -180,6 +314,11 @@ public class AreaPartecipante {
         return documentiPanel;
     }
 
+    /**
+     * Aggiorna la visibilità dei campi in base alla presenza o meno di un team.
+     * @param inTeam true se il partecipante è in un team
+     * @param teamUtente team del partecipante
+     */
     private void aggiornaVisibilitaCampi(boolean inTeam, Team teamUtente) {
         if (inTeam) {
             setVisibilitaCampiTeam(true, teamUtente);
@@ -188,6 +327,11 @@ public class AreaPartecipante {
         }
     }
 
+    /**
+     * Imposta la visibilità dei campi collegati al team.
+     * @param inTeam true se il partecipante è in un team
+     * @param teamUtente team del partecipante
+     */
     private void setVisibilitaCampiTeam(boolean inTeam, Team teamUtente) {
         creaTeamButton.setVisible(!inTeam);
         nomeField.setVisible(!inTeam);
@@ -213,7 +357,12 @@ public class AreaPartecipante {
         }
     }
 
-    private void mostraDocumentiTeam(JPanel documentiPanel, Team teamUtente) {
+    /**
+     * Mostra i documenti caricati dal partecipante.
+     * @param documentiPanel pannello documenti su cui mostrare i documenti
+     * @param teamUtente team dell'utente
+     */
+    private void mostraDocumenti(JPanel documentiPanel, Team teamUtente) {
         documentiPanel.removeAll();
         List<Documento> documenti = controller.getDocumentiTeamEventoPartecipante(eventoId, teamUtente.getNomeTeam(), loginPartecipante);
         if (documenti.isEmpty()) {
@@ -228,6 +377,12 @@ public class AreaPartecipante {
         documentiPanel.repaint();
     }
 
+
+    /**
+     * Crea un pannello per un singolo documento, con eventuali commenti dei giudici.
+     * @param doc documento da visualizzare
+     * @return pannello documento
+     */
     private JPanel creaDocPanel(Documento doc) {
         JPanel docPanel = new JPanel();
         docPanel.setLayout(new BoxLayout(docPanel, BoxLayout.Y_AXIS));
@@ -253,6 +408,11 @@ public class AreaPartecipante {
         return docPanel;
     }
 
+    /**
+     * Crea il bottone per visualizzare un documento.
+     * @param doc documento da visualizzare
+     * @return bottone visualizzazione
+     */
     private JButton creaVisualizzaDocButton(Documento doc) {
         JButton visualizzaDocButton = new JButton("Visualizza");
         visualizzaDocButton.setBackground(btnColor);
@@ -276,6 +436,11 @@ public class AreaPartecipante {
         return visualizzaDocButton;
     }
 
+    /**
+     * Crea il pannello per i commenti dei giudici.
+     * @param commenti lista dei commenti dei giudici
+     * @return pannello commenti
+     */
     private JPanel creaCommentiPanel(List<CommentoGiudice> commenti) {
         JPanel commentiPanel = new JPanel();
         commentiPanel.setLayout(new BoxLayout(commentiPanel, BoxLayout.Y_AXIS));
@@ -292,6 +457,12 @@ public class AreaPartecipante {
         return commentiPanel;
     }
 
+    /**
+     * Aggiunge una label al pannello specificato.
+     * @param panel pannello di destinazione
+     * @param text testo della label
+     * @param font font da applicare
+     */
     private void aggiungiLabel(JPanel panel, String text, Font font) {
         JLabel label = new JLabel(text);
         label.setFont(font);
@@ -299,6 +470,11 @@ public class AreaPartecipante {
         panel.add(label);
     }
 
+
+    /**
+     * Azione per la creazione di un nuovo team.
+     * @param documentiPanel pannello documenti da aggiornare dopo la creazione
+     */
     private void azioneCreaTeam(JPanel documentiPanel) {
         String nome = nomeField.getText();
         if (nome.trim().isEmpty()) {
@@ -311,15 +487,22 @@ public class AreaPartecipante {
 
         Team nuovoTeamUtente = trovaTeamUtente(controller.getTeamsEvento(eventoId));
         aggiornaVisibilitaCampi(true, nuovoTeamUtente);
-        mostraDocumentiTeam(documentiPanel, nuovoTeamUtente);
+        mostraDocumenti(documentiPanel, nuovoTeamUtente);
     }
 
-    private void azioneHome() {
+    /**
+     * Azione per tornare alla schermata principale.
+     */
+    private void tornaHome() {
         ViewEvento gui = new ViewEvento(controller, loginPartecipante, frameAccedi, frameAreaPartecipante, frameNotifica, frameGiudice);
         gui.getFramePartecipante().setVisible(false);
         frameEventi.setVisible(true);
     }
 
+    /**
+     * Azione per unirsi al team selezionato.
+     * @param documentiPanel pannello documenti da aggiornare dopo l'unione
+     */
     private void azioneUniscitiTeam(JPanel documentiPanel) {
         Team teamSelected = (Team) comboBox1.getSelectedItem();
         if (controller.isPartecipanteInTeam(loginPartecipante, teamSelected.getNomeTeam(), eventoId)) {
@@ -333,9 +516,13 @@ public class AreaPartecipante {
         controller.unisciPartecipanteATeam(loginPartecipante, teamSelected.getNomeTeam(), eventoId);
         Team nuovoTeamUtente = trovaTeamUtente(controller.getTeamsEvento(eventoId));
         aggiornaVisibilitaCampi(true, nuovoTeamUtente);
-        mostraDocumentiTeam(documentiPanel, nuovoTeamUtente);
+        mostraDocumenti(documentiPanel, nuovoTeamUtente);
     }
 
+    /**
+     * Azione per caricare un documento da parte del partecipante.
+     * @param documentiPanel pannello documenti da aggiornare dopo il caricamento
+     */
     private void azioneCaricaDocumento(JPanel documentiPanel) {
         JFileChooser fileChooser = new JFileChooser();
         int risultato = fileChooser.showOpenDialog(frameAreaPartecipante);
@@ -347,9 +534,14 @@ public class AreaPartecipante {
             controller.caricaDocumento(documento, teamUser.getNomeTeam(), eventoId, loginPartecipante);
             JOptionPane.showMessageDialog(frameAreaPartecipante, "Documento caricato con successo!");
 
-            mostraDocumentiTeam(documentiPanel, teamUser);
+            mostraDocumenti(documentiPanel, teamUser);
         }
     }
+
+    /**
+     * Restituisce il frame dell'area partecipante.
+     * @return frame dell'area partecipante
+     */
     public JFrame getFramePartecipante() {
         return frameAreaPartecipante;
     }

@@ -7,18 +7,55 @@ import java.awt.*;
 import controller.Controller;
 import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
 
+/**
+ * GUI per la schermata di login dell'applicazione Hackaton.
+ * <p>
+ * Consente all'utente di:
+ * <ul>
+ *   <li>Effettuare l'accesso tramite nome utente e password</li>
+ *   <li>Accedere alla schermata di registrazione</li>
+ *   <li>Ricevere feedback in caso di errori di autenticazione o campi vuoti</li>
+ *   <li>Viene indirizzato in base al ruolo: organizzatore nell'area organizzatore, altrimenti nell'area eventi</li>
+ * </ul>
+ * <p>
+ * La classe si occupa anche di inizializzare tutti i DAO e il Controller per la gestione logica dell'applicazione.
+ * Gli stili e le interazioni sono definiti per coerenza con il resto dell'applicazione.
+ */
 public class Login {
+    /** Pannello principale per la schermata di login. */
     private JPanel loginPanel;
+
+    /** Label per il nome utente. */
     private JLabel nomeUtenteLabel;
+
+    /** Label per la password. */
     private JLabel passwordLabel;
+
+    /** Campo di testo per il nome utente. */
     private JTextField nomeUtenteField;
+
+    /** Campo di testo per la password. */
     private JPasswordField passwordField;
+
+    /** Bottone per accedere all'applicazione. */
     private JButton accediButton;
+
+    /** Bottone per accedere alla schermata di registrazione. */
     private JButton registratiButton;
+
+    /** Pannello secondario. */
     private JPanel panel;
+
+    /** Frame principale della schermata di login. */
     private static JFrame frame;
+
+    /** Controller logico dell'applicazione. */
     private Controller controller;
 
+    /**
+     * Costruisce la schermata di login, inizializzando componenti grafici, stili, DAO e Controller.
+     * Gestisce le azioni di login e di accesso alla registrazione.
+     */
     public Login() {
         Color bgColor = new Color(240, 248, 255); // Azzurrino molto chiaro
         Color btnColor = new Color(30, 144, 255); // Blu moderno
@@ -27,7 +64,6 @@ public class Login {
         loginPanel.setBackground(bgColor);
         panel.setBackground(bgColor);
 
-        // Font moderni
         Font labelFont = new Font("SansSerif", Font.BOLD, 16);
         Font fieldFont = new Font("SansSerif", Font.PLAIN, 15);
 
@@ -36,7 +72,6 @@ public class Login {
         nomeUtenteField.setFont(fieldFont);
         passwordField.setFont(fieldFont);
 
-        // Pulsanti stilizzati
         accediButton.setBackground(btnColor);
         accediButton.setForeground(Color.WHITE);
         accediButton.setFocusPainted(false);
@@ -49,7 +84,6 @@ public class Login {
         registratiButton.setFont(labelFont);
         registratiButton.setBorder(BorderFactory.createEmptyBorder(10, 25, 10, 25));
 
-        // Effetto hover
         accediButton.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mouseEntered(java.awt.event.MouseEvent evt) {
@@ -73,7 +107,6 @@ public class Login {
             }
         });
 
-        // Migliora layout con padding
         loginPanel.setBorder(BorderFactory.createEmptyBorder(40, 40, 40, 40));
 
         IUtenteDAO utenteDAO = new IUtenteDAO();
@@ -132,6 +165,10 @@ public class Login {
 
     }
 
+    /**
+     * Metodo main: avvia la schermata di login.
+     * @param args argomenti della riga di comando (non usati)
+     */
     public static void main (String[]args){
         frame = new JFrame("Login");
         frame.setContentPane(new Login().loginPanel);
