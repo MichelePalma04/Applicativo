@@ -204,7 +204,7 @@ public class ViewEvento {
             areaGiudice.addActionListener(e -> {
                 Giudice g =  controller.getGiudiceEvento(loginUtente, ev.getId());
                 if(g != null) {
-                    AreaGiudice gui = new AreaGiudice(controller, loginUtente, ev.getId(), frameAccedi, frameEventi, loginUtente);
+                    AreaGiudice gui = new AreaGiudice(controller, loginUtente, ev.getId(), frameAccedi, frameEventi);
                     gui.getFrameGiudice().setVisible(true);
                     frameEventi.setVisible(false);
                 }
