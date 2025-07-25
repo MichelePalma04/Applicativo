@@ -9,6 +9,7 @@ import javax.swing.*;
 import java.awt.*;
 
 import java.util.List;
+import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
 
 public class VediNotifica {
 
@@ -40,6 +41,7 @@ public class VediNotifica {
         frameNotifiche.pack();
         frameNotifiche.setSize(500, 500);
         frameNotifiche.setLocationRelativeTo(null);
+        frameNotifiche.setDefaultCloseOperation(EXIT_ON_CLOSE);
 
         panelInviti.setLayout(new BoxLayout(panelInviti, BoxLayout.Y_AXIS));
         aggiornaInviti();

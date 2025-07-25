@@ -5,6 +5,7 @@ import model.*;
 
 import javax.swing.*;
 import java.awt.*;
+import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
 
 import java.util.List;
 
@@ -39,6 +40,7 @@ public class AreaGiudice {
         frameGiudice.pack();
         frameGiudice.setSize(500,500);
         frameGiudice.setLocationRelativeTo(null);
+        frameGiudice.setDefaultCloseOperation(EXIT_ON_CLOSE);
 
         scroll.getVerticalScrollBar().setUnitIncrement(20);
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
@@ -140,7 +142,7 @@ public class AreaGiudice {
                     }
 
                     visualizzaDocumenti.addActionListener(e -> {
-                        VisualizzaDocumenti nuovaGUI = new VisualizzaDocumenti(controller, t.getNomeTeam(), eventoId, frameGiudice, loginGiudice, loginPartecipante);
+                        VisualizzaDocumenti nuovaGUI = new VisualizzaDocumenti(controller, t.getNomeTeam(), eventoId, frameGiudice, loginGiudice);
                         nuovaGUI.getFrameDocumenti().setVisible(true);
                         frameGiudice.setVisible(false);
                     });

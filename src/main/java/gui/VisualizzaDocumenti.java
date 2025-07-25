@@ -5,6 +5,7 @@ import model.*;
 
 import javax.swing.*;
 import java.awt.*;
+import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
 
 import java.io.File;
 import java.io.IOException;
@@ -19,18 +20,17 @@ public class VisualizzaDocumenti {
     private Controller controller;
     private JFrame frameGiudice;
     private String loginGiudice;
-    private String loginPartecipante;
 
-    public VisualizzaDocumenti(Controller controller, String nomeTeam, int eventoId, JFrame frameAreaGiudice, String loginGiudice, String loginPartecipante) {
+    public VisualizzaDocumenti(Controller controller, String nomeTeam, int eventoId, JFrame frameAreaGiudice, String giudiceLogin) {
         this.controller = controller;
-        this.loginGiudice = loginGiudice;
-        this.loginPartecipante = loginPartecipante;
+        this.loginGiudice = giudiceLogin;
         frameGiudice = frameAreaGiudice;
         frameDocumenti = new JFrame("Documenti");
         frameDocumenti.setContentPane(mainpanel);
         frameDocumenti.pack();
         frameDocumenti.setSize(600, 600);
         frameDocumenti.setLocationRelativeTo(null);
+        frameDocumenti.setDefaultCloseOperation(EXIT_ON_CLOSE);
         documentiTeam.setText("Documenti del team: " + nomeTeam);
         scroll.getVerticalScrollBar().setUnitIncrement(20);
 

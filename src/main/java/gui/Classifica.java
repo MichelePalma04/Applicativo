@@ -5,6 +5,7 @@ import model.*;
 
 import javax.swing.*;
 import java.awt.*;
+import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
 
 import java.util.List;
 
@@ -18,16 +19,18 @@ public class Classifica {
     private Controller controller;
     private JFrame frameClassifica;
     private JFrame frameEventi;
-    private int eventoID;
+    private int eventoId;
 
-    public Classifica(int eventoId, Controller controller, JFrame frameAreaEventi) {
+    public Classifica(int idEvento, Controller controller, JFrame frameAreaEventi) {
         this.controller = controller;
         this.frameEventi = frameAreaEventi;
+        this.eventoId = idEvento;
         frameClassifica = new JFrame("Classifica");
         frameClassifica.setContentPane(mainPanel);
         frameClassifica.pack();
         frameClassifica.setSize(500, 500);
         frameClassifica.setLocationRelativeTo(null);
+        frameClassifica.setDefaultCloseOperation(EXIT_ON_CLOSE);
         Evento evento = controller.getEventoById(eventoId);
         ingresso.setText("Classifica finale di "+ evento.getTitolo());
         scroll.getVerticalScrollBar().setUnitIncrement(20);

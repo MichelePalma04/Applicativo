@@ -9,8 +9,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.ArrayList;
+
 import java.util.List;
+import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
 
 public class AreaPartecipante {
     private JLabel avviso;
@@ -38,10 +39,10 @@ public class AreaPartecipante {
     private JFrame frameGiudice;
 
 
-    public AreaPartecipante(String loginPartecipante, int eventoId, JFrame frameAreaEventi, JFrame frameAreaAccesso, JFrame frameAreaNotifiche, JFrame frameAreaGiudice, Controller controller) {
+    public AreaPartecipante(String loginPartecipante, int idEvento, JFrame frameAreaEventi, JFrame frameAreaAccesso, JFrame frameAreaNotifiche, JFrame frameAreaGiudice, Controller controller) {
         this.controller = controller;
         this.loginPartecipante = loginPartecipante;
-        this.eventoId = eventoId;
+        this.eventoId = idEvento;
         frameEventi = frameAreaEventi;
         frameAccedi = frameAreaAccesso;
         frameNotifica = frameAreaNotifiche;
@@ -53,6 +54,7 @@ public class AreaPartecipante {
         frameAreaPartecipante.pack();
         frameAreaPartecipante.setSize(600, 600);
         frameAreaPartecipante.setLocationRelativeTo(null);
+        frameAreaPartecipante.setDefaultCloseOperation(EXIT_ON_CLOSE);
 
         messaggio.setVisible(false);
 
@@ -126,7 +128,6 @@ public class AreaPartecipante {
                     JPanel rigaPanel = new JPanel();
                     rigaPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
                     JLabel nomeDocLabel = new JLabel("Documento caricato: " + doc.getFile().getName());
-                    //rigaPanel.add(nomeDocLabel);
 
                     JButton visualizzaDocButton = new JButton("Visualizza");
                     visualizzaDocButton.addActionListener(e -> {
@@ -140,25 +141,6 @@ public class AreaPartecipante {
                     rigaPanel.add(visualizzaDocButton);
                     docPanel.add(rigaPanel);
 
-                   /* StringBuilder commentiSb = new StringBuilder("<html>");
-                    List<CommentoGiudice> commenti = doc.getCommentiGiudici();
-                    if (commenti == null || commenti.isEmpty()) {
-                        commentiSb.append("Nessun commento dai giudici.");
-                    } else {
-                        for (CommentoGiudice c : commenti) {
-                            commentiSb.append("<b>")
-                                    .append(c.getNomeGiudice())
-                                    .append(":</b> ")
-                                    .append(c.getTesto())
-                                    .append("<br>");
-                        }
-                    }
-                    commentiSb.append("</html>");
-                    JLabel commentiLabel = new JLabel(commentiSb.toString());
-                    commentiLabel.setVerticalAlignment(SwingConstants.TOP);
-                    docPanel.add(commentiLabel);
-
-                    */
                     List<CommentoGiudice> commenti = doc.getCommentiGiudici();
                     if (commenti == null || commenti.isEmpty()) {
                         JLabel nessunCommento = new JLabel("Nessun commento dai giudici.");
