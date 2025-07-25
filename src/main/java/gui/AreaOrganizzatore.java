@@ -164,55 +164,6 @@ public class AreaOrganizzatore {
             nuovaGUI.getFrameCreazioneEventi().setVisible(true);
             frameOrganizzatore.setVisible(false);
         });
-
-        /*benvenuto.setText("Benvenuto organizzatore "+ organizzatore.getLogin());
-        frameOrganizzatore = new JFrame("Area Organizzatore " + organizzatore.getLogin());
-        frameOrganizzatore.setContentPane(panel);
-        frameOrganizzatore.pack();
-        frameOrganizzatore.setSize(500, 500);
-        frameOrganizzatore.setLocationRelativeTo(null);
-        frameOrganizzatore.setVisible(true);
-
-        scroll.getVerticalScrollBar().setUnitIncrement(20);
-        panelEventi.setLayout(new BoxLayout(panelEventi, BoxLayout.Y_AXIS));
-
-        List <Evento> eventi = controller.getEventiOrganizzatore(organizzatore.getLogin());
-        for (Evento evento: eventi){
-            JPanel eventoBox = new JPanel(new BorderLayout());
-            JLabel eventoLabel = new JLabel(evento.getTitolo() + " " + evento.getSede());
-            JButton infoButton = new JButton("Dettagli");
-
-            infoButton.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    Invito nuovaGUI = new Invito (evento.getId(), frameOrganizzatore, controller);
-                    nuovaGUI.frameInvito.setVisible(true);
-                    frameOrganizzatore.setVisible(false);
-                }
-            });
-
-            eventoBox.add(eventoLabel);
-            eventoBox.add(infoButton, BorderLayout.SOUTH);
-            eventoBox.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-            panelEventi.add(eventoBox);
-        }
-
-        logOutButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                frameOrganizzatore.setVisible(false);
-                frameAccessi.setVisible(true);
-            }
-        });
-
-        creaEventiButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                CreazioneEventi nuovaGUI = new CreazioneEventi(controller, frameOrganizzatore, organizzatore, frameAccessi, frameInviti);
-                nuovaGUI.frameCreazioneEventi.setVisible(true);
-                frameOrganizzatore.setVisible(false);
-            }
-        });*/
     }
     public JFrame getFrameOrganizzatore() {
         return frameOrganizzatore;

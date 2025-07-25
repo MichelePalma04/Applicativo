@@ -2,14 +2,13 @@ package gui;
 
 import controller.Controller;
 import model.Evento;
-import model.Giudice;
+
 import model.InvitoGiudice;
 import model.Utente;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+
 import java.util.List;
 
 public class VediNotifica {
@@ -46,14 +45,11 @@ public class VediNotifica {
         panelInviti.setLayout(new BoxLayout(panelInviti, BoxLayout.Y_AXIS));
         aggiornaInviti();
 
-        backButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                frameNotifiche.setVisible(false);
-                frameEventi.dispose();
-                ViewEvento nuovo = new ViewEvento(controller, loginUtente, frameAccesso, framePartecipante, frameNotifiche, frameGiudice);
-                nuovo.getFrameEventi().setVisible(true);
-            }
+        backButton.addActionListener(e -> {
+            frameNotifiche.setVisible(false);
+            frameEventi.dispose();
+            ViewEvento nuovo = new ViewEvento(controller, loginUtente, frameAccesso, framePartecipante, frameNotifiche, frameGiudice);
+            nuovo.getFrameEventi().setVisible(true);
         });
     }
     private void aggiornaInviti() {
@@ -76,26 +72,17 @@ public class VediNotifica {
                 panelInviti.add(riga);
 
 
-                accettabutton.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        if(controller.accettaInvitoGiudice(invito.getId(), loginUtente)) {
-                            JOptionPane.showMessageDialog(frameNotifiche, "Ora sei giudice dell'evento: " + evento.getTitolo());
-                            //DEBUG
-                            System.out.println("DEBUG: invito.getId() = " + invito.getEventoId());
-                            System.out.println("DEBUG: loginUtente = " + loginUtente);
-                            aggiornaInviti();
-                        }
+                accettabutton.addActionListener(e -> {
+                    if(controller.accettaInvitoGiudice(invito.getId(), loginUtente)) {
+                        JOptionPane.showMessageDialog(frameNotifiche, "Ora sei giudice dell'evento: " + evento.getTitolo());
                         aggiornaInviti();
                     }
+                    aggiornaInviti();
                 });
 
-                rifiutabutton.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        controller.rifiutaInvitoGiudice(invito.getId());
-                        aggiornaInviti();
-                    }
+                rifiutabutton.addActionListener(e ->{
+                    controller.rifiutaInvitoGiudice(invito.getId());
+                    aggiornaInviti();
                 });
 
             }

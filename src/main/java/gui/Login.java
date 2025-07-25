@@ -101,7 +101,7 @@ public class Login {
 
         accediButton.addActionListener(e -> {
             String nome = nomeUtenteField.getText();
-            String password = passwordField.getText();
+            String password = new String (passwordField.getPassword());
 
             if (nome.trim().isEmpty() || password.trim().isEmpty()) {
                 JOptionPane.showMessageDialog(frame, "Inserisci sia il nome utente che la password!", "Error", JOptionPane.ERROR_MESSAGE);
@@ -110,8 +110,8 @@ public class Login {
 
             Utente u = controller.loginUtente(nome, password);
             if (u != null) {
-                if (u instanceof Organizzatore) {
-                    AreaOrganizzatore quartaGUI = new AreaOrganizzatore(controller, (Organizzatore) u, null, frame);
+                if (u instanceof Organizzatore organizzatore) {
+                    AreaOrganizzatore quartaGUI = new AreaOrganizzatore(controller, organizzatore, null, frame);
                     quartaGUI.getFrameOrganizzatore().setVisible(true);
                     frame.setVisible(false);
                 } else {

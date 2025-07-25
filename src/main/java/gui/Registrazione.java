@@ -4,16 +4,14 @@ import controller.Controller;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 public class Registrazione {
     private JPanel panel;
-    private JLabel nome;
+    private JLabel nomeLabel;
     private JTextField nomeUtenteField;
-    private JLabel password;
+    private JLabel passwordLabel;
     private JButton registrati;
     private JPasswordField passwordField;
     private JFrame frameRegistrazione;
@@ -34,8 +32,8 @@ public class Registrazione {
 
         // Applica i font e colore
         panel.setBackground(bgColor);
-        nome.setFont(labelFont);
-        password.setFont(labelFont);
+        nomeLabel.setFont(labelFont);
+        passwordLabel.setFont(labelFont);
         nomeUtenteField.setFont(fieldFont);
         passwordField.setFont(fieldFont);
 
@@ -51,9 +49,11 @@ public class Registrazione {
 
         // Effetto hover sul bottone
         registrati.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 registrati.setBackground(btnHoverColor);
             }
+            @Override
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 registrati.setBackground(btnColor);
             }
@@ -78,27 +78,22 @@ public class Registrazione {
             }
         });
 
-        registrati.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String nome = nomeUtenteField.getText();
-                String password = passwordField.getText();
-
-                if (nome.trim().isEmpty() || password.trim().isEmpty()) {
-                    JOptionPane.showMessageDialog(frameRegistrazione, "Inserisci sia il nome utente che la password!", "Error", JOptionPane.ERROR_MESSAGE);
-                    return;
-                }
-
-                boolean successo = controller.registraUtente(nome, password);
-                if(successo) {
-                    JOptionPane.showMessageDialog(frameRegistrazione, "Registrazione completata.");
-                    frameRegistrazione.dispose();
-                    frameAccedi.setVisible(true);
-                }else{
-                    JOptionPane.showMessageDialog(frameRegistrazione, "Utente già esistente");
-                    frameRegistrazione.dispose();
-                    frameAccedi.setVisible(true);
-                }
+        registrati.addActionListener(e -> {
+            String nome = nomeUtenteField.getText();
+            String password = new String(passwordField.getPassword());
+            if (nome.trim().isEmpty() || password.trim().isEmpty()) {
+                JOptionPane.showMessageDialog(frameRegistrazione, "Inserisci sia il nome utente che la password!", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            boolean successo = controller.registraUtente(nome, password);
+            if(successo) {
+                JOptionPane.showMessageDialog(frameRegistrazione, "Registrazione completata.");
+                frameRegistrazione.dispose();
+                frameAccedi.setVisible(true);
+            }else{
+                JOptionPane.showMessageDialog(frameRegistrazione, "Utente già esistente");
+                frameRegistrazione.dispose();
+                frameAccedi.setVisible(true);
             }
         });
     }

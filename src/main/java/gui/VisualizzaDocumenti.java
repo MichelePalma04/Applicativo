@@ -5,8 +5,7 @@ import model.*;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+
 import java.io.File;
 import java.io.IOException;
 
@@ -46,27 +45,20 @@ public class VisualizzaDocumenti {
             commentaDocScrollPane.getVerticalScrollBar().setUnitIncrement(20);
 
 
-            visualizzaDoc.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed (ActionEvent e){
-                    apriFile (doc.getFile());
-                }
-            });
+            visualizzaDoc.addActionListener(e -> apriFile (doc.getFile()));
 
-            commentaDoc.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed (ActionEvent e){
-                    String commento = commentaDocText.getText();
-                    if(!commento.trim().isEmpty()) {
-                        boolean ok = controller.aggiungiCommentoGiudice(doc.getId(),loginGiudice, eventoId, commento);
-                        if(ok){
-                            JOptionPane.showMessageDialog(frameDocumenti, "Commento aggiunto con successo.");
-                        }else{
-                            JOptionPane.showMessageDialog(frameDocumenti, "Errore nel salvataggio del commento.", "error", JOptionPane.ERROR_MESSAGE);
-                        }
+
+            commentaDoc.addActionListener(e ->{
+                String commento = commentaDocText.getText();
+                if(!commento.trim().isEmpty()) {
+                    boolean ok = controller.aggiungiCommentoGiudice(doc.getId(),loginGiudice, eventoId, commento);
+                    if(ok){
+                        JOptionPane.showMessageDialog(frameDocumenti, "Commento aggiunto con successo.");
                     }else{
-                        JOptionPane.showMessageDialog(frameDocumenti, "Il commento non può essere vuoto!", "error", JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(frameDocumenti, "Errore nel salvataggio del commento.", "error", JOptionPane.ERROR_MESSAGE);
                     }
+                }else{
+                    JOptionPane.showMessageDialog(frameDocumenti, "Il commento non può essere vuoto!", "error", JOptionPane.ERROR_MESSAGE);
                 }
             });
             rigaDocumenti.add(nomeDoc);
@@ -77,12 +69,9 @@ public class VisualizzaDocumenti {
             panelDocumenti.add(rigaDocumenti);
         }
 
-        backButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                frameDocumenti.setVisible(false);
-                frameGiudice.setVisible(true);
-            }
+        backButton.addActionListener(e ->{
+            frameDocumenti.setVisible(false);
+            frameGiudice.setVisible(true);
         });
     }
 
