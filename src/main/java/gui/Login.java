@@ -8,7 +8,7 @@ import controller.Controller;
 import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
 
 public class Login {
-    private JPanel login;
+    private JPanel loginPanel;
     private JLabel nomeUtenteLabel;
     private JLabel passwordLabel;
     private JTextField nomeUtenteField;
@@ -16,9 +16,7 @@ public class Login {
     private JButton accediButton;
     private JButton registratiButton;
     private JPanel panel;
-    public static JFrame frame;
-  //  private JFrame frame2;
-   // private JFrame frameEventi;
+    private static JFrame frame;
     private Controller controller;
 
     public Login() {
@@ -26,7 +24,7 @@ public class Login {
         Color btnColor = new Color(30, 144, 255); // Blu moderno
         Color btnHoverColor = new Color(65, 105, 225); // Blu scuro
 
-        login.setBackground(bgColor);
+        loginPanel.setBackground(bgColor);
         panel.setBackground(bgColor);
 
         // Font moderni
@@ -76,7 +74,7 @@ public class Login {
         });
 
         // Migliora layout con padding
-        login.setBorder(BorderFactory.createEmptyBorder(40, 40, 40, 40));
+        loginPanel.setBorder(BorderFactory.createEmptyBorder(40, 40, 40, 40));
 
         IUtenteDAO utenteDAO = new IUtenteDAO();
         IOrganizzatoreDAO organizzatoreDAO = new IOrganizzatoreDAO();
@@ -136,7 +134,7 @@ public class Login {
 
     public static void main (String[]args){
         frame = new JFrame("Login");
-        frame.setContentPane(new Login().login);
+        frame.setContentPane(new Login().loginPanel);
         frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
         frame.pack();
         frame.setSize(600, 600);
