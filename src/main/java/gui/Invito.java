@@ -7,6 +7,7 @@ import model.Utente;
 
 import javax.swing.*;
 import java.awt.*;
+import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
 
 import java.util.List;
 
@@ -35,6 +36,7 @@ public class Invito {
         frameInvito.pack();
         frameInvito.setSize(600, 600);
         frameInvito.setLocationRelativeTo(null);
+        frameInvito.setDefaultCloseOperation(EXIT_ON_CLOSE);
         applicaStili();
         preparaEvento();
         preparaPanelGiudici();
