@@ -13,13 +13,26 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Implementazione Postgres del DAO per la gestione degli inviti ai giudici.
+ * Consente l'inserimento, aggiornamento, cancellazione e recupero degli inviti ai giudici associati agli eventi.
+ */
 public class IInvitoGiudiceDAO implements InvitoGiudiceDAO {
+    /** Connessione al database. */
     private Connection connection;
+
+    /** DAO per la gestione degli eventi. */
     private  IEventoDAO eventoDAO;
+
+    /** DAO per la gestione degli utenti. */
     private IUtenteDAO utenteDAO;
 
+    /** Nome della colonna evento_id nella tabella invito_giudice. */
     private static final String EVENTOID_COLUMN = "evento_id";
 
+    /**
+     * Costruttore. Inizializza la connessione al database.
+     */
     public IInvitoGiudiceDAO() {
         try {
             connection = ConnessioneDatabase.getInstance().connection;
@@ -27,6 +40,12 @@ public class IInvitoGiudiceDAO implements InvitoGiudiceDAO {
             e.printStackTrace();
         }
     }
+
+    /**
+     * Aggiunge un nuovo invito per un giudice.
+     * @param invito invito da aggiungere
+     * @return true se l'inserimento è avvenuto con successo, false altrimenti
+     */
     @Override
     public boolean addInvitoGiudice(InvitoGiudice invito) {
         String sql = "INSERT INTO invito_giudice (evento_id, utente_login, accettato, rifiutato) VALUES (?, ?, ?, ?)";
@@ -42,6 +61,11 @@ public class IInvitoGiudiceDAO implements InvitoGiudiceDAO {
         }
     }
 
+    /**
+     * Restituisce la lista degli inviti pendenti per uno specifico utente.
+     * @param loginUtente login dell'utente
+     * @return lista degli inviti pendenti
+     */
     @Override
     public List<InvitoGiudice> getInvitiPendentiPerUtente(String loginUtente) {
         List<InvitoGiudice> lista = new ArrayList<>();
@@ -61,6 +85,11 @@ public class IInvitoGiudiceDAO implements InvitoGiudiceDAO {
         return lista;
     }
 
+    /**
+     * Restituisce l'invito tramite identificativo.
+     * @param idInvito identificativo dell'invito
+     * @return invito trovato oppure null se non esiste
+     */
     @Override
     public InvitoGiudice getInvitoById(int idInvito) {
         String sql = "SELECT id, evento_id, utente_login, accettato, rifiutato  FROM invito_giudice WHERE id = ?";
@@ -80,6 +109,12 @@ public class IInvitoGiudiceDAO implements InvitoGiudiceDAO {
         return null;
     }
 
+    /**
+     * Verifica se esiste un invito pendente per uno specifico utente e evento.
+     * @param login login dell'utente
+     * @param eventoId identificativo dell'evento
+     * @return true se esiste almeno un invito pendente, false altrimenti
+     */
     @Override
     public boolean esisteInvitoPendentePerUtenteEvento(String login, int eventoId) {
         String sql = "SELECT 1 FROM invito_giudice WHERE utente_login = ? AND evento_id = ? AND accettato = false AND rifiutato = false LIMIT 1";
@@ -87,14 +122,19 @@ public class IInvitoGiudiceDAO implements InvitoGiudiceDAO {
             ps.setString(1, login);
             ps.setInt(2, eventoId);
             try (ResultSet rs = ps.executeQuery()) {
-                return rs.next(); // true se c'è almeno una riga
+                return rs.next();
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            return false; // oppure puoi rilanciare l'eccezione a seconda della tua gestione errori
+            return false;
         }
     }
 
+    /**
+     * Aggiorna lo stato di un invito giudice (accettato/rifiutato).
+     * @param invito invito da aggiornare
+     * @return true se l'aggiornamento è avvenuto con successo, false altrimenti
+     */
     @Override
     public boolean updateInvitoGiudice(InvitoGiudice invito) {
         String sql = "UPDATE invito_giudice SET accettato = ?, rifiutato = ? WHERE id = ?";
@@ -109,6 +149,11 @@ public class IInvitoGiudiceDAO implements InvitoGiudiceDAO {
         }
     }
 
+    /**
+     * Elimina un invito giudice dal database.
+     * @param idInvito identificativo dell'invito da eliminare
+     * @return true se l'eliminazione è avvenuta con successo, false altrimenti
+     */
     @Override
     public boolean deleteInvitoGiudice(int idInvito) {
         String sql = "DELETE FROM invito_giudice WHERE id = ?";
@@ -121,11 +166,19 @@ public class IInvitoGiudiceDAO implements InvitoGiudiceDAO {
         }
     }
 
+    /**
+     * Imposta il DAO per la gestione degli utenti.
+     * @param utenteDAO implementazione del DAO utente
+     */
     @Override
     public void setUtenteDAO(IUtenteDAO utenteDAO) {
         this.utenteDAO = utenteDAO;
     }
 
+    /**
+     * Imposta il DAO per la gestione degli eventi.
+     * @param eventoDAO implementazione del DAO evento
+     */
     @Override
     public void setEventoDAO(IEventoDAO eventoDAO){
         this.eventoDAO = eventoDAO;

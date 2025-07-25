@@ -13,16 +13,35 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Implementazione Postgres del DAO per la gestione dei documenti.
+ * Fornisce metodi per il salvataggio, recupero e commento dei documenti associati a team e eventi.
+ */
 public class IDocumentoDAO implements DocumentoDAO {
+    /** Connessione al database. */
     private Connection connection;
+
+    /** DAO per la gestione dei team. */
     private ITeamDAO teamDAO;
+
+    /** DAO per la gestione dei giudici. */
     private IGiudiceDAO giudiceDAO;
+
+    /** DAO per la gestione dei documenti (self-reference). */
     private IDocumentoDAO documentoDAO;
 
+    /** Nome della colonna percorso file nella tabella documento. */
     private static final String PERCORSO_FILE_COLUMN = "percorso_file";
+
+    /** Nome della colonna team_nome nella tabella documento. */
     private static final String TEAM_NOME_COLUMN = "team_nome";
+
+    /** Nome della colonna partecipante_login nella tabella documento. */
     private static final String LOGIN_COLUMN = "partecipante_login";
 
+    /**
+     * Costruttore. Inizializza la connessione al database.
+     */
     public IDocumentoDAO() {
         try{
             connection = ConnessioneDatabase.getInstance().connection;
@@ -31,6 +50,12 @@ public class IDocumentoDAO implements DocumentoDAO {
         }
     }
 
+    /**
+     * Restituisce i documenti di un team per un evento.
+     * @param eventoId identificativo dell'evento
+     * @param nomeTeam nome del team
+     * @return lista di documenti associati al team e all'evento
+     */
     @Override
     public List<Documento> getDocumentiTeamEvento(int eventoId, String nomeTeam) {
         List<Documento> docs = new ArrayList<>();
@@ -55,6 +80,12 @@ public class IDocumentoDAO implements DocumentoDAO {
         }
         return docs;
     }
+
+    /**
+     * Restituisce il documento tramite identificativo.
+     * @param idDocumento identificativo del documento
+     * @return documento trovato, o null se non esiste
+     */
     @Override
     public Documento getDocumentoById(int idDocumento) {
         String sql = "SELECT id, data, nome_file, percorso_file, team_nome, evento_id, partecipante_login FROM documento WHERE id = ?";
@@ -77,7 +108,13 @@ public class IDocumentoDAO implements DocumentoDAO {
         return null;
     }
 
-    // Salva documento per un team e un evento
+    /**
+     * Salva un documento relativo a un team e a un evento.
+     * @param documento documento da salvare
+     * @param nomeTeam nome del team
+     * @param eventoId identificativo dell'evento
+     * @param login login del partecipante che carica il documento
+     */
     @Override
     public void save(Documento documento, String nomeTeam, int eventoId, String login) {
         String sql = "INSERT INTO documento (data, nome_file, percorso_file, team_nome, evento_id, partecipante_login) VALUES (?, ?, ?, ?, ?, ?)";
@@ -94,7 +131,12 @@ public class IDocumentoDAO implements DocumentoDAO {
         }
     }
 
-    // Verifica se il team ha documenti per l'evento
+    /**
+     * Verifica se il team ha documenti per uno specifico evento.
+     * @param nomeTeam nome del team
+     * @param eventoId identificativo dell'evento
+     * @return true se il team ha documenti per l'evento, false altrimenti.
+     */
     @Override
     public boolean teamHaDocumenti(String nomeTeam, int eventoId) {
         String sql = "SELECT COUNT(*) AS cnt FROM documento WHERE team_nome = ? AND evento_id = ?";
@@ -109,7 +151,11 @@ public class IDocumentoDAO implements DocumentoDAO {
         return false;
     }
 
-    // Restituisce tutti i documenti per un evento
+    /**
+     * Restituisce tutti i documenti di un evento.
+     * @param eventoId identificativo dell'evento
+     * @return lista di documenti associati all'evento
+     */
     @Override
     public List<Documento> getDocumentiEvento(int eventoId) {
         List<Documento> docs = new ArrayList<>();
@@ -123,7 +169,6 @@ public class IDocumentoDAO implements DocumentoDAO {
                 File file = new File(filepath);
                 String teamNome = rs.getString(TEAM_NOME_COLUMN);
                 String loginPartecipante = rs.getString(LOGIN_COLUMN);
-                // Ottieni l'oggetto Team tramite il TeamDAO
                 Team team = teamDAO.getTeam(teamNome, eventoId);
 
                 Documento doc = new Documento(dataCaricamento, file, team, loginPartecipante);
@@ -136,6 +181,13 @@ public class IDocumentoDAO implements DocumentoDAO {
         return docs;
     }
 
+    /**
+     * Restituisce i documenti di un team per un evento e un partecipante.
+     * @param eventoId identificativo dell'evento
+     * @param nomeTeam nome del team
+     * @param login login del partecipante
+     * @return lista di documenti associati al team, evento e partecipante
+     */
     @Override
     public List<Documento> getDocumentiTeamEventoPartecipante(int eventoId, String nomeTeam, String login) {
         List<Documento> docs = new ArrayList<>();
@@ -162,6 +214,12 @@ public class IDocumentoDAO implements DocumentoDAO {
         return docs;
     }
 
+    /**
+     * Restituisce la lista dei commenti dei giudici per un documento e un evento.
+     * @param idDocumento identificativo del documento
+     * @param eventoId identificativo dell'evento
+     * @return lista dei commenti dei giudici
+     */
     @Override
     public List<CommentoGiudice> getCommentiDocumento(int idDocumento, int eventoId) {
         List<CommentoGiudice> commenti = new ArrayList<>();
@@ -186,6 +244,14 @@ public class IDocumentoDAO implements DocumentoDAO {
         return commenti;
     }
 
+    /**
+     * Aggiunge un commento di un giudice ad un documento associato ad un evento.
+     * @param documentoId identificativo del documento
+     * @param utenteLogin login del giudice
+     * @param eventoId identificativo dell'evento
+     * @param testoCommento testo del commento da aggiungere
+     * @return true se l'inserimento è andato a buon fine, false altrimenti
+     */
     @Override
     public boolean aggiungiCommentoGiudice (int documentoId, String utenteLogin, int eventoId, String testoCommento) {
         String sql = "INSERT INTO commento_documento (id_documento, utente_login, evento_id, testo_commento) VALUES (?, ?, ?, ?)";
@@ -202,16 +268,28 @@ public class IDocumentoDAO implements DocumentoDAO {
         }
     }
 
+    /**
+     * Imposta il DAO per la gestione dei team.
+     * @param teamDAO implementazione del TeamDAO
+     */
     @Override
     public void setTeamDAO (ITeamDAO teamDAO){
         this.teamDAO = teamDAO;
     }
 
+    /**
+     * Imposta il DAO per la gestione dei giudici.
+     * @param giudiceDAO implementazione del GiudiceDAO
+     */
     @Override
     public void setGiudiceDAO (IGiudiceDAO giudiceDAO){
         this.giudiceDAO = giudiceDAO;
     }
 
+    /**
+     * Imposta il DAO per la gestione dei documenti (self-reference).
+     * @param documentoDAO implementazione del DocumentoDAO
+     */
     @Override
     public void setDocumentoDAO(IDocumentoDAO documentoDAO){
         this.documentoDAO = documentoDAO;

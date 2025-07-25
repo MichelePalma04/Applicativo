@@ -8,11 +8,23 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Implementazione Postgres del DAO per la gestione degli utenti.
+ * Fornisce metodi per il recupero, aggiunta, aggiornamento ed eliminazione degli utenti nel database.
+ */
 public class IUtenteDAO implements UtenteDAO {
+    /** Connessione al database. */
     private Connection connection;
+
+    /** Nome della colonna login nella tabella utente. */
     private static final String LOGIN_COLUMN = "login";
+
+    /** Nome della colonna password nella tabella utente. */
     private static final String PASSWORD_COLUMN = "password";
 
+    /**
+     * Costruttore. Inizializza la connessione al database.
+     */
     public IUtenteDAO() {
         try{
             connection = ConnessioneDatabase.getInstance().connection;
@@ -21,6 +33,11 @@ public class IUtenteDAO implements UtenteDAO {
         }
     }
 
+    /**
+     * Aggiunge un nuovo utente al database.
+     * @param utente utente da aggiungere
+     * @return true se l'inserimento ha successo, false altrimenti
+     */
     @Override
     public boolean addUtente(Utente utente) {
         String sql = "INSERT INTO utente (login, password) VALUES (?,?)";
@@ -35,6 +52,12 @@ public class IUtenteDAO implements UtenteDAO {
         }
     }
 
+
+    /**
+     * Recupera un utente dal database tramite login.
+     * @param login login dell'utente da cercare
+     * @return Utente trovato oppure null se non esiste
+     */
     @Override
     public Utente getUtentebyLogin (String login) {
         String sql = "SELECT login, password FROM utente WHERE login = ?";
@@ -50,6 +73,13 @@ public class IUtenteDAO implements UtenteDAO {
         return null;
     }
 
+    /**
+     * Recupera un utente dal database tramite login e password.
+     * @param login login dell'utente
+     * @param password password dell'utente
+     * @return Utente trovato oppure null se non esiste
+     */
+    @Override
     public Utente getUtentebyLoginAndPassword (String login, String password) {
         String sql = "SELECT login, password FROM utente WHERE login = ? AND password = ?";
         try (PreparedStatement ps = connection.prepareStatement(sql)){
@@ -65,6 +95,11 @@ public class IUtenteDAO implements UtenteDAO {
         return null;
     }
 
+
+    /**
+     * Restituisce la lista di tutti gli utenti presenti nel database.
+     * @return lista di utenti
+     */
     @Override
     public List<Utente> getAllUtenti() {
         List<Utente> utenti = new ArrayList<>();
@@ -80,6 +115,11 @@ public class IUtenteDAO implements UtenteDAO {
         return utenti;
     }
 
+    /**
+     * Elimina un utente dal database tramite login.
+     * @param login login dell'utente da eliminare
+     * @return true se l'eliminazione ha successo, false altrimenti
+     */
     @Override
     public boolean deleteUtente (String login) {
         String sql = "DELETE FROM utente WHERE login = ?";
@@ -92,6 +132,11 @@ public class IUtenteDAO implements UtenteDAO {
         }
     }
 
+    /**
+     * Aggiorna la password di un utente nel database.
+     * @param utente utente con i dati aggiornati
+     * @return true se l'aggiornamento ha successo, false altrimenti
+     */
     @Override
     public boolean updateUtente(Utente utente) {
         String sql = "UPDATE utente SET password = ? WHERE login = ?";

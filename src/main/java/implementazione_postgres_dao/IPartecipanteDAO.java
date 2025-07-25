@@ -10,12 +10,20 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Implementazione Postgres del DAO per la gestione dei partecipanti.
+ * Fornisce metodi per il recupero, aggiunta, aggiornamento, eliminazione e gestione dei team dei partecipanti associati agli eventi.
+ */
 public class IPartecipanteDAO implements PartecipanteDAO{
-
+    /** Connessione al database. */
     private Connection connection;
+
+    /** DAO per la gestione degli utenti. */
     private IUtenteDAO utenteDAO;
 
-
+    /**
+     * Costruttore. Inizializza la connessione al database.
+     */
     public IPartecipanteDAO() {
         try{
             connection = ConnessioneDatabase.getInstance().connection;
@@ -24,6 +32,12 @@ public class IPartecipanteDAO implements PartecipanteDAO{
         }
     }
 
+    /**
+     * Aggiunge un partecipante ad un evento.
+     * @param login login del partecipante da aggiungere
+     * @param eventoId identificativo dell'evento
+     * @return true se l'inserimento ha successo, false altrimenti
+     */
     @Override
     public boolean addPartecipante (String login, int eventoId) {
         String sql = "INSERT INTO partecipante (utente_login, evento_id) VALUES (?, ?)";
@@ -38,6 +52,12 @@ public class IPartecipanteDAO implements PartecipanteDAO{
         }
     }
 
+    /**
+     * Restituisce il partecipante associato al login e all'evento specificato.
+     * @param login login del partecipante
+     * @param eventoId identificativo dell'evento
+     * @return Partecipante trovato oppure null se non esiste
+     */
     @Override
     public Partecipante getPartecipante(String login, int eventoId) {
         String sql = "SELECT utente_login, evento_id, team_nome FROM partecipante WHERE utente_login = ? AND evento_id = ?";
@@ -56,7 +76,12 @@ public class IPartecipanteDAO implements PartecipanteDAO{
         return null;
     }
 
-    // Unisci partecipante a team
+    /**
+     * Assegna un partecipante a un team per l'evento specificato.
+     * @param loginPartecipante login del partecipante
+     * @param nomeTeam nome del team
+     * @param eventoId identificativo dell'evento
+     */
     @Override
     public void joinTeam(String loginPartecipante, String nomeTeam, int eventoId) {
         String sqlUpdate = "UPDATE partecipante SET team_nome = ? WHERE utente_login = ? AND evento_id = ?";
@@ -70,6 +95,11 @@ public class IPartecipanteDAO implements PartecipanteDAO{
         }
     }
 
+    /**
+     * Restituisce la lista dei partecipanti ad un evento.
+     * @param eventoId identificativo dell'evento
+     * @return lista dei partecipanti dell'evento
+     */
     @Override
     public List<Partecipante> getPartecipantiEvento(int eventoId) {
         List<Partecipante> lista = new ArrayList<>();
@@ -86,6 +116,12 @@ public class IPartecipanteDAO implements PartecipanteDAO{
         return lista;
     }
 
+    /**
+     * Restituisce la lista dei partecipanti di un team per un evento specifico.
+     * @param nomeTeam nome del team
+     * @param eventoId identificativo dell'evento
+     * @return lista dei partecipanti del team
+     */
     @Override
     public List<Partecipante> getPartecipantiTeam(String nomeTeam, int eventoId) {
         List<Partecipante> lista = new ArrayList<>();
@@ -103,6 +139,12 @@ public class IPartecipanteDAO implements PartecipanteDAO{
         return lista;
     }
 
+    /**
+     * Aggiunge un partecipante (oggetto) ad un evento specifico, assegnandolo ad un team.
+     * @param p partecipante da aggiungere
+     * @param eventoId identificativo dell'evento
+     * @return true se l'inserimento ha successo, false altrimenti
+     */
     @Override
     public boolean aggiungiPartecipante(Partecipante p, int eventoId) {
         String sql = "INSERT INTO partecipante (utente_login, evento_id, team_nome) VALUES (?, ?, ?)";
@@ -118,6 +160,12 @@ public class IPartecipanteDAO implements PartecipanteDAO{
         return false;
     }
 
+    /**
+     * Aggiorna i dati di un partecipante per un evento.
+     * @param p partecipante da aggiornare
+     * @param eventoId identificativo dell'evento
+     * @return true se l'aggiornamento ha successo, false altrimenti
+     */
     @Override
     public boolean aggiornaPartecipante(Partecipante p, int eventoId) {
         String sql = "UPDATE partecipante SET team_nome = ? WHERE utente_login = ? AND evento_id = ?";
@@ -132,6 +180,12 @@ public class IPartecipanteDAO implements PartecipanteDAO{
         return false;
     }
 
+    /**
+     * Elimina un partecipante da un evento.
+     * @param login login del partecipante da eliminare
+     * @param eventoId identificativo dell'evento
+     * @return true se l'eliminazione ha successo, false altrimenti
+     */
     @Override
     public boolean eliminaPartecipante(String login, int eventoId) {
         String sql = "DELETE FROM partecipante WHERE utente_login = ? AND evento_id = ?";
@@ -145,6 +199,10 @@ public class IPartecipanteDAO implements PartecipanteDAO{
         }
     }
 
+    /**
+     * Imposta il DAO per la gestione degli utenti.
+     * @param utenteDAO implementazione del DAO utente
+     */
     @Override
     public void setUtenteDAO (IUtenteDAO utenteDAO) {
         this.utenteDAO = utenteDAO;
