@@ -17,13 +17,13 @@ public class Classifica {
     private JPanel panelVoti;
     private JButton backButton;
     private Controller controller;
-    public JFrame frameClassifica;
+    private JFrame frameClassifica;
     private JFrame frameEventi;
     private int eventoID;
 
-    public Classifica(int eventoId, Controller controller, JFrame frameE) {
+    public Classifica(int eventoId, Controller controller, JFrame frameAreaEventi) {
         this.controller = controller;
-        this.frameEventi = frameE;
+        this.frameEventi = frameAreaEventi;
         frameClassifica = new JFrame("Classifica");
         frameClassifica.setContentPane(mainPanel);
         frameClassifica.pack();
@@ -54,8 +54,11 @@ public class Classifica {
             @Override
             public void actionPerformed(ActionEvent e) {
                 frameClassifica.dispose();
-                frameE.setVisible(true);
+                frameEventi.setVisible(true);
             }
         });
+    }
+    public JFrame getFrameClassifica() {
+        return frameClassifica;
     }
 }

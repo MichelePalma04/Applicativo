@@ -32,18 +32,18 @@ public class CreazioneEventi {
     private JLabel fineReg;
     private JButton backButton;
     private Controller controller;
-    public JFrame frameCreazioneEventi;
-    public JFrame frameOrganizzatore;
-    public JFrame frameAccesso;
-    public JFrame frameInviti;
+    private JFrame frameCreazioneEventi;
+    private JFrame frameOrganizzatore;
+    private JFrame frameAccesso;
+    private JFrame frameInviti;
     private Organizzatore organizzatore;
 
-    public CreazioneEventi(Controller controller, JFrame frameO, Organizzatore organizzatore, JFrame frameA, JFrame frameI) {
+    public CreazioneEventi(Controller controller, JFrame frameAreaOrganizzatore, Organizzatore organizzatore, JFrame frameAreaAccesso, JFrame frameAreaInvito) {
         this.controller = controller;
         this.organizzatore = organizzatore;
-        frameOrganizzatore = frameO;
-        frameAccesso = frameA;
-        frameInviti = frameI;
+        frameOrganizzatore = frameAreaOrganizzatore;
+        frameAccesso = frameAreaAccesso;
+        frameInviti = frameAreaInvito;
         frameCreazioneEventi = new JFrame("Creazione Eventi");
         frameCreazioneEventi.setSize(500, 500);
         frameCreazioneEventi.setContentPane(mainPanel);
@@ -55,9 +55,8 @@ public class CreazioneEventi {
             @Override
             public void actionPerformed(ActionEvent e) {
                 frameCreazioneEventi.dispose();
-                AreaOrganizzatore nuovaGUI = new AreaOrganizzatore(controller, organizzatore, frameI, frameA);
-                nuovaGUI.frameOrganizzatore.setVisible(true);
-              // frameOrganizzatore.setVisible(true);
+                AreaOrganizzatore nuovaGUI = new AreaOrganizzatore(controller, organizzatore, frameInviti, frameAccesso);
+                nuovaGUI.getFrameOrganizzatore().setVisible(true);
             }
         });
 
@@ -113,12 +112,15 @@ public class CreazioneEventi {
                 if(eventoCreato != null) {
                     JOptionPane.showMessageDialog(frameCreazioneEventi , "Evento creato con successo");
                     frameCreazioneEventi.dispose();
-                    AreaOrganizzatore nuovaGUI = new AreaOrganizzatore(controller, organizzatore, frameI, frameA);
-                    nuovaGUI.frameOrganizzatore.setVisible(true);
+                    AreaOrganizzatore nuovaGUI = new AreaOrganizzatore(controller, organizzatore, frameAreaInvito , frameAreaAccesso);
+                    nuovaGUI.getFrameOrganizzatore().setVisible(true);
                 } else {
                     JOptionPane.showMessageDialog(frameCreazioneEventi, "Errore nella creazione evento", "Error", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
+    }
+    public JFrame getFrameCreazioneEventi() {
+        return frameCreazioneEventi;
     }
 }

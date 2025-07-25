@@ -4,12 +4,11 @@ import implementazione_postgres_dao.*;
 import model .*;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import controller.Controller;
+import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
 
 public class Login {
-    private JPanel Login;
+    private JPanel login;
     private JLabel nomeUtenteLabel;
     private JLabel passwordLabel;
     private JTextField nomeUtenteField;
@@ -18,8 +17,8 @@ public class Login {
     private JButton registratiButton;
     private JPanel panel;
     public static JFrame frame;
-    public JFrame frame2;
-    public JFrame frameEventi;
+  //  private JFrame frame2;
+   // private JFrame frameEventi;
     private Controller controller;
 
     public Login() {
@@ -27,7 +26,7 @@ public class Login {
         Color btnColor = new Color(30, 144, 255); // Blu moderno
         Color btnHoverColor = new Color(65, 105, 225); // Blu scuro
 
-        Login.setBackground(bgColor);
+        login.setBackground(bgColor);
         panel.setBackground(bgColor);
 
         // Font moderni
@@ -54,24 +53,30 @@ public class Login {
 
         // Effetto hover
         accediButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 accediButton.setBackground(btnHoverColor);
             }
+
+            @Override
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 accediButton.setBackground(btnColor);
             }
         });
         registratiButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 registratiButton.setBackground(btnHoverColor);
             }
+
+            @Override
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 registratiButton.setBackground(btnColor);
             }
         });
 
         // Migliora layout con padding
-        Login.setBorder(BorderFactory.createEmptyBorder(40, 40, 40, 40));
+        login.setBorder(BorderFactory.createEmptyBorder(40, 40, 40, 40));
 
         IUtenteDAO utenteDAO = new IUtenteDAO();
         IOrganizzatoreDAO organizzatoreDAO = new IOrganizzatoreDAO();
@@ -96,48 +101,43 @@ public class Login {
         documentoDAO.setGiudiceDAO(giudiceDAO);
         controller = new Controller(utenteDAO, organizzatoreDAO, partecipanteDAO, giudiceDAO, eventoDAO, teamDAO, invitoGiudiceDAO, documentoDAO, votoDAO);
 
-        accediButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String nome = nomeUtenteField.getText();
-                String password = passwordField.getText();
+        accediButton.addActionListener(e -> {
+            String nome = nomeUtenteField.getText();
+            String password = passwordField.getText();
 
-                if (nome.trim().isEmpty() || password.trim().isEmpty()) {
-                    JOptionPane.showMessageDialog(frame, "Inserisci sia il nome utente che la password!", "Error", JOptionPane.ERROR_MESSAGE);
-                    return;
-                }
+            if (nome.trim().isEmpty() || password.trim().isEmpty()) {
+                JOptionPane.showMessageDialog(frame, "Inserisci sia il nome utente che la password!", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
 
-                Utente u = controller.loginUtente(nome, password);
-                if (u != null) {
-                    if (u instanceof Organizzatore) {
-                        AreaOrganizzatore QuartaGUI = new AreaOrganizzatore(controller, (Organizzatore) u, null, frame);
-                        QuartaGUI.frameOrganizzatore.setVisible(true);
-                        frame.setVisible(false);
-                    }else {
-                        ViewEvento terzaGUI = new ViewEvento(controller, nome, frame, null, null, null);
-                        terzaGUI.frameEventi.setVisible(true);
-                        frame.setVisible(false);
-                    }
+            Utente u = controller.loginUtente(nome, password);
+            if (u != null) {
+                if (u instanceof Organizzatore) {
+                    AreaOrganizzatore quartaGUI = new AreaOrganizzatore(controller, (Organizzatore) u, null, frame);
+                    quartaGUI.getFrameOrganizzatore().setVisible(true);
+                    frame.setVisible(false);
                 } else {
-                    JOptionPane.showMessageDialog(frame, "Nessun utente trovato, effettua prima la registrazione se non ancora lo hai fatto.", "Error", JOptionPane.ERROR_MESSAGE);
+                    ViewEvento terzaGUI = new ViewEvento(controller, nome, frame, null, null, null);
+                    terzaGUI.getFrameEventi().setVisible(true);
+                    frame.setVisible(false);
                 }
+            } else {
+                JOptionPane.showMessageDialog(frame, "Nessun utente trovato, effettua prima la registrazione se non ancora lo hai fatto.", "Error", JOptionPane.ERROR_MESSAGE);
             }
         });
 
-        registratiButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                Registrazione secondGUI = new Registrazione(controller, frame);
-                secondGUI.frameRegistrazione.setVisible(true);
-                frame.setVisible(false);
-            }
+        registratiButton.addActionListener(e -> {
+            Registrazione secondGUI = new Registrazione(controller, frame);
+            secondGUI.getFrameRegistrazione().setVisible(true);
+            frame.setVisible(false);
         });
 
     }
+
     public static void main (String[]args){
         frame = new JFrame("Login");
-        frame.setContentPane(new Login().Login);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setContentPane(new Login().login);
+        frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
         frame.pack();
         frame.setSize(600, 600);
         frame.setLocationRelativeTo(null);

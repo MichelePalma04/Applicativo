@@ -16,17 +16,17 @@ public class VisualizzaDocumenti {
     private JScrollPane scroll;
     private JPanel panelDocumenti;
     private JButton backButton;
-    public JFrame frameDocumenti;
+    private JFrame frameDocumenti;
     private Controller controller;
-    public JFrame frameGiudice;
+    private JFrame frameGiudice;
     private String loginGiudice;
     private String loginPartecipante;
 
-    public VisualizzaDocumenti(Controller controller, String nomeTeam, int eventoId, JFrame frame, String loginGiudice, String loginPartecipante) {
+    public VisualizzaDocumenti(Controller controller, String nomeTeam, int eventoId, JFrame frameAreaGiudice, String loginGiudice, String loginPartecipante) {
         this.controller = controller;
         this.loginGiudice = loginGiudice;
         this.loginPartecipante = loginPartecipante;
-        frameGiudice = frame;
+        frameGiudice = frameAreaGiudice;
         frameDocumenti = new JFrame("Documenti");
         frameDocumenti.setContentPane(mainpanel);
         frameDocumenti.pack();
@@ -97,6 +97,10 @@ public class VisualizzaDocumenti {
         }else{
             JOptionPane.showMessageDialog(frameDocumenti, "Funzionalità non supportata dal sistema operativo.", "Error", JOptionPane.ERROR_MESSAGE);
         }
+    }
+
+    public JFrame getFrameDocumenti () {
+        return frameDocumenti;
     }
 }
 

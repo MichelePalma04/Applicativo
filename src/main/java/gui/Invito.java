@@ -20,16 +20,18 @@ public class Invito {
     private JButton homeButton;
     private JScrollPane scrollgiudici;
     private JPanel panelGiudici;
-    public JFrame frameInvito;
-    public JFrame frameOrganizzatore;
+    private JFrame frameInvito;
+    private JFrame frameOrganizzatore;
     private Controller controller;
 
     private int eventoID;
 
-    public Invito(int eventoID, JFrame frame, Controller controller) {
+    public Invito(int eventoID, JFrame frameAreaOrganizzatore, Controller controller) {
         this.controller = controller;
-        frameOrganizzatore = frame;
         this.eventoID = eventoID;
+
+        frameOrganizzatore = frameAreaOrganizzatore;
+
         frameInvito = new JFrame("Operazioni organizzatore");
         frameInvito.setContentPane(panel);
         frameInvito.pack();
@@ -121,12 +123,9 @@ public class Invito {
             panelGiudici.add(riga);
         }
 
-        homeButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                frameInvito.setVisible(false);
-                frameOrganizzatore.setVisible(true);
-            }
+        homeButton.addActionListener(e -> {
+            frameInvito.setVisible(false);
+            frameOrganizzatore.setVisible(true);
         });
 
         invitaComeGiudiceButton.addActionListener(new ActionListener() {
@@ -152,6 +151,10 @@ public class Invito {
         for (Utente u : controller.getUtentiInvitabili(eventoID)) {
             comboBox1.addItem(u);
         }
+    }
+
+    public JFrame getFrameInvito() {
+        return frameInvito;
     }
 
 }

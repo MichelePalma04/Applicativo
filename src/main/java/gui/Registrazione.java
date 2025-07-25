@@ -16,12 +16,12 @@ public class Registrazione {
     private JLabel password;
     private JButton registrati;
     private JPasswordField passwordField;
-    public JFrame frameRegistrazione;
-    public JFrame frameAccedi;
+    private JFrame frameRegistrazione;
+    private JFrame frameAccedi;
     private Controller controller;
 
-    public Registrazione(Controller controller, JFrame frame) {
-        this.frameAccedi = frame;
+    public Registrazione(Controller controller, JFrame frameAreaAccesso) {
+        this.frameAccedi = frameAreaAccesso;
         this.controller = controller;
 
         // Colori e font personalizzati
@@ -85,7 +85,7 @@ public class Registrazione {
                 String password = passwordField.getText();
 
                 if (nome.trim().isEmpty() || password.trim().isEmpty()) {
-                    JOptionPane.showMessageDialog(frame, "Inserisci sia il nome utente che la password!", "Error", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(frameRegistrazione, "Inserisci sia il nome utente che la password!", "Error", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
 
@@ -102,6 +102,8 @@ public class Registrazione {
             }
         });
     }
-
+    public JFrame getFrameRegistrazione() {
+        return frameRegistrazione;
+    }
 
 }

@@ -21,20 +21,19 @@ public class VediNotifica {
     private String loginUtente;
     private JScrollPane scroll;
     private Controller controller;
-    public JFrame frameNotifiche;
-    public JFrame frameEventi;
-    public JFrame frameGiudice;
-    public JFrame frameAccesso;
-    public JFrame frameAreaPartecipante;
-    private Evento evento;
+    private JFrame frameNotifiche;
+    private JFrame frameEventi;
+    private JFrame frameGiudice;
+    private JFrame frameAccesso;
+    private JFrame framePartecipante;
 
-    public VediNotifica(Controller controller, String loginUtente, JFrame frame, JFrame frame2, JFrame frame3, JFrame frame4) {
+    public VediNotifica(Controller controller, String loginUtente, JFrame frameAreaEvento, JFrame frameAreaGiudice, JFrame frameAreaAccesso, JFrame frameAreaPartecipante) {
         this.controller = controller;
         this.loginUtente = loginUtente;
-        frameEventi = frame;
-        frameGiudice = frame2;
-        frameAccesso = frame3;
-        frameAreaPartecipante = frame4;
+        frameEventi = frameAreaEvento;
+        frameGiudice = frameAreaGiudice;
+        frameAccesso = frameAreaAccesso;
+        framePartecipante = frameAreaPartecipante;
 
         scroll.getVerticalScrollBar().setUnitIncrement(20);
 
@@ -52,8 +51,8 @@ public class VediNotifica {
             public void actionPerformed(ActionEvent e) {
                 frameNotifiche.setVisible(false);
                 frameEventi.dispose();
-                ViewEvento nuovo = new ViewEvento(controller, loginUtente, frameAccesso, frameAreaPartecipante, frameNotifiche, frameGiudice);
-                nuovo.frameEventi.setVisible(true);
+                ViewEvento nuovo = new ViewEvento(controller, loginUtente, frameAccesso, framePartecipante, frameNotifiche, frameGiudice);
+                nuovo.getFrameEventi().setVisible(true);
             }
         });
     }
@@ -103,5 +102,8 @@ public class VediNotifica {
         }
         panelInviti.revalidate();
         panelInviti.repaint();
+    }
+    public JFrame getFrameNotifiche() {
+        return frameNotifiche;
     }
 }

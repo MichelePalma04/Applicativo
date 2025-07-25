@@ -31,21 +31,21 @@ public class AreaPartecipante {
     private JTextField nomeField;
     private JLabel nomeTeam;
     private Controller controller;
-    public JFrame frameAreaPartecipante;
-    public JFrame frameEventi;
-    public JFrame frameAccedi;
-    public JFrame frameNotifica;
-    public JFrame frameGiudice;
+    private JFrame frameAreaPartecipante;
+    private JFrame frameEventi;
+    private JFrame frameAccedi;
+    private JFrame frameNotifica;
+    private JFrame frameGiudice;
 
 
-    public AreaPartecipante(String loginPartecipante, int eventoId, JFrame frame, JFrame frame2, JFrame frame3, JFrame frame4, Controller controller) {
+    public AreaPartecipante(String loginPartecipante, int eventoId, JFrame frameAreaEventi, JFrame frameAreaAccesso, JFrame frameAreaNotifiche, JFrame frameAreaGiudice, Controller controller) {
         this.controller = controller;
         this.loginPartecipante = loginPartecipante;
         this.eventoId = eventoId;
-        frameEventi = frame;
-        frameAccedi = frame2;
-        frameNotifica = frame3;
-        frameGiudice = frame4;
+        frameEventi = frameAreaEventi;
+        frameAccedi = frameAreaAccesso;
+        frameNotifica = frameAreaNotifiche;
+        frameGiudice = frameAreaGiudice;
 
         Partecipante partecipante = controller.getPartecipanteDaDB(loginPartecipante, eventoId);
         frameAreaPartecipante = new JFrame("Area Personale " + loginPartecipante);
@@ -234,11 +234,6 @@ public class AreaPartecipante {
                         sfogliaDocumenti.setVisible(false);
                         inserisciDocumento.setVisible(false);
                     }
-                    // DEBUG VISIBILITA' DOPO CREA TEAM
-                    System.out.println("DOPO CREA TEAM - VISIBILITA':");
-                    System.out.println("Problema visibile: " + problema.isVisible());
-                    System.out.println("SfogliaDocumenti visibile: " + sfogliaDocumenti.isVisible());
-                    System.out.println("InserisciDocumento visibile: " + inserisciDocumento.isVisible());
                 }
             }
         });
@@ -264,10 +259,6 @@ public class AreaPartecipante {
                 sfogliaDocumenti.setVisible(false);
                 inserisciDocumento.setVisible(false);
             }
-            System.out.println("INTEAM - VISIBILITA' INIZIALE:");
-            System.out.println("Problema visibile: " + problema.isVisible());
-            System.out.println("SfogliaDocumenti visibile: " + sfogliaDocumenti.isVisible());
-            System.out.println("InserisciDocumento visibile: " + inserisciDocumento.isVisible());
         } else {
             uniscitiButton.setVisible(true);
             comboBox1.setVisible(true);
@@ -277,18 +268,13 @@ public class AreaPartecipante {
             problema.setVisible(false);
             sfogliaDocumenti.setVisible(false);
             inserisciDocumento.setVisible(false);
-            // DEBUG VISIBILITA' INIZIALE DA ELSE
-            System.out.println("NON INTEAM - VISIBILITA' INIZIALE:");
-            System.out.println("Problema visibile: " + problema.isVisible());
-            System.out.println("SfogliaDocumenti visibile: " + sfogliaDocumenti.isVisible());
-            System.out.println("InserisciDocumento visibile: " + inserisciDocumento.isVisible());
         }
 
         homeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 ViewEvento gui = new ViewEvento(controller, loginPartecipante, frameAccedi, frameAreaPartecipante, frameNotifica, frameGiudice);
-                gui.frameAreaPartecipante.setVisible(false);
+                gui.getFramePartecipante().setVisible(false);
                 frameEventi.setVisible(true);
             }
         });
@@ -323,9 +309,6 @@ public class AreaPartecipante {
                 }
                 boolean inTeamAggiornato = (nuovoTeamUtente != null);
                 String problemaEventoAggiornato = controller.getProblemaEvento(eventoId);
-                System.out.println("DOPO UNISCI TEAM:");
-                System.out.println("inTeamAggiornato: " + inTeamAggiornato);
-                System.out.println("problema: " + (problemaEventoAggiornato != null ? problemaEventoAggiornato : "null"));
 
                 if (inTeamAggiornato) {
                     creaTeamButton.setVisible(false);
@@ -347,33 +330,6 @@ public class AreaPartecipante {
                         sfogliaDocumenti.setVisible(false);
                         inserisciDocumento.setVisible(false);
                     }
-                    // DEBUG VISIBILITA' DOPO UNISCI TEAM
-                    System.out.println("DOPO UNISCI TEAM - VISIBILITA':");
-                    System.out.println("Problema visibile: " + problema.isVisible());
-                    System.out.println("SfogliaDocumenti visibile: " + sfogliaDocumenti.isVisible());
-                    System.out.println("InserisciDocumento visibile: " + inserisciDocumento.isVisible());
-
-/*
-                // Unisci il partecipante al team tramite Controller
-                controller.unisciPartecipanteATeam(loginPartecipante, teamSelected.getNomeTeam(), eventoId);
-                creaTeamButton.setVisible(false);
-                nomeField.setVisible(false);
-                nomeTeam.setVisible(false);
-                comboBox1.setVisible(false);
-                teamLabel.setVisible(false);
-                uniscitiButton.setVisible(false);
-                avviso.setVisible(false);
-                messaggio.setVisible(true);
-                messaggio.setText("Ora sei un membro del " + teamSelected.getNomeTeam());
-                if(evento.getProblema()!= null && !evento.getProblema().isEmpty()){
-                    problema.setText("Problema da risolvere: " + evento.getProblema());
-                    problema.setVisible(true);
-                    sfogliaDocumenti.setVisible(true);
-                    inserisciDocumento.setVisible(true);
-                }else{
-                    problema.setVisible(false);
-                    sfogliaDocumenti.setVisible(false);
-                    inserisciDocumento.setVisible(false);*/
                 }
             }
         });
@@ -448,6 +404,8 @@ public class AreaPartecipante {
             }
         });
     }
-
+    public JFrame getFramePartecipante() {
+        return frameAreaPartecipante;
+    }
 
 }

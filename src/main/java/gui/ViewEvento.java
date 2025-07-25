@@ -24,22 +24,22 @@ public class ViewEvento {
     private JPanel panelBottoni;
     private Controller controller;
     private String loginUtente;
-    public JFrame frameEventi;
-    public JFrame frameAccedi;
-    public JFrame frameAreaPartecipante;
-    public JFrame frameNotifiche;
-    public JFrame frameGiudice;
+    private JFrame frameEventi;
+    private JFrame frameAccedi;
+    private JFrame frameAreaPartecipante;
+    private JFrame frameNotifiche;
+    private JFrame frameGiudice;
 
-    public ViewEvento(Controller controller, String loginUtente, JFrame frame, JFrame frame2, JFrame frame3, JFrame frame4) {
+    public ViewEvento(Controller controller, String loginUtente, JFrame frameAreaAccesso, JFrame framePartecipante, JFrame frameAreaNotifiche, JFrame frameAreaGiudice) {
         scroll.getVerticalScrollBar().setUnitIncrement(20); //abbiamo aumentato la sensibilità dello scroll
-        frameAccedi = frame;
-        frameGiudice = frame4;
+        frameAccedi = frameAreaAccesso;
+        frameAreaPartecipante = framePartecipante;
+        frameNotifiche = frameAreaNotifiche;
+        frameGiudice = frameAreaGiudice;
         this.controller = controller;
         this.loginUtente = loginUtente;
 
-        frameAreaPartecipante = frame2;
-        frameNotifiche = frame3;
-       // controller.initEventi();
+
         List<Evento> eventi = controller.getTuttiEventi();
 
         frameEventi = new JFrame("Eventi");
@@ -93,7 +93,7 @@ public class ViewEvento {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     Classifica classificaGUI = new Classifica(ev.getId(), controller, frameEventi);
-                    classificaGUI.frameClassifica.setVisible(true);
+                    classificaGUI.getFrameClassifica().setVisible(true);
                     frameEventi.setVisible(false);
                 }
             });
@@ -103,8 +103,8 @@ public class ViewEvento {
                 public void actionPerformed(ActionEvent e) {
                     Giudice g =  controller.getGiudiceEvento(loginUtente, ev.getId());
                     if(g != null) {
-                        AreaGiudice gui = new AreaGiudice(controller, loginUtente, ev.getId(), frame, frameEventi, loginUtente);
-                        gui.frameGiudice.setVisible(true);
+                        AreaGiudice gui = new AreaGiudice(controller, loginUtente, ev.getId(), frameAreaAccesso, frameEventi, loginUtente);
+                        gui.getFrameGiudice().setVisible(true);
                         frameEventi.setVisible(false);
                     }
                 }
@@ -122,7 +122,7 @@ public class ViewEvento {
                         iscrivitiButton.setVisible(false);
                         visualizzaArea.setVisible(true);
                         AreaPartecipante areaGUI = new AreaPartecipante(loginUtente, ev.getId(), frameEventi, frameAccedi, frameNotifiche, frameAreaPartecipante, controller);
-                        areaGUI.frameAreaPartecipante.setVisible(true);
+                        areaGUI.getFramePartecipante().setVisible(true);
                         frameEventi.setVisible(false);
                         return;
                     }
@@ -139,7 +139,7 @@ public class ViewEvento {
                         visualizzaArea.setVisible(true);
 
                         AreaPartecipante areaGUI = new AreaPartecipante(loginUtente, ev.getId(), frameEventi, frameAccedi, frameNotifiche, frameAreaPartecipante, controller);
-                        areaGUI.frameAreaPartecipante.setVisible(true);
+                        areaGUI.getFramePartecipante().setVisible(true);
                         frameEventi.setVisible(false);
                     } else {
                         JOptionPane.showMessageDialog(frameEventi, "Errore durante l'iscrizione!");
@@ -194,7 +194,7 @@ public class ViewEvento {
                 public void actionPerformed(ActionEvent e) {
                     //Partecipante p = controller.getPartecipanteDaDB(loginUtente, ev.getId());
                     AreaPartecipante areaGUI = new AreaPartecipante(loginUtente, ev.getId(), frameEventi, frameAccedi, frameNotifiche, frameAreaPartecipante, controller);
-                    areaGUI.frameAreaPartecipante.setVisible(true);
+                    areaGUI.getFramePartecipante().setVisible(true);
                     frameEventi.setVisible(false);
                 }
             });
@@ -220,11 +220,17 @@ public class ViewEvento {
             public void actionPerformed(ActionEvent e) {
                 Utente utente = controller.getUtenteDaDB(loginUtente);
                 VediNotifica notifica = new VediNotifica(controller, loginUtente, frameEventi, frameGiudice, frameAccedi, frameAreaPartecipante );
-                notifica.frameNotifiche.setVisible(true);
+                notifica.getFrameNotifiche().setVisible(true);
                 frameEventi.setVisible(false);
 
             }
         });
     }
+    public JFrame getFrameEventi() {
+        return frameEventi;
+    }
 
+    public JFrame getFramePartecipante() {
+        return frameAreaPartecipante;
+    }
 }

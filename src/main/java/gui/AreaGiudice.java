@@ -5,8 +5,6 @@ import model.*;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import java.util.List;
 
@@ -17,22 +15,22 @@ public class AreaGiudice {
     private JScrollPane scroll;
     private JPanel panel;
     private JButton back;
-    public JFrame frameGiudice;
-    public JFrame frameAccesso;
-    public JFrame frameEventi;
+    private JFrame frameGiudice;
+    private JFrame frameAccesso;
+    private JFrame frameEventi;
     private String loginGiudice;
     private String loginPartecipante;
     private int eventoId;
 
     private Controller controller;
 
-    public AreaGiudice(Controller controller, String loginGiudice, int eventoId, JFrame frame, JFrame eventi, String loginPartecipante) {
+    public AreaGiudice(Controller controller, String loginGiudice, int eventoId, JFrame frameAreaAccesso, JFrame frameAreaEventi, String loginPartecipante) {
         this.controller = controller;
         this.loginGiudice = loginGiudice;
         this.loginPartecipante = loginPartecipante;
         this.eventoId = eventoId;
-        frameAccesso = frame;
-        frameEventi = eventi;
+        frameAccesso = frameAreaAccesso;
+        frameEventi = frameAreaEventi;
 
         benvenuto.setText("Benvenuto "+ loginGiudice);
         frameGiudice = new JFrame();
@@ -60,23 +58,20 @@ public class AreaGiudice {
                 panel.add(scrollProblema);
                 panel.add(carica);
 
-                carica.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        String testo = descrizioneProblema.getText();
-                        if (testo.isEmpty()) {
-                            JOptionPane.showMessageDialog(frameGiudice, "Inserisci la descrizione del problema prima di effettuare il caricamento!", "Error", JOptionPane.ERROR_MESSAGE);
-                        } else {
-                            // Salva nel DB tramite Controller!
-                            controller.setProblemaEvento(eventoId, testo);
-                            JOptionPane.showMessageDialog(frameGiudice, "Descrizione del problema caricata con successo!");
-                            panel.removeAll();
-                            JLabel giaCaricata = new JLabel("Problema:\n " + testo);
-                            panel.add(messaggio);
-                            panel.add(giaCaricata);
-                            panel.revalidate();
-                            panel.repaint();
-                        }
+                carica.addActionListener(e -> {
+                    String testo = descrizioneProblema.getText();
+                    if (testo.isEmpty()) {
+                        JOptionPane.showMessageDialog(frameGiudice, "Inserisci la descrizione del problema prima di effettuare il caricamento!", "Error", JOptionPane.ERROR_MESSAGE);
+                    } else {
+                        // Salva nel DB tramite Controller!
+                        controller.setProblemaEvento(eventoId, testo);
+                        JOptionPane.showMessageDialog(frameGiudice, "Descrizione del problema caricata con successo!");
+                        panel.removeAll();
+                        JLabel giaCaricata = new JLabel("Problema:\n " + testo);
+                        panel.add(messaggio);
+                        panel.add(giaCaricata);
+                        panel.revalidate();
+                        panel.repaint();
                     }
                 });
             } else {
@@ -98,9 +93,6 @@ public class AreaGiudice {
         List<Team> teams = controller.getTeamsEvento(eventoId);
         boolean almenoUno = false;
         if (teams != null && !teams.isEmpty()) {
-           // JLabel documentiLabel = new JLabel("Documenti caricati dai team: ");
-           // panel.add(documentiLabel);
-
             for (Team t : teams) {
                 boolean haDocumenti = controller.teamHaDocumenti(t.getNomeTeam(), eventoId);
                 if (haDocumenti) {
@@ -133,30 +125,24 @@ public class AreaGiudice {
                         rigaTeam.add(confermaVoto);
                         panel.add(rigaTeam);
 
-                        confermaVoto.addActionListener(new ActionListener() {
-                            @Override
-                            public void actionPerformed(ActionEvent e) {
-                                int votoSelezionato = (int) voti.getSelectedItem();
-                                // Registra il voto tramite Controller/DB!
-                                controller.votaTeam(loginGiudice, t.getNomeTeam(), eventoId, votoSelezionato);
-                                JOptionPane.showMessageDialog(frameGiudice, "Voto " + votoSelezionato + " assegnato con successo al team " + t.getNomeTeam());
-                                voti.setVisible(false);
-                                confermaVoto.setVisible(false);
-                                JLabel votoAssegnato = new JLabel("" + votoSelezionato);
-                                rigaTeam.add(votoAssegnato);
-                                rigaTeam.revalidate();
-                                rigaTeam.repaint();
-                            }
+                        confermaVoto.addActionListener(e -> {
+                            int votoSelezionato = (int) voti.getSelectedItem();
+                            // Registra il voto tramite Controller/DB!
+                            controller.votaTeam(loginGiudice, t.getNomeTeam(), eventoId, votoSelezionato);
+                            JOptionPane.showMessageDialog(frameGiudice, "Voto " + votoSelezionato + " assegnato con successo al team " + t.getNomeTeam());
+                            voti.setVisible(false);
+                            confermaVoto.setVisible(false);
+                            JLabel votoAssegnato = new JLabel("" + votoSelezionato);
+                            rigaTeam.add(votoAssegnato);
+                            rigaTeam.revalidate();
+                            rigaTeam.repaint();
                         });
                     }
 
-                    visualizzaDocumenti.addActionListener(new ActionListener() {
-                        @Override
-                        public void actionPerformed(ActionEvent e) {
-                            VisualizzaDocumenti nuovaGUI = new VisualizzaDocumenti(controller, t.getNomeTeam(), eventoId, frameGiudice, loginGiudice, loginPartecipante);
-                            nuovaGUI.frameDocumenti.setVisible(true);
-                            frameGiudice.setVisible(false);
-                        }
+                    visualizzaDocumenti.addActionListener(e -> {
+                        VisualizzaDocumenti nuovaGUI = new VisualizzaDocumenti(controller, t.getNomeTeam(), eventoId, frameGiudice, loginGiudice, loginPartecipante);
+                        nuovaGUI.getFrameDocumenti().setVisible(true);
+                        frameGiudice.setVisible(false);
                     });
                 }
             } if(!almenoUno) {
@@ -165,19 +151,17 @@ public class AreaGiudice {
             }
         }
 
-        logOutButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                frameGiudice.dispose();
-                frameAccesso.setVisible(true);
-            }
+        logOutButton.addActionListener(e -> {
+            frameGiudice.dispose();
+            frameAccesso.setVisible(true);
         });
-        back.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                frameGiudice.dispose();
-                frameEventi.setVisible(true);
-            }
+
+        back.addActionListener(e -> {
+            frameGiudice.dispose();
+            frameEventi.setVisible(true);
         });
+    }
+    public JFrame getFrameGiudice() {
+        return frameGiudice;
     }
 }
