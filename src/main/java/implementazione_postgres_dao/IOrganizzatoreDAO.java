@@ -7,11 +7,21 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Implementazione Postgres del DAO per la gestione degli organizzatori.
+ * Fornisce metodi per il recupero, aggiunta, eliminazione e verifica degli organizzatori associati agli eventi.
+ */
 public class IOrganizzatoreDAO implements OrganizzatoreDAO {
+
+    /** Connessione al database. */
     private Connection connection;
+
+    /** DAO per la gestione degli utenti. */
     private IUtenteDAO utenteDAO;
 
-
+    /**
+     * Costruttore. Inizializza la connessione al database.
+     */
     public IOrganizzatoreDAO() {
         try {
             connection = ConnessioneDatabase.getInstance().connection;
@@ -20,6 +30,11 @@ public class IOrganizzatoreDAO implements OrganizzatoreDAO {
         }
     }
 
+    /**
+     * Restituisce l'organizzatore associato al login specificato.
+     * @param login login dell'organizzatore
+     * @return Organizzatore trovato oppure null se non esiste
+     */
     @Override
     public Organizzatore getOrganizzatore(String login) {
         String sql = "SELECT utente_login FROM organizzatore WHERE utente_login = ?";
@@ -36,6 +51,11 @@ public class IOrganizzatoreDAO implements OrganizzatoreDAO {
         return null;
     }
 
+    /**
+     * Restituisce la lista degli organizzatori associati ad un evento.
+     * @param eventoId identificativo dell'evento
+     * @return lista degli organizzatori dell'evento
+     */
     @Override
     public List<Organizzatore> getOrganizzatoriEvento(int eventoId) {
         List<Organizzatore> lista = new ArrayList<>();
@@ -52,6 +72,12 @@ public class IOrganizzatoreDAO implements OrganizzatoreDAO {
         return lista;
     }
 
+    /**
+     * Aggiunge un organizzatore ad un evento.
+     * @param o organizzatore da aggiungere
+     * @param eventoId identificativo dell'evento
+     * @return true se l'inserimento ha successo, false altrimenti
+     */
     @Override
     public boolean aggiungiOrganizzatore(Organizzatore o, int eventoId) {
         String sql = "INSERT INTO organizzatore_evento (utente_login, evento_id) VALUES (?, ?)";
@@ -66,7 +92,12 @@ public class IOrganizzatoreDAO implements OrganizzatoreDAO {
         return false;
     }
 
-
+    /**
+     * Elimina un organizzatore associato ad un evento.
+     * @param login login dell'organizzatore da eliminare
+     * @param eventoId identificativo dell'evento
+     * @return true se l'eliminazione ha successo, false altrimenti
+     */
     @Override
     public boolean eliminaOrganizzatore(String login, int eventoId) {
         String sql = "DELETE FROM organizzatore_evento WHERE utente_login = ? AND evento_id = ?";
@@ -80,6 +111,11 @@ public class IOrganizzatoreDAO implements OrganizzatoreDAO {
         return false;
     }
 
+    /**
+     * Verifica se l'utente con il login specificato è un organizzatore.
+     * @param login login dell'utente da verificare
+     * @return true se l'utente è un organizzatore, false altrimenti
+     */
     @Override
     public boolean isOrganizzatore(String login) {
         String sql = "SELECT COUNT(*) FROM organizzatore WHERE utente_login = ?";
@@ -93,6 +129,10 @@ public class IOrganizzatoreDAO implements OrganizzatoreDAO {
         return false;
     }
 
+    /**
+     * Imposta il DAO per la gestione degli utenti.
+     * @param utenteDAO implementazione del DAO utente
+     */
     @Override
     public void setUtenteDAO(IUtenteDAO utenteDAO) {
         this.utenteDAO = utenteDAO;
