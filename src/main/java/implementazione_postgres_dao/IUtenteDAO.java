@@ -9,8 +9,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class IUtenteDAO implements UtenteDAO {
-
     private Connection connection;
+    private static final String LOGIN_COLUMN = "login";
+    private static final String PASSWORD_COLUMN = "password";
 
     public IUtenteDAO() {
         try{
@@ -41,7 +42,7 @@ public class IUtenteDAO implements UtenteDAO {
             ps.setString(1, login);
             ResultSet rs = ps.executeQuery();
             if (rs.next()){
-                return new Utente(rs.getString("login"), rs.getString("password"));
+                return new Utente(rs.getString(LOGIN_COLUMN), rs.getString(PASSWORD_COLUMN));
             }
         }catch (SQLException e){
             e.printStackTrace();
@@ -56,7 +57,7 @@ public class IUtenteDAO implements UtenteDAO {
             ps.setString(2, password);
             ResultSet rs = ps.executeQuery();
             if(rs.next()){
-                return new Utente(rs.getString("login"), rs.getString("password"));
+                return new Utente(rs.getString(LOGIN_COLUMN), rs.getString(PASSWORD_COLUMN));
             }
         }catch(SQLException e){
             e.printStackTrace();
@@ -71,7 +72,7 @@ public class IUtenteDAO implements UtenteDAO {
         try (Statement st = connection.createStatement();
              ResultSet rs = st.executeQuery(sql)) {
             while (rs.next()) {
-                utenti.add(new Utente(rs.getString("login"), rs.getString("password")));
+                utenti.add(new Utente(rs.getString(LOGIN_COLUMN), rs.getString(PASSWORD_COLUMN)));
             }
         } catch (SQLException e) {
             e.printStackTrace();

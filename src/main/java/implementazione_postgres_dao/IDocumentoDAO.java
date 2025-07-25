@@ -2,10 +2,7 @@ package implementazione_postgres_dao;
 
 import dao.DocumentoDAO;
 import database.ConnessioneDatabase;
-import model.CommentoGiudice;
-import model.Documento;
-import model.Giudice;
-import model.Team;
+import model.*;
 
 import java.io.File;
 import java.sql.Connection;
@@ -21,6 +18,10 @@ public class IDocumentoDAO implements DocumentoDAO {
     private ITeamDAO teamDAO;
     private IGiudiceDAO giudiceDAO;
     private IDocumentoDAO documentoDAO;
+
+    private static final String PERCORSO_FILE_COLUMN = "percorso_file";
+    private static final String TEAM_NOME_COLUMN = "team_nome";
+    private static final String LOGIN_COLUMN = "partecipante_login";
 
     public IDocumentoDAO() {
         try{
@@ -40,9 +41,9 @@ public class IDocumentoDAO implements DocumentoDAO {
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 LocalDate data = rs.getDate("data").toLocalDate();
-                File file = new File(rs.getString("percorso_file"));
-                String nometeam = rs.getString("team_nome");
-                String loginPartecipante = rs.getString("partecipante_login");
+                File file = new File(rs.getString(PERCORSO_FILE_COLUMN));
+                String nometeam = rs.getString(TEAM_NOME_COLUMN);
+                String loginPartecipante = rs.getString(LOGIN_COLUMN);
                 Team team = new Team(nometeam, new ArrayList<>(), new ArrayList<>());
                 Documento doc = new Documento(data, file, team, loginPartecipante);
                 doc.setId(rs.getInt("id"));
@@ -62,10 +63,10 @@ public class IDocumentoDAO implements DocumentoDAO {
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 LocalDate data = rs.getDate("data").toLocalDate();
-                File file = new File(rs.getString("percorso_file"));
-                String nometeam = rs.getString("team_nome");
+                File file = new File(rs.getString(PERCORSO_FILE_COLUMN));
+                String nometeam = rs.getString(TEAM_NOME_COLUMN);
                 Team team = new Team(nometeam, new ArrayList<>(), new ArrayList<>());
-                String loginPartecipante = rs.getString("partecipante_login");
+                String loginPartecipante = rs.getString(LOGIN_COLUMN);
                 Documento doc = new Documento(data, file, team, loginPartecipante);
                 doc.setId(idDocumento);
                 return doc;
@@ -118,10 +119,10 @@ public class IDocumentoDAO implements DocumentoDAO {
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 LocalDate dataCaricamento = rs.getDate("data_caricamento").toLocalDate();
-                String filepath = rs.getString("filepath");
+                String filepath = rs.getString(PERCORSO_FILE_COLUMN);
                 File file = new File(filepath);
-                String teamNome = rs.getString("team_nome");
-                String loginPartecipante = rs.getString("partecipante_login");
+                String teamNome = rs.getString(TEAM_NOME_COLUMN);
+                String loginPartecipante = rs.getString(LOGIN_COLUMN);
                 // Ottieni l'oggetto Team tramite il TeamDAO
                 Team team = teamDAO.getTeam(teamNome, eventoId);
 
@@ -146,9 +147,9 @@ public class IDocumentoDAO implements DocumentoDAO {
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 LocalDate data = rs.getDate("data").toLocalDate();
-                File file = new File(rs.getString("percorso_file"));
-                String nometeam = rs.getString("team_nome");
-                String loginPartecipante = rs.getString("partecipante_login");
+                File file = new File(rs.getString(PERCORSO_FILE_COLUMN));
+                String nometeam = rs.getString(TEAM_NOME_COLUMN);
+                String loginPartecipante = rs.getString(LOGIN_COLUMN);
                 Team team = new Team(nometeam, new ArrayList<>(), new ArrayList<>());
                 Documento doc = new Documento(data, file, team, loginPartecipante);
                 doc.setId(rs.getInt("id"));

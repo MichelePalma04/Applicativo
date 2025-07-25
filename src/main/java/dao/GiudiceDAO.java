@@ -1,8 +1,6 @@
 package dao;
-import implementazione_postgres_dao.IEventoDAO;
-import implementazione_postgres_dao.IOrganizzatoreDAO;
+
 import implementazione_postgres_dao.IUtenteDAO;
-import implementazione_postgres_dao.IVotoDAO;
 import model.Giudice;
 import java.util.List;
 

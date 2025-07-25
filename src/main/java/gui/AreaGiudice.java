@@ -193,65 +193,77 @@ public class AreaGiudice {
         rigaTeam.setMaximumSize(new Dimension(Integer.MAX_VALUE, 36));
         rigaTeam.setAlignmentX(Component.LEFT_ALIGNMENT);
 
+        Evento evento = controller.getEventoById(eventoId); // assicurati di avere questo metodo in Controller
+        boolean eventoFinito = evento.getDataFine().isBefore(java.time.LocalDate.now());
+
         boolean haVotato = controller.giudiceHaVotatoTeam(loginGiudice, t.getNomeTeam(), eventoId);
-        if (haVotato) {
-            int votoAssegnato = controller.getVotoDiGiudiceTeam(loginGiudice, t.getNomeTeam(), eventoId);
-            rigaTeam.add(Box.createHorizontalStrut(10));
-            rigaTeam.add(nomeTeam);
-            rigaTeam.add(Box.createHorizontalStrut(8));
-            rigaTeam.add(visualizzaDocumenti);
-            rigaTeam.add(Box.createHorizontalStrut(8));
-            rigaTeam.add(new JLabel("Voto al team: " + votoAssegnato));
-            panel.add(Box.createVerticalStrut(10));
-            panel.add(rigaTeam);
-        } else {
-            JComboBox<Integer> voti = new JComboBox<>();
-            for (int i = 0; i <= 10; i++) {
-                voti.addItem(i);
+
+        if (eventoFinito) {
+            // L'evento è finito: solo voto
+            if (haVotato) {
+                int votoAssegnato = controller.getVotoDiGiudiceTeam(loginGiudice, t.getNomeTeam(), eventoId);
+                rigaTeam.add(Box.createHorizontalStrut(10));
+                rigaTeam.add(nomeTeam);
+                rigaTeam.add(Box.createHorizontalStrut(8));
+                rigaTeam.add(new JLabel("Voto al team: " + votoAssegnato));
+                panel.add(Box.createVerticalStrut(10));
+                panel.add(rigaTeam);
+            } else {
+                JComboBox<Integer> voti = new JComboBox<>();
+                for (int i = 0; i <= 10; i++) {
+                    voti.addItem(i);
+                }
+                voti.setFont(fieldFont);
+                voti.setBackground(Color.WHITE);
+                voti.setBorder(BorderFactory.createCompoundBorder(
+                        BorderFactory.createLineBorder(new Color(210, 210, 210), 1),
+                        BorderFactory.createEmptyBorder(5, 8, 5, 8)
+                ));
+                voti.setPreferredSize(new Dimension(100, 32));
+                voti.setMaximumSize(new Dimension(100, 32));
+                voti.setFocusable(false);
+
+                JButton confermaVoto = creaStyledButton("Conferma");
+
+                rigaTeam.add(Box.createHorizontalStrut(10));
+                rigaTeam.add(nomeTeam);
+                rigaTeam.add(Box.createHorizontalStrut(8));
+                rigaTeam.add(new JLabel("Voto: "));
+                rigaTeam.add(Box.createHorizontalStrut(4));
+                rigaTeam.add(voti);
+                rigaTeam.add(Box.createHorizontalStrut(8));
+                rigaTeam.add(confermaVoto);
+                panel.add(Box.createVerticalStrut(10));
+                panel.add(rigaTeam);
+
+                confermaVoto.addActionListener(e -> {
+                    int votoSelezionato = (int) voti.getSelectedItem();
+                    controller.votaTeam(loginGiudice, t.getNomeTeam(), eventoId, votoSelezionato);
+                    JOptionPane.showMessageDialog(frameGiudice, "Voto " + votoSelezionato + " assegnato con successo al team " + t.getNomeTeam());
+                    voti.setVisible(false);
+                    confermaVoto.setVisible(false);
+                    JLabel votoAssegnato = new JLabel("" + votoSelezionato);
+                    rigaTeam.add(votoAssegnato);
+                    rigaTeam.revalidate();
+                    rigaTeam.repaint();
+                });
             }
-            voti.setFont(fieldFont);
-            voti.setBackground(Color.WHITE);
-            voti.setBorder(BorderFactory.createCompoundBorder(
-                    BorderFactory.createLineBorder(new Color(210, 210, 210), 1),
-                    BorderFactory.createEmptyBorder(5, 8, 5, 8)
-            ));
-            voti.setPreferredSize(new Dimension(100, 32));
-            voti.setMaximumSize(new Dimension(100, 32));
-            voti.setFocusable(false);
-
-            JButton confermaVoto = creaStyledButton("Conferma");
-
+            // NON aggiungere il bottone visualizzaDocumenti
+        } else {
+            // L'evento NON è finito: solo visualizza documenti
             rigaTeam.add(Box.createHorizontalStrut(10));
             rigaTeam.add(nomeTeam);
             rigaTeam.add(Box.createHorizontalStrut(8));
             rigaTeam.add(visualizzaDocumenti);
-            rigaTeam.add(Box.createHorizontalStrut(8));
-            rigaTeam.add(new JLabel("Voto: "));
-            rigaTeam.add(Box.createHorizontalStrut(4));
-            rigaTeam.add(voti);
-            rigaTeam.add(Box.createHorizontalStrut(8));
-            rigaTeam.add(confermaVoto);
             panel.add(Box.createVerticalStrut(10));
             panel.add(rigaTeam);
 
-            confermaVoto.addActionListener(e -> {
-                int votoSelezionato = (int) voti.getSelectedItem();
-                controller.votaTeam(loginGiudice, t.getNomeTeam(), eventoId, votoSelezionato);
-                JOptionPane.showMessageDialog(frameGiudice, "Voto " + votoSelezionato + " assegnato con successo al team " + t.getNomeTeam());
-                voti.setVisible(false);
-                confermaVoto.setVisible(false);
-                JLabel votoAssegnato = new JLabel("" + votoSelezionato);
-                rigaTeam.add(votoAssegnato);
-                rigaTeam.revalidate();
-                rigaTeam.repaint();
+            visualizzaDocumenti.addActionListener(e -> {
+                VisualizzaDocumenti nuovaGUI = new VisualizzaDocumenti(controller, t.getNomeTeam(), eventoId, frameGiudice, loginGiudice);
+                nuovaGUI.getFrameDocumenti().setVisible(true);
+                frameGiudice.setVisible(false);
             });
         }
-
-        visualizzaDocumenti.addActionListener(e -> {
-            VisualizzaDocumenti nuovaGUI = new VisualizzaDocumenti(controller, t.getNomeTeam(), eventoId, frameGiudice, loginGiudice);
-            nuovaGUI.getFrameDocumenti().setVisible(true);
-            frameGiudice.setVisible(false);
-        });
     }
 
     private JButton creaStyledButton(String text) {

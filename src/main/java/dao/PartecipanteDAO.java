@@ -1,6 +1,6 @@
 package dao;
 
-import implementazione_postgres_dao.ITeamDAO;
+
 import implementazione_postgres_dao.IUtenteDAO;
 import model.Partecipante;
 import java.util.List;

@@ -116,7 +116,7 @@ public class ViewEvento {
         JPanel eventoCard = new JPanel(new BorderLayout());
         eventoCard.setBackground(cardColor);
         eventoCard.setBorder(BorderFactory.createLineBorder(borderColor, 1));
-        eventoCard.setPreferredSize(new Dimension(220, 210));
+        eventoCard.setPreferredSize(new Dimension(220, 240));
 
         JLabel titoloLabel = new JLabel("<html><b>" + ev.getTitolo() + "</b></html>", SwingConstants.CENTER);
         titoloLabel.setFont(new Font(FONT_FAMILY, Font.BOLD, 17));
@@ -177,6 +177,7 @@ public class ViewEvento {
         }
         if (eventoFinito) {
             classificaButton.setVisible(true);
+            visualizzaArea.setVisible(false);
         }
 
         classificaButton.addActionListener(e -> {

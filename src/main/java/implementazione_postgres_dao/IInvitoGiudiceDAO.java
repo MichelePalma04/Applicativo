@@ -18,6 +18,8 @@ public class IInvitoGiudiceDAO implements InvitoGiudiceDAO {
     private  IEventoDAO eventoDAO;
     private IUtenteDAO utenteDAO;
 
+    private static final String EVENTOID_COLUMN = "evento_id";
+
     public IInvitoGiudiceDAO() {
         try {
             connection = ConnessioneDatabase.getInstance().connection;
@@ -48,9 +50,9 @@ public class IInvitoGiudiceDAO implements InvitoGiudiceDAO {
             ps.setString(1, loginUtente);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                Evento evento = eventoDAO.getEvento(rs.getInt("evento_id"));
+                Evento evento = eventoDAO.getEvento(rs.getInt(EVENTOID_COLUMN));
                 Utente utente = utenteDAO.getUtentebyLogin(rs.getString("utente_login"));
-                InvitoGiudice invito = new InvitoGiudice(rs.getInt("evento_id"), rs.getInt("id"), evento, utente, rs.getBoolean("accettato"), rs.getBoolean("rifiutato"));
+                InvitoGiudice invito = new InvitoGiudice(rs.getInt(EVENTOID_COLUMN), rs.getInt("id"), evento, utente, rs.getBoolean("accettato"), rs.getBoolean("rifiutato"));
                 lista.add(invito);
             }
         } catch (SQLException e) {
@@ -66,11 +68,11 @@ public class IInvitoGiudiceDAO implements InvitoGiudiceDAO {
             ps.setInt(1, idInvito);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                Evento evento = eventoDAO.getEvento(rs.getInt("evento_id"));
+                Evento evento = eventoDAO.getEvento(rs.getInt(EVENTOID_COLUMN));
                 Utente utente = utenteDAO.getUtentebyLogin(rs.getString("utente_login"));
                 boolean accettato = rs.getBoolean("accettato");
                 boolean rifiutato = rs.getBoolean("rifiutato");
-                return new InvitoGiudice(rs.getInt("evento_id"), rs.getInt("id"), evento, utente, accettato, rifiutato);
+                return new InvitoGiudice(rs.getInt(EVENTOID_COLUMN), rs.getInt("id"), evento, utente, accettato, rifiutato);
             }
         } catch (SQLException e) {
             e.printStackTrace();

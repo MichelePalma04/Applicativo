@@ -13,6 +13,15 @@ import java.util.List;
 public class IEventoDAO implements EventoDAO {
     private Connection connection;
     private IOrganizzatoreDAO organizzatoreDAO;
+    private static final String TITOLO_COLUMN = "titolo";
+    private static final String SEDE_COLUMN = "sede";
+    private static final String DATA_INIZIO_COLUMN = "data_inizio";
+    private static final String DATA_FINE_COLUMN = "data_fine";
+    private static final String MAX_ISCRITTI_COLUMN = "n_max_iscritti";
+    private static final String DIM_TEAM_COLUMN = "dim_max_team";
+    private static final String INIZIO_REG_COLUMN = "inizio_registrazioni";
+    private static final String FINE_REG_COLUMN = "fine_registrazioni";
+
 
 
     public IEventoDAO() {
@@ -45,14 +54,14 @@ public class IEventoDAO implements EventoDAO {
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 int id = rs.getInt("id");
-                String titolo = rs.getString("titolo");
-                String sede = rs.getString("sede");
-                LocalDate dataInizio = rs.getDate("data_inizio").toLocalDate();
-                LocalDate dataFine = rs.getDate("data_fine").toLocalDate();
-                int nMaxIscritti = rs.getInt("n_max_iscritti");
-                int dimMaxTeam = rs.getInt("dim_max_team");
-                LocalDate inizioRegistrazioni = rs.getDate("inizio_registrazioni").toLocalDate();
-                LocalDate fineRegistrazioni = rs.getDate("fine_registrazioni").toLocalDate();
+                String titolo = rs.getString(TITOLO_COLUMN);
+                String sede = rs.getString(SEDE_COLUMN);
+                LocalDate dataInizio = rs.getDate(DATA_INIZIO_COLUMN).toLocalDate();
+                LocalDate dataFine = rs.getDate(DATA_FINE_COLUMN).toLocalDate();
+                int nMaxIscritti = rs.getInt(MAX_ISCRITTI_COLUMN);
+                int dimMaxTeam = rs.getInt(DIM_TEAM_COLUMN);
+                LocalDate inizioRegistrazioni = rs.getDate(INIZIO_REG_COLUMN).toLocalDate();
+                LocalDate fineRegistrazioni = rs.getDate(FINE_REG_COLUMN).toLocalDate();
 
                 Organizzatore organizzatore = organizzatoreDAO.getOrganizzatore(rs.getString("organizzatore_login"));
 
@@ -71,7 +80,7 @@ public class IEventoDAO implements EventoDAO {
         try (PreparedStatement ps = connection.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
             while (rs.next()) {
-                Evento evento = new Evento(rs.getInt("id"), rs.getString("titolo"), rs.getString("sede"), rs.getDate("data_inizio").toLocalDate(), rs.getDate("data_fine").toLocalDate(), rs.getInt("n_max_iscritti"), rs.getInt("dim_max_team"), rs.getDate("inizio_registrazioni").toLocalDate(), rs.getDate("fine_registrazioni").toLocalDate(), null, new ArrayList<>(), new ArrayList<>());
+                Evento evento = new Evento(rs.getInt("id"), rs.getString(TITOLO_COLUMN), rs.getString(SEDE_COLUMN), rs.getDate(DATA_INIZIO_COLUMN ).toLocalDate(), rs.getDate(DATA_FINE_COLUMN).toLocalDate(), rs.getInt(MAX_ISCRITTI_COLUMN), rs.getInt(DIM_TEAM_COLUMN), rs.getDate(INIZIO_REG_COLUMN).toLocalDate(), rs.getDate(FINE_REG_COLUMN).toLocalDate(), null, new ArrayList<>(), new ArrayList<>());
                 String loginOrg = rs.getString("organizzatore_login");
                 Organizzatore organizzatore = organizzatoreDAO.getOrganizzatore(loginOrg);
                 evento.setOrganizzatore(organizzatore);
@@ -152,7 +161,7 @@ public class IEventoDAO implements EventoDAO {
             ps.setString(1, login);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                Evento evento = new Evento(rs.getInt("id"), rs.getString("titolo"), rs.getString("sede"), rs.getDate("data_inizio").toLocalDate(), rs.getDate("data_fine").toLocalDate(), rs.getInt("n_max_iscritti"), rs.getInt("dim_max_team"), rs.getDate("inizio_registrazioni").toLocalDate(), rs.getDate("fine_registrazioni").toLocalDate(), null, new ArrayList<>(), new ArrayList<>());
+                Evento evento = new Evento(rs.getInt("id"), rs.getString(TITOLO_COLUMN), rs.getString(SEDE_COLUMN), rs.getDate(DATA_INIZIO_COLUMN ).toLocalDate(), rs.getDate(DATA_FINE_COLUMN).toLocalDate(), rs.getInt(MAX_ISCRITTI_COLUMN), rs.getInt(DIM_TEAM_COLUMN), rs.getDate(INIZIO_REG_COLUMN).toLocalDate(), rs.getDate(FINE_REG_COLUMN).toLocalDate(), null, new ArrayList<>(), new ArrayList<>());
                 eventi.add(evento);
             }
         } catch (SQLException e) {
