@@ -5,8 +5,6 @@ import model.*;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.time.LocalDate;
 
@@ -38,69 +36,110 @@ public class AreaPartecipante {
     private JFrame frameNotifica;
     private JFrame frameGiudice;
 
+    private static final String FONT_FAMILY = "SansSerif";
+    private static final String PROBLEMA_LABEL = "Problema da risolvere: ";
+    private static final String DOCUMENTO_CARICATO_LABEL = "Documento caricato: ";
+    private static final String NESSUN_DOCUMENTO_LABEL = "Nessun documento caricato dal tuo team.";
+    private static final String COMMENTO_GIUDICE_LABEL = "Nessun commento dai giudici.";
 
-    public AreaPartecipante(String loginPartecipante, int idEvento, JFrame frameAreaEventi, JFrame frameAreaAccesso, JFrame frameAreaNotifiche, JFrame frameAreaGiudice, Controller controller) {
+    private Color bgColor = new Color(240, 248, 255);
+    private Color btnColor = new Color(30, 144, 255);
+    private Color btnHoverColor = new Color(65, 105, 225);
+    private Color fieldBg = Color.WHITE;
+    private Color fieldBorder = new Color(210, 210, 210);
+    private Font labelFont = new Font(FONT_FAMILY, Font.BOLD, 16);
+    private Font fieldFont = new Font(FONT_FAMILY, Font.PLAIN, 15);
+
+
+    public AreaPartecipante(String partecipanteLogin, int idEvento, JFrame frameAreaEventi, JFrame frameAreaAccesso, JFrame frameAreaNotifiche, JFrame frameAreaGiudice, Controller controller) {
         this.controller = controller;
-        this.loginPartecipante = loginPartecipante;
+        this.loginPartecipante = partecipanteLogin;
         this.eventoId = idEvento;
         frameEventi = frameAreaEventi;
         frameAccedi = frameAreaAccesso;
         frameNotifica = frameAreaNotifiche;
         frameGiudice = frameAreaGiudice;
 
-        Color bgColor = new Color(240, 248, 255);      // chiaro azzurrino
-        Color btnColor = new Color(30, 144, 255);
-        Color btnHoverColor = new Color(65, 105, 225);
-        Color fieldBg = Color.WHITE;
-        Color fieldBorder = new Color(210, 210, 210);
-        Font labelFont = new Font("SansSerif", Font.BOLD, 16);
-        Font fieldFont = new Font("SansSerif", Font.PLAIN, 15);
+        setupStileComponenti();
+        setupFrame();
 
+        List<Team> teams = controller.getTeamsEvento(eventoId);
+        caricaTeamComboBox(teams);
 
-        if (panel != null) panel.setBackground(bgColor);
-        if (panel2 != null) panel2.setBackground(bgColor);
+        Team teamUtente = trovaTeamUtente(teams);
+        boolean inTeam = teamUtente != null;
 
-        if (benvenuto != null) benvenuto.setFont(labelFont);
-        if (teamLabel != null) teamLabel.setFont(labelFont);
-        if (avviso != null) avviso.setFont(labelFont);
-        if (messaggio != null) messaggio.setFont(fieldFont);
-        if (problema != null) problema.setFont(labelFont);
-        if (nomeTeam != null) nomeTeam.setFont(labelFont);
-        if (inserisciDocumento != null) inserisciDocumento.setFont(fieldFont);
+        JPanel documentiPanel = creaDocumentiPanel();
+        panel2.setLayout(new BoxLayout(panel2, BoxLayout.Y_AXIS));
+        panel2.add(documentiPanel);
+
+        aggiornaVisibilitaCampi(inTeam, teamUtente);
+
+        if (inTeam) {
+            mostraDocumentiTeam(documentiPanel, teamUtente);
+        }
+
+        creaTeamButton.addActionListener(e -> azioneCreaTeam(documentiPanel));
+        homeButton.addActionListener(e -> azioneHome());
+        uniscitiButton.addActionListener(e -> azioneUniscitiTeam(documentiPanel));
+        sfogliaDocumenti.addActionListener(e -> azioneCaricaDocumento(documentiPanel));
+    }
+
+    private void setupStileComponenti() {
+        setPanelBg(panel, bgColor);
+        setPanelBg(panel2, bgColor);
+
+        setLabelFont(benvenuto, labelFont);
+        setLabelFont(teamLabel, labelFont);
+        setLabelFont(avviso, labelFont);
+        setLabelFont(messaggio, fieldFont);
+        setLabelFont(problema, labelFont);
+        setLabelFont(nomeTeam, labelFont);
+        setLabelFont(inserisciDocumento, fieldFont);
 
         JButton[] allButtons = {homeButton, uniscitiButton, sfogliaDocumenti, creaTeamButton};
         for (JButton btn : allButtons) {
-            if (btn == null) continue;
-            btn.setBackground(btnColor);
-            btn.setForeground(Color.WHITE);
-            btn.setFocusPainted(false);
-            btn.setFont(labelFont);
-            btn.setBorder(BorderFactory.createEmptyBorder(10, 25, 10, 25));
-            btn.addMouseListener(new java.awt.event.MouseAdapter() {
-                public void mouseEntered(java.awt.event.MouseEvent evt) { btn.setBackground(btnHoverColor);}
-                public void mouseExited(java.awt.event.MouseEvent evt) { btn.setBackground(btnColor);}
-            });
+            if (btn != null) styleButton(btn);
         }
 
-        if (comboBox1 != null) {
-            comboBox1.setFont(fieldFont);
-            comboBox1.setBackground(fieldBg);
-            comboBox1.setBorder(BorderFactory.createCompoundBorder(
-                    BorderFactory.createLineBorder(fieldBorder, 1),
+        styleField(comboBox1, fieldFont, fieldBg, fieldBorder);
+        styleField(nomeField, fieldFont, fieldBg, fieldBorder);
+    }
+
+    private void setPanelBg(JPanel p, Color color) {
+        if (p != null) p.setBackground(color);
+    }
+
+    private void setLabelFont(JLabel l, Font font) {
+        if (l != null) l.setFont(font);
+    }
+
+    private void styleButton(JButton btn) {
+        btn.setBackground(btnColor);
+        btn.setForeground(Color.WHITE);
+        btn.setFocusPainted(false);
+        btn.setFont(labelFont);
+        btn.setBorder(BorderFactory.createEmptyBorder(10, 25, 10, 25));
+        btn.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseEntered(java.awt.event.MouseEvent evt) { btn.setBackground(btnHoverColor);}
+            @Override
+            public void mouseExited(java.awt.event.MouseEvent evt) { btn.setBackground(btnColor);}
+        });
+    }
+
+    private void styleField(JComponent f, Font font, Color bg, Color borderColor) {
+        if (f != null) {
+            f.setFont(font);
+            f.setBackground(bg);
+            f.setBorder(BorderFactory.createCompoundBorder(
+                    BorderFactory.createLineBorder(borderColor, 1),
                     BorderFactory.createEmptyBorder(5, 8, 5, 8)
             ));
         }
-        if (nomeField != null) {
-            nomeField.setFont(fieldFont);
-            nomeField.setBackground(fieldBg);
-            nomeField.setBorder(BorderFactory.createCompoundBorder(
-                    BorderFactory.createLineBorder(fieldBorder, 1),
-                    BorderFactory.createEmptyBorder(5, 8, 5, 8)
-            ));
-        }
+    }
 
-
-        Partecipante partecipante = controller.getPartecipanteDaDB(loginPartecipante, eventoId);
+    private void setupFrame() {
         frameAreaPartecipante = new JFrame("Area Personale " + loginPartecipante);
         frameAreaPartecipante.setContentPane(panel);
         frameAreaPartecipante.pack();
@@ -109,12 +148,11 @@ public class AreaPartecipante {
         frameAreaPartecipante.setDefaultCloseOperation(EXIT_ON_CLOSE);
 
         messaggio.setVisible(false);
-
         avviso.setText("Iscrizione avvenuta con successo!");
         benvenuto.setText("Benvenuto, " + loginPartecipante);
+    }
 
-
-        List<Team> teams = controller.getTeamsEvento(eventoId);
+    private void caricaTeamComboBox(List<Team> teams) {
         if (teams.isEmpty()) {
             uniscitiButton.setEnabled(false);
             comboBox1.setEnabled(false);
@@ -124,388 +162,195 @@ public class AreaPartecipante {
                 comboBox1.addItem(team);
             }
         }
+    }
 
-        // boolean inTeam = false;
-        // Verifica se il partecipante è già in un team
-        Team teamUtente = null;
+    private Team trovaTeamUtente(List<Team> teams) {
         for (Team team : teams) {
             if (controller.isPartecipanteInTeam(loginPartecipante, team.getNomeTeam(), eventoId)) {
-                //inTeam = true;
-                teamUtente = team;
-                break;
+                return team;
             }
         }
+        return null;
+    }
 
-        boolean inTeam = (teamUtente != null);
-        String problemaEvento = controller.getProblemaEvento(eventoId);
+    private JPanel creaDocumentiPanel() {
         JPanel documentiPanel = new JPanel();
         documentiPanel.setBackground(bgColor);
-
         documentiPanel.setLayout(new BoxLayout(documentiPanel, BoxLayout.Y_AXIS));
-        panel2.setLayout(new BoxLayout(panel2, BoxLayout.Y_AXIS)); // esempio
-        panel2.add(documentiPanel);
+        return documentiPanel;
+    }
 
+    private void aggiornaVisibilitaCampi(boolean inTeam, Team teamUtente) {
         if (inTeam) {
-            creaTeamButton.setVisible(false);
-            nomeField.setVisible(false);
-            nomeTeam.setVisible(false);
-            uniscitiButton.setVisible(false);
-            comboBox1.setVisible(false);
-            teamLabel.setVisible(false);
-            avviso.setVisible(false);
-            messaggio.setVisible(true);
+            setVisibilitaCampiTeam(true, teamUtente);
+        } else {
+            setVisibilitaCampiTeam(false, null);
+        }
+    }
+
+    private void setVisibilitaCampiTeam(boolean inTeam, Team teamUtente) {
+        creaTeamButton.setVisible(!inTeam);
+        nomeField.setVisible(!inTeam);
+        nomeTeam.setVisible(!inTeam);
+        uniscitiButton.setVisible(!inTeam);
+        comboBox1.setVisible(!inTeam);
+        teamLabel.setVisible(!inTeam);
+        avviso.setVisible(!inTeam);
+        messaggio.setVisible(inTeam);
+        problema.setVisible(false);
+        sfogliaDocumenti.setVisible(false);
+        inserisciDocumento.setVisible(false);
+
+        if (inTeam && teamUtente != null) {
             messaggio.setText("Ora sei membro del " + teamUtente.getNomeTeam());
             String problemaEventoInTeam = controller.getProblemaEvento(eventoId);
             if (problemaEventoInTeam != null && !problemaEventoInTeam.isEmpty()) {
-                problema.setText("Problema da risolvere: " + problemaEventoInTeam);
+                problema.setText(PROBLEMA_LABEL + problemaEventoInTeam);
                 problema.setVisible(true);
                 sfogliaDocumenti.setVisible(true);
                 inserisciDocumento.setVisible(true);
-            } else {
-                problema.setVisible(false);
-                sfogliaDocumenti.setVisible(false);
-                inserisciDocumento.setVisible(false);
             }
-
-            // --- Visualizzazione documenti e commenti ---
-            documentiPanel.removeAll();
-            List<Documento> documenti = controller.getDocumentiTeamEventoPartecipante(eventoId, teamUtente.getNomeTeam(), loginPartecipante);
-            if (documenti.isEmpty()) {
-                JLabel noDocLabel = new JLabel("Nessun documento caricato dal tuo team.");
-                noDocLabel.setFont(fieldFont);
-                noDocLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
-                documentiPanel.add(noDocLabel);
-            } else {
-                //documentiPanel.removeAll();
-                //documentiPanel.setLayout(new BoxLayout(documentiPanel, BoxLayout.Y_AXIS));
-                for (Documento doc : documenti) {
-                    JPanel docPanel = new JPanel();
-                    docPanel.setLayout(new BoxLayout(docPanel, BoxLayout.Y_AXIS));
-                    docPanel.setBackground(bgColor);
-                    docPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
-
-                    JPanel rigaPanel = new JPanel();
-                    rigaPanel.setLayout(new BoxLayout(rigaPanel, BoxLayout.X_AXIS));
-                    rigaPanel.setBackground(bgColor);
-                    rigaPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
-
-                    JLabel nomeDocLabel = new JLabel("Documento caricato: " + doc.getFile().getName());
-                    nomeDocLabel.setFont(fieldFont);
-
-                    JButton visualizzaDocButton = new JButton("Visualizza");
-                    visualizzaDocButton.setBackground(btnColor);
-                    visualizzaDocButton.setForeground(Color.WHITE);
-                    visualizzaDocButton.setFont(new Font("SansSerif", Font.BOLD, 13));
-                    visualizzaDocButton.setFocusPainted(false);
-                    visualizzaDocButton.setBorder(BorderFactory.createEmptyBorder(6, 18, 6, 18));
-                    visualizzaDocButton.addMouseListener(new java.awt.event.MouseAdapter() {
-                        public void mouseEntered(java.awt.event.MouseEvent evt) { visualizzaDocButton.setBackground(btnHoverColor);}
-                        public void mouseExited(java.awt.event.MouseEvent evt) { visualizzaDocButton.setBackground(btnColor);}
-                    });
-                    visualizzaDocButton.addActionListener(e -> {
-                        try {
-                            Desktop.getDesktop().open(doc.getFile());
-                        } catch (IOException ex) {
-                            JOptionPane.showMessageDialog(frameAreaPartecipante, "Impossibile aprire il documento.", "Errore", JOptionPane.ERROR_MESSAGE);
-                        }
-                    });
-                    rigaPanel.add(nomeDocLabel);
-                    rigaPanel.add(Box.createRigidArea(new Dimension(10, 0)));
-                    rigaPanel.add(visualizzaDocButton);
-
-                    docPanel.add(rigaPanel);
-
-                    JPanel commentiPanel = new JPanel();
-                    commentiPanel.setLayout(new BoxLayout(commentiPanel, BoxLayout.Y_AXIS));
-                    commentiPanel.setBackground(bgColor);
-                    commentiPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
-
-                    List<CommentoGiudice> commenti = doc.getCommentiGiudici();
-                    if (commenti == null || commenti.isEmpty()) {
-                        JLabel nessunCommento = new JLabel("Nessun commento dai giudici.");
-                        nessunCommento.setFont(fieldFont);
-                        nessunCommento.setAlignmentX(Component.LEFT_ALIGNMENT);
-                        commentiPanel.add(nessunCommento);
-                    } else {
-                        for (CommentoGiudice c : commenti) {
-                            JLabel commentoLabel = new JLabel(c.getGiudice() + ": " + c.getTesto()+"\n");
-                            commentoLabel.setFont(fieldFont);
-                            commentoLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
-                            commentiPanel.add(commentoLabel);
-                        }
-                    }
-                    docPanel.add(commentiPanel);
-                    docPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
-                    documentiPanel.add(docPanel);
-                    documentiPanel.add(Box.createVerticalStrut(8));
-
-                }
-            }
-
-            documentiPanel.revalidate();
-            documentiPanel.repaint();
-        } else {
-            uniscitiButton.setVisible(true);
-            comboBox1.setVisible(true);
-            teamLabel.setVisible(true);
-            avviso.setVisible(true);
-            messaggio.setVisible(false);
-            problema.setVisible(false);
-            sfogliaDocumenti.setVisible(false);
-            inserisciDocumento.setVisible(false);
         }
+    }
 
-        creaTeamButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String nome = nomeField.getText();
-                if (nome.trim().isEmpty()) {
-                    JOptionPane.showMessageDialog(frameAreaPartecipante, "Inserire un nome valido.", "Error", JOptionPane.ERROR_MESSAGE);
-                    return;
-                }
-                // Crea il team nel DB e unisci subito il partecipante
-                Team nuovoTeam = controller.creaTeam(nome, loginPartecipante, eventoId);
-                controller.unisciPartecipanteATeam(loginPartecipante, nuovoTeam.getNomeTeam(), eventoId);
-                comboBox1.addItem(nuovoTeam);
-
-                //Evento eventoAggiornato = controller.geteventoById(eventoId);
-
-                List<Team> teamsAggiornati = controller.getTeamsEvento(eventoId);
-                Team nuovoTeamUtente = null;
-                for (Team t : teamsAggiornati) {
-                    if (controller.isPartecipanteInTeam(loginPartecipante, t.getNomeTeam(), eventoId)) {
-                        nuovoTeamUtente = t;
-                        break;
-                    }
-                }
-
-                boolean inTeamAggiornato = (nuovoTeamUtente != null);
-                String problemaEvento = controller.getProblemaEvento(eventoId);
-
-                if (inTeamAggiornato) {
-                    nomeField.setVisible(false);
-                    nomeTeam.setVisible(false);
-                    creaTeamButton.setVisible(false);
-                    teamLabel.setVisible(false);
-                    comboBox1.setVisible(false);
-                    uniscitiButton.setVisible(false);
-                    avviso.setVisible(false);
-                    messaggio.setVisible(true);
-                    messaggio.setText("Ora sei un membro del team " + nuovoTeamUtente.getNomeTeam());
-                    if (problemaEvento != null && !problemaEvento.isEmpty()) {
-                        problema.setText("Problema da risolvere: " + problemaEvento);
-                        problema.setVisible(true);
-                        sfogliaDocumenti.setVisible(true);
-                        inserisciDocumento.setVisible(true);
-                    } else {
-                        problema.setVisible(false);
-                        sfogliaDocumenti.setVisible(false);
-                        inserisciDocumento.setVisible(false);
-                    }
-                }
-            }
-        });
-
-        if (inTeam) {
-            creaTeamButton.setVisible(false);
-            nomeField.setVisible(false);
-            nomeTeam.setVisible(false);
-            uniscitiButton.setVisible(false);
-            comboBox1.setVisible(false);
-            teamLabel.setVisible(false);
-            avviso.setVisible(false);
-            messaggio.setVisible(true);
-            messaggio.setText("Ora sei membro del " + teamUtente.getNomeTeam());
-            String problemaEventoInTeam = controller.getProblemaEvento(eventoId);
-            if (problemaEventoInTeam != null && !problemaEventoInTeam.isEmpty()) {
-                problema.setText("Problema da risolvere: " + problemaEventoInTeam);
-                problema.setVisible(true);
-                sfogliaDocumenti.setVisible(true);
-                inserisciDocumento.setVisible(true);
-            } else {
-                problema.setVisible(false);
-                sfogliaDocumenti.setVisible(false);
-                inserisciDocumento.setVisible(false);
-            }
+    private void mostraDocumentiTeam(JPanel documentiPanel, Team teamUtente) {
+        documentiPanel.removeAll();
+        List<Documento> documenti = controller.getDocumentiTeamEventoPartecipante(eventoId, teamUtente.getNomeTeam(), loginPartecipante);
+        if (documenti.isEmpty()) {
+            aggiungiLabel(documentiPanel, NESSUN_DOCUMENTO_LABEL, fieldFont);
         } else {
-            uniscitiButton.setVisible(true);
-            comboBox1.setVisible(true);
-            teamLabel.setVisible(true);
-            avviso.setVisible(true);
-            messaggio.setVisible(false);
-            problema.setVisible(false);
-            sfogliaDocumenti.setVisible(false);
-            inserisciDocumento.setVisible(false);
+            for (Documento doc : documenti) {
+                documentiPanel.add(creaDocPanel(doc));
+                documentiPanel.add(Box.createVerticalStrut(8));
+            }
         }
+        documentiPanel.revalidate();
+        documentiPanel.repaint();
+    }
 
-        homeButton.addActionListener(new ActionListener() {
+    private JPanel creaDocPanel(Documento doc) {
+        JPanel docPanel = new JPanel();
+        docPanel.setLayout(new BoxLayout(docPanel, BoxLayout.Y_AXIS));
+        docPanel.setBackground(bgColor);
+        docPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+        JPanel rigaPanel = new JPanel();
+        rigaPanel.setLayout(new BoxLayout(rigaPanel, BoxLayout.X_AXIS));
+        rigaPanel.setBackground(bgColor);
+        rigaPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+        JLabel nomeDocLabel = new JLabel(DOCUMENTO_CARICATO_LABEL + doc.getFile().getName());
+        nomeDocLabel.setFont(fieldFont);
+
+        JButton visualizzaDocButton = creaVisualizzaDocButton(doc);
+
+        rigaPanel.add(nomeDocLabel);
+        rigaPanel.add(Box.createRigidArea(new Dimension(10, 0)));
+        rigaPanel.add(visualizzaDocButton);
+
+        docPanel.add(rigaPanel);
+        docPanel.add(creaCommentiPanel(doc.getCommentiGiudici()));
+        return docPanel;
+    }
+
+    private JButton creaVisualizzaDocButton(Documento doc) {
+        JButton visualizzaDocButton = new JButton("Visualizza");
+        visualizzaDocButton.setBackground(btnColor);
+        visualizzaDocButton.setForeground(Color.WHITE);
+        visualizzaDocButton.setFont(new Font(FONT_FAMILY, Font.BOLD, 13));
+        visualizzaDocButton.setFocusPainted(false);
+        visualizzaDocButton.setBorder(BorderFactory.createEmptyBorder(6, 18, 6, 18));
+        visualizzaDocButton.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
-            public void actionPerformed(ActionEvent e) {
-                ViewEvento gui = new ViewEvento(controller, loginPartecipante, frameAccedi, frameAreaPartecipante, frameNotifica, frameGiudice);
-                gui.getFramePartecipante().setVisible(false);
-                frameEventi.setVisible(true);
+            public void mouseEntered(java.awt.event.MouseEvent evt) { visualizzaDocButton.setBackground(btnHoverColor); }
+            @Override
+            public void mouseExited(java.awt.event.MouseEvent evt) { visualizzaDocButton.setBackground(btnColor); }
+        });
+        visualizzaDocButton.addActionListener(e -> {
+            try {
+                Desktop.getDesktop().open(doc.getFile());
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(frameAreaPartecipante, "Impossibile aprire il documento.", "Errore", JOptionPane.ERROR_MESSAGE);
             }
         });
+        return visualizzaDocButton;
+    }
 
-        uniscitiButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                Team teamSelected = (Team) comboBox1.getSelectedItem();
+    private JPanel creaCommentiPanel(List<CommentoGiudice> commenti) {
+        JPanel commentiPanel = new JPanel();
+        commentiPanel.setLayout(new BoxLayout(commentiPanel, BoxLayout.Y_AXIS));
+        commentiPanel.setBackground(bgColor);
+        commentiPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
-                // Verifica se già in un team tramite Controller
-                if (controller.isPartecipanteInTeam(loginPartecipante, teamSelected.getNomeTeam(), eventoId)) {
-                    JOptionPane.showMessageDialog(frameAreaPartecipante, "Sei già in un team.");
-                    return;
-                }
-
-                // Verifica la dimensione massima tramite Controller
-                String problemaEvento = controller.getProblemaEvento(eventoId);
-                if (controller.getDimTeam(teamSelected.getNomeTeam(), eventoId) >= controller.getEventoById(eventoId).getDMaxTeam()) {
-                    JOptionPane.showMessageDialog(frameAreaPartecipante, "Il team " + teamSelected.getNomeTeam() + " è pieno.");
-                    return;
-                }
-                controller.unisciPartecipanteATeam(loginPartecipante, teamSelected.getNomeTeam(), eventoId);
-
-                // Aggiorna la visibilità dopo l'unione
-                List<Team> teamsAggiornati = controller.getTeamsEvento(eventoId);
-                Team nuovoTeamUtente = null;
-                for (Team t : teamsAggiornati) {
-                    if (controller.isPartecipanteInTeam(loginPartecipante, t.getNomeTeam(), eventoId)) {
-                        nuovoTeamUtente = t;
-                        break;
-                    }
-                }
-                boolean inTeamAggiornato = (nuovoTeamUtente != null);
-                String problemaEventoAggiornato = controller.getProblemaEvento(eventoId);
-
-                if (inTeamAggiornato) {
-                    creaTeamButton.setVisible(false);
-                    nomeField.setVisible(false);
-                    nomeTeam.setVisible(false);
-                    comboBox1.setVisible(false);
-                    teamLabel.setVisible(false);
-                    uniscitiButton.setVisible(false);
-                    avviso.setVisible(false);
-                    messaggio.setVisible(true);
-                    messaggio.setText("Ora sei un membro del " + nuovoTeamUtente.getNomeTeam());
-                    if (problemaEventoAggiornato != null && !problemaEventoAggiornato.isEmpty()) {
-                        problema.setText("Problema da risolvere: " + problemaEventoAggiornato);
-                        problema.setVisible(true);
-                        sfogliaDocumenti.setVisible(true);
-                        inserisciDocumento.setVisible(true);
-                    } else {
-                        problema.setVisible(false);
-                        sfogliaDocumenti.setVisible(false);
-                        inserisciDocumento.setVisible(false);
-                    }
-                }
+        if (commenti == null || commenti.isEmpty()) {
+            aggiungiLabel(commentiPanel, COMMENTO_GIUDICE_LABEL, fieldFont);
+        } else {
+            for (CommentoGiudice c : commenti) {
+                aggiungiLabel(commentiPanel, c.getGiudice() + ": " + c.getTesto(), fieldFont);
             }
-        });
+        }
+        return commentiPanel;
+    }
 
+    private void aggiungiLabel(JPanel panel, String text, Font font) {
+        JLabel label = new JLabel(text);
+        label.setFont(font);
+        label.setAlignmentX(Component.LEFT_ALIGNMENT);
+        panel.add(label);
+    }
 
-        sfogliaDocumenti.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JFileChooser fileChooser = new JFileChooser();
-                int risultato = fileChooser.showOpenDialog(frameAreaPartecipante);
-                if (risultato == JFileChooser.APPROVE_OPTION) {
-                    java.io.File file = fileChooser.getSelectedFile();
+    private void azioneCreaTeam(JPanel documentiPanel) {
+        String nome = nomeField.getText();
+        if (nome.trim().isEmpty()) {
+            JOptionPane.showMessageDialog(frameAreaPartecipante, "Inserire un nome valido.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        Team nuovoTeam = controller.creaTeam(nome, loginPartecipante, eventoId);
+        controller.unisciPartecipanteATeam(loginPartecipante, nuovoTeam.getNomeTeam(), eventoId);
+        comboBox1.addItem(nuovoTeam);
 
-                    //Trova il team dell'utente tramite controller
-                    Team teamUser = null;
-                    List<Team> teams = controller.getTeamsEvento(eventoId);
-                    for (Team t : teams) {
-                        if (controller.isPartecipanteInTeam(loginPartecipante, t.getNomeTeam(), eventoId)) {
-                            teamUser = t;
-                            break;
-                        }
-                    }
-                    Documento documento = new Documento(LocalDate.now(), file, teamUser);
-                    controller.caricaDocumento(documento, teamUser.getNomeTeam(), eventoId, loginPartecipante);
-                    JOptionPane.showMessageDialog(frameAreaPartecipante, "Documento caricato con successo!");
-                  //  --- AGGIUNGI QUESTO BLOCCO PER AGGIORNARE LA LISTA DOCUMENTI ---
-                            // Recupera di nuovo la lista dei documenti del team
+        Team nuovoTeamUtente = trovaTeamUtente(controller.getTeamsEvento(eventoId));
+        aggiornaVisibilitaCampi(true, nuovoTeamUtente);
+        mostraDocumentiTeam(documentiPanel, nuovoTeamUtente);
+    }
 
-                    List<Documento> documentiAggiornati = controller.getDocumentiTeamEventoPartecipante(eventoId, teamUser.getNomeTeam(), loginPartecipante);
-                    documentiPanel.removeAll(); // pulisci il pannello
-                    if (documentiAggiornati.isEmpty()) {
-                        JLabel noDocLabel = new JLabel("Nessun documento caricato");
-                        noDocLabel.setFont(fieldFont);
-                        noDocLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
-                        documentiPanel.add(noDocLabel);
-                    } else {
+    private void azioneHome() {
+        ViewEvento gui = new ViewEvento(controller, loginPartecipante, frameAccedi, frameAreaPartecipante, frameNotifica, frameGiudice);
+        gui.getFramePartecipante().setVisible(false);
+        frameEventi.setVisible(true);
+    }
 
-                        for (Documento doc : documentiAggiornati) {
-                            JPanel docPanel = new JPanel();
-                            docPanel.setLayout(new BoxLayout(docPanel, BoxLayout.Y_AXIS));
-                            docPanel.setBackground(bgColor);
-                            docPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+    private void azioneUniscitiTeam(JPanel documentiPanel) {
+        Team teamSelected = (Team) comboBox1.getSelectedItem();
+        if (controller.isPartecipanteInTeam(loginPartecipante, teamSelected.getNomeTeam(), eventoId)) {
+            JOptionPane.showMessageDialog(frameAreaPartecipante, "Sei già in un team.");
+            return;
+        }
+        if (controller.getDimTeam(teamSelected.getNomeTeam(), eventoId) >= controller.getEventoById(eventoId).getDMaxTeam()) {
+            JOptionPane.showMessageDialog(frameAreaPartecipante, "Il team " + teamSelected.getNomeTeam() + " è pieno.");
+            return;
+        }
+        controller.unisciPartecipanteATeam(loginPartecipante, teamSelected.getNomeTeam(), eventoId);
+        Team nuovoTeamUtente = trovaTeamUtente(controller.getTeamsEvento(eventoId));
+        aggiornaVisibilitaCampi(true, nuovoTeamUtente);
+        mostraDocumentiTeam(documentiPanel, nuovoTeamUtente);
+    }
 
-                            JPanel rigaPanel = new JPanel();
-                            rigaPanel.setLayout(new BoxLayout(rigaPanel, BoxLayout.X_AXIS));
-                            rigaPanel.setBackground(bgColor);
-                            rigaPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+    private void azioneCaricaDocumento(JPanel documentiPanel) {
+        JFileChooser fileChooser = new JFileChooser();
+        int risultato = fileChooser.showOpenDialog(frameAreaPartecipante);
+        if (risultato == JFileChooser.APPROVE_OPTION) {
+            java.io.File file = fileChooser.getSelectedFile();
 
-                            JLabel nomeDocLabel = new JLabel("Documento caricato: " + doc.getFile().getName());
-                            nomeDocLabel.setFont(fieldFont);
+            Team teamUser = trovaTeamUtente(controller.getTeamsEvento(eventoId));
+            Documento documento = new Documento(LocalDate.now(), file, teamUser);
+            controller.caricaDocumento(documento, teamUser.getNomeTeam(), eventoId, loginPartecipante);
+            JOptionPane.showMessageDialog(frameAreaPartecipante, "Documento caricato con successo!");
 
-                            JButton visualizzaDocButton = new JButton("Visualizza");
-                            visualizzaDocButton.setBackground(btnColor);
-                            visualizzaDocButton.setForeground(Color.WHITE);
-                            visualizzaDocButton.setFont(new Font("SansSerif", Font.BOLD, 13));
-                            visualizzaDocButton.setFocusPainted(false);
-                            visualizzaDocButton.setBorder(BorderFactory.createEmptyBorder(6, 18, 6, 18));
-                            visualizzaDocButton.addMouseListener(new java.awt.event.MouseAdapter() {
-                                public void mouseEntered(java.awt.event.MouseEvent evt) { visualizzaDocButton.setBackground(btnHoverColor);}
-                                public void mouseExited(java.awt.event.MouseEvent evt) { visualizzaDocButton.setBackground(btnColor);}
-                            });
-                            visualizzaDocButton.addActionListener(ev -> {
-                                try {
-                                    Desktop.getDesktop().open(doc.getFile());
-                                } catch (IOException ex) {
-                                    JOptionPane.showMessageDialog(frameAreaPartecipante, "Impossibile aprire il documento.", "Errore", JOptionPane.ERROR_MESSAGE);
-                                }
-                            });
-                            rigaPanel.add(nomeDocLabel);
-                            rigaPanel.add(Box.createRigidArea(new Dimension(10, 0)));
-                            rigaPanel.add(visualizzaDocButton);
-
-                            docPanel.add(rigaPanel);
-
-                            JPanel commentiPanel = new JPanel();
-                            commentiPanel.setLayout(new BoxLayout(commentiPanel, BoxLayout.Y_AXIS));
-                            commentiPanel.setBackground(bgColor);
-                            commentiPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
-
-                            List<CommentoGiudice> commenti = doc.getCommentiGiudici();
-                            if (commenti == null || commenti.isEmpty()) {
-                                JLabel nessunCommento = new JLabel("Nessun commento dai giudici.");
-                                nessunCommento.setFont(fieldFont);
-                                nessunCommento.setAlignmentX(Component.LEFT_ALIGNMENT);
-                                commentiPanel.add(nessunCommento);
-                            } else {
-                                for (CommentoGiudice c : commenti) {
-                                    JLabel commentoLabel = new JLabel(c.getGiudice() + ": " + c.getTesto());
-                                    commentoLabel.setFont(fieldFont);
-                                    commentoLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
-                                    commentiPanel.add(commentoLabel);
-                                }
-                            }
-                            docPanel.add(commentiPanel);
-                            docPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
-                            documentiPanel.add(docPanel);
-                            documentiPanel.add(Box.createVerticalStrut(8));
-                        }
-                    }
-                    documentiPanel.revalidate();
-                    documentiPanel.repaint();
-                    // --- FINE BLOCCO AGGIORNAMENTO ---
-                }
-            }
-        });
+            mostraDocumentiTeam(documentiPanel, teamUser);
+        }
     }
     public JFrame getFramePartecipante() {
         return frameAreaPartecipante;
     }
-
 }
