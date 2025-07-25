@@ -6,6 +6,7 @@ import model.Organizzatore;
 
 import javax.swing.*;
 import java.awt.*;
+import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -37,9 +38,9 @@ public class CreazioneEventi {
     private JFrame frameInviti;
     private Organizzatore organizzatore;
 
-    public CreazioneEventi(Controller controller, Organizzatore organizzatore, JFrame frameAreaAccesso, JFrame frameAreaInvito) {
+    public CreazioneEventi(Controller controller, Organizzatore organizzatoreEvento, JFrame frameAreaAccesso, JFrame frameAreaInvito) {
         this.controller = controller;
-        this.organizzatore = organizzatore;
+        this.organizzatore = organizzatoreEvento;
         frameAccesso = frameAreaAccesso;
         frameInviti = frameAreaInvito;
         frameCreazioneEventi = new JFrame("Creazione Eventi");
@@ -47,6 +48,7 @@ public class CreazioneEventi {
         frameCreazioneEventi.setSize(600, 600);
         frameCreazioneEventi.setContentPane(mainPanel);
         frameCreazioneEventi.setLocationRelativeTo(null);
+        frameCreazioneEventi.setDefaultCloseOperation(EXIT_ON_CLOSE);
         frameCreazioneEventi.setVisible(true);
 
         // --- Stile coerente con AreaOrganizzatore ---

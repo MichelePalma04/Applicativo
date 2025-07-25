@@ -8,6 +8,7 @@ import model.Partecipante;
 
 import javax.swing.*;
 import java.awt.*;
+import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -45,6 +46,7 @@ public class ViewEvento {
         frameEventi.pack();
         frameEventi.setSize(500,500);
         frameEventi.setLocationRelativeTo(null);
+        frameEventi.setDefaultCloseOperation(EXIT_ON_CLOSE);
 
         panelEventi.setLayout(new BoxLayout(panelEventi, BoxLayout.Y_AXIS));
 
@@ -73,16 +75,21 @@ public class ViewEvento {
             Partecipante partecipante = controller.getPartecipanteDaDB(loginUtente, ev.getId());
             Giudice giudice = controller.getGiudiceEvento(loginUtente, ev.getId());
 
-            if(giudice != null) {
+
+            boolean isGiudice = giudice != null;
+            boolean isPartecipante = partecipante != null;
+            boolean eventoFinito = ev.getDataFine().isBefore(LocalDate.now());
+
+            if (isGiudice) {
                 iscrivitiButton.setVisible(false);
                 visualizzaArea.setVisible(false);
                 areaGiudice.setVisible(true);
-            }else if(partecipante != null) {
+            } else if (isPartecipante) {
                 iscrivitiButton.setVisible(false);
                 visualizzaArea.setVisible(true);
             }
 
-            if(ev.getDataFine().isBefore(LocalDate.now())) {
+            if (eventoFinito) {
                 classificaButton.setVisible(true);
             }
 
@@ -103,7 +110,6 @@ public class ViewEvento {
 
             iscrivitiButton.addActionListener(e ->{
 
-                    // Verifica se l'utente è già partecipante per questo evento (controllo su DB)
                     Partecipante p = controller.getPartecipanteDaDB(loginUtente, ev.getId());
                     if (p != null) {
                         // Già iscritto: mostra solo l'area partecipante
@@ -115,19 +121,17 @@ public class ViewEvento {
                         return;
                     }
 
-                    // Tenta iscrizione su DB
-                    boolean successo = controller.iscriviPartecipante(loginUtente, ev.getId());
-                    if (successo) {
-                        JOptionPane.showMessageDialog(frameEventi, "Iscrizione completata con successo!");
-                        iscrivitiButton.setVisible(false);
-                        visualizzaArea.setVisible(true);
-
-                        AreaPartecipante areaGUI = new AreaPartecipante(loginUtente, ev.getId(), frameEventi, frameAccedi, frameNotifiche, frameAreaPartecipante, controller);
-                        areaGUI.getFramePartecipante().setVisible(true);
-                        frameEventi.setVisible(false);
-                    } else {
-                        JOptionPane.showMessageDialog(frameEventi, "Errore durante l'iscrizione!");
-                    }
+                boolean successo = controller.iscriviPartecipante(loginUtente, ev.getId());
+                if (!successo) {
+                    JOptionPane.showMessageDialog(frameEventi, "Errore durante l'iscrizione!");
+                    return;
+                }
+                JOptionPane.showMessageDialog(frameEventi, "Iscrizione completata con successo!");
+                iscrivitiButton.setVisible(false);
+                visualizzaArea.setVisible(true);
+                AreaPartecipante areaGUI = new AreaPartecipante(loginUtente, ev.getId(), frameEventi, frameAccedi, frameNotifiche, frameAreaPartecipante, controller);
+                areaGUI.getFramePartecipante().setVisible(true);
+                frameEventi.setVisible(false);
             });
 
             panelEventi.add(eventoPanel);
@@ -143,13 +147,10 @@ public class ViewEvento {
         panelEventi.revalidate();
         panelEventi.repaint();
 
-
-
         logOutButton1.addActionListener(e -> {
             frameEventi.setVisible(false);
             frameAccedi.setVisible(true);
         });
-
         visualizzaButton.addActionListener(e ->{
             VediNotifica notifica = new VediNotifica(controller, loginUtente, frameEventi, frameGiudice, frameAccedi, frameAreaPartecipante );
             notifica.getFrameNotifiche().setVisible(true);
