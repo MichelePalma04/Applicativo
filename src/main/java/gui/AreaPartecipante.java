@@ -48,6 +48,58 @@ public class AreaPartecipante {
         frameNotifica = frameAreaNotifiche;
         frameGiudice = frameAreaGiudice;
 
+        Color bgColor = new Color(240, 248, 255);      // chiaro azzurrino
+        Color btnColor = new Color(30, 144, 255);
+        Color btnHoverColor = new Color(65, 105, 225);
+        Color fieldBg = Color.WHITE;
+        Color fieldBorder = new Color(210, 210, 210);
+        Font labelFont = new Font("SansSerif", Font.BOLD, 16);
+        Font fieldFont = new Font("SansSerif", Font.PLAIN, 15);
+
+
+        if (panel != null) panel.setBackground(bgColor);
+        if (panel2 != null) panel2.setBackground(bgColor);
+
+        if (benvenuto != null) benvenuto.setFont(labelFont);
+        if (teamLabel != null) teamLabel.setFont(labelFont);
+        if (avviso != null) avviso.setFont(labelFont);
+        if (messaggio != null) messaggio.setFont(fieldFont);
+        if (problema != null) problema.setFont(labelFont);
+        if (nomeTeam != null) nomeTeam.setFont(labelFont);
+        if (inserisciDocumento != null) inserisciDocumento.setFont(fieldFont);
+
+        JButton[] allButtons = {homeButton, uniscitiButton, sfogliaDocumenti, creaTeamButton};
+        for (JButton btn : allButtons) {
+            if (btn == null) continue;
+            btn.setBackground(btnColor);
+            btn.setForeground(Color.WHITE);
+            btn.setFocusPainted(false);
+            btn.setFont(labelFont);
+            btn.setBorder(BorderFactory.createEmptyBorder(10, 25, 10, 25));
+            btn.addMouseListener(new java.awt.event.MouseAdapter() {
+                public void mouseEntered(java.awt.event.MouseEvent evt) { btn.setBackground(btnHoverColor);}
+                public void mouseExited(java.awt.event.MouseEvent evt) { btn.setBackground(btnColor);}
+            });
+        }
+
+        if (comboBox1 != null) {
+            comboBox1.setFont(fieldFont);
+            comboBox1.setBackground(fieldBg);
+            comboBox1.setBorder(BorderFactory.createCompoundBorder(
+                    BorderFactory.createLineBorder(fieldBorder, 1),
+                    BorderFactory.createEmptyBorder(5, 8, 5, 8)
+            ));
+        }
+        if (nomeField != null) {
+            nomeField.setFont(fieldFont);
+            nomeField.setBackground(fieldBg);
+            nomeField.setBorder(BorderFactory.createCompoundBorder(
+                    BorderFactory.createLineBorder(fieldBorder, 1),
+                    BorderFactory.createEmptyBorder(5, 8, 5, 8)
+            ));
+        }
+
+
         Partecipante partecipante = controller.getPartecipanteDaDB(loginPartecipante, eventoId);
         frameAreaPartecipante = new JFrame("Area Personale " + loginPartecipante);
         frameAreaPartecipante.setContentPane(panel);
@@ -87,6 +139,8 @@ public class AreaPartecipante {
         boolean inTeam = (teamUtente != null);
         String problemaEvento = controller.getProblemaEvento(eventoId);
         JPanel documentiPanel = new JPanel();
+        documentiPanel.setBackground(bgColor);
+
         documentiPanel.setLayout(new BoxLayout(documentiPanel, BoxLayout.Y_AXIS));
         panel2.setLayout(new BoxLayout(panel2, BoxLayout.Y_AXIS)); // esempio
         panel2.add(documentiPanel);
@@ -118,18 +172,36 @@ public class AreaPartecipante {
             List<Documento> documenti = controller.getDocumentiTeamEventoPartecipante(eventoId, teamUtente.getNomeTeam(), loginPartecipante);
             if (documenti.isEmpty()) {
                 JLabel noDocLabel = new JLabel("Nessun documento caricato dal tuo team.");
+                noDocLabel.setFont(fieldFont);
+                noDocLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
                 documentiPanel.add(noDocLabel);
             } else {
-                documentiPanel.removeAll();
-                documentiPanel.setLayout(new BoxLayout(documentiPanel, BoxLayout.Y_AXIS));
+                //documentiPanel.removeAll();
+                //documentiPanel.setLayout(new BoxLayout(documentiPanel, BoxLayout.Y_AXIS));
                 for (Documento doc : documenti) {
                     JPanel docPanel = new JPanel();
                     docPanel.setLayout(new BoxLayout(docPanel, BoxLayout.Y_AXIS));
+                    docPanel.setBackground(bgColor);
+                    docPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+
                     JPanel rigaPanel = new JPanel();
-                    rigaPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+                    rigaPanel.setLayout(new BoxLayout(rigaPanel, BoxLayout.X_AXIS));
+                    rigaPanel.setBackground(bgColor);
+                    rigaPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+
                     JLabel nomeDocLabel = new JLabel("Documento caricato: " + doc.getFile().getName());
+                    nomeDocLabel.setFont(fieldFont);
 
                     JButton visualizzaDocButton = new JButton("Visualizza");
+                    visualizzaDocButton.setBackground(btnColor);
+                    visualizzaDocButton.setForeground(Color.WHITE);
+                    visualizzaDocButton.setFont(new Font("SansSerif", Font.BOLD, 13));
+                    visualizzaDocButton.setFocusPainted(false);
+                    visualizzaDocButton.setBorder(BorderFactory.createEmptyBorder(6, 18, 6, 18));
+                    visualizzaDocButton.addMouseListener(new java.awt.event.MouseAdapter() {
+                        public void mouseEntered(java.awt.event.MouseEvent evt) { visualizzaDocButton.setBackground(btnHoverColor);}
+                        public void mouseExited(java.awt.event.MouseEvent evt) { visualizzaDocButton.setBackground(btnColor);}
+                    });
                     visualizzaDocButton.addActionListener(e -> {
                         try {
                             Desktop.getDesktop().open(doc.getFile());
@@ -138,24 +210,38 @@ public class AreaPartecipante {
                         }
                     });
                     rigaPanel.add(nomeDocLabel);
+                    rigaPanel.add(Box.createRigidArea(new Dimension(10, 0)));
                     rigaPanel.add(visualizzaDocButton);
+
                     docPanel.add(rigaPanel);
+
+                    JPanel commentiPanel = new JPanel();
+                    commentiPanel.setLayout(new BoxLayout(commentiPanel, BoxLayout.Y_AXIS));
+                    commentiPanel.setBackground(bgColor);
+                    commentiPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
                     List<CommentoGiudice> commenti = doc.getCommentiGiudici();
                     if (commenti == null || commenti.isEmpty()) {
                         JLabel nessunCommento = new JLabel("Nessun commento dai giudici.");
-                        docPanel.add(nessunCommento);
+                        nessunCommento.setFont(fieldFont);
+                        nessunCommento.setAlignmentX(Component.LEFT_ALIGNMENT);
+                        commentiPanel.add(nessunCommento);
                     } else {
                         for (CommentoGiudice c : commenti) {
                             JLabel commentoLabel = new JLabel(c.getGiudice() + ": " + c.getTesto()+"\n");
-                            commentoLabel.setFont(commentoLabel.getFont().deriveFont(Font.PLAIN));
-                            //commentoLabel.setAlignmentX(Component.LEFT_ALIGNMENT);// Puoi personalizzare il font qui
-                            docPanel.add(commentoLabel);
+                            commentoLabel.setFont(fieldFont);
+                            commentoLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+                            commentiPanel.add(commentoLabel);
                         }
                     }
+                    docPanel.add(commentiPanel);
+                    docPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
                     documentiPanel.add(docPanel);
+                    documentiPanel.add(Box.createVerticalStrut(8));
+
                 }
             }
+
             documentiPanel.revalidate();
             documentiPanel.repaint();
         } else {
@@ -339,21 +425,40 @@ public class AreaPartecipante {
                     JOptionPane.showMessageDialog(frameAreaPartecipante, "Documento caricato con successo!");
                   //  --- AGGIUNGI QUESTO BLOCCO PER AGGIORNARE LA LISTA DOCUMENTI ---
                             // Recupera di nuovo la lista dei documenti del team
-                            List<Documento> documentiAggiornati = controller.getDocumentiTeamEventoPartecipante(eventoId, teamUser.getNomeTeam(), loginPartecipante);
 
+                    List<Documento> documentiAggiornati = controller.getDocumentiTeamEventoPartecipante(eventoId, teamUser.getNomeTeam(), loginPartecipante);
                     documentiPanel.removeAll(); // pulisci il pannello
                     if (documentiAggiornati.isEmpty()) {
-                        JLabel noDocLabel = new JLabel("Nessun documento caricato dal tuo team.");
+                        JLabel noDocLabel = new JLabel("Nessun documento caricato");
+                        noDocLabel.setFont(fieldFont);
+                        noDocLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
                         documentiPanel.add(noDocLabel);
                     } else {
+
                         for (Documento doc : documentiAggiornati) {
                             JPanel docPanel = new JPanel();
                             docPanel.setLayout(new BoxLayout(docPanel, BoxLayout.Y_AXIS));
+                            docPanel.setBackground(bgColor);
+                            docPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+
                             JPanel rigaPanel = new JPanel();
-                            rigaPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+                            rigaPanel.setLayout(new BoxLayout(rigaPanel, BoxLayout.X_AXIS));
+                            rigaPanel.setBackground(bgColor);
+                            rigaPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+
                             JLabel nomeDocLabel = new JLabel("Documento caricato: " + doc.getFile().getName());
+                            nomeDocLabel.setFont(fieldFont);
 
                             JButton visualizzaDocButton = new JButton("Visualizza");
+                            visualizzaDocButton.setBackground(btnColor);
+                            visualizzaDocButton.setForeground(Color.WHITE);
+                            visualizzaDocButton.setFont(new Font("SansSerif", Font.BOLD, 13));
+                            visualizzaDocButton.setFocusPainted(false);
+                            visualizzaDocButton.setBorder(BorderFactory.createEmptyBorder(6, 18, 6, 18));
+                            visualizzaDocButton.addMouseListener(new java.awt.event.MouseAdapter() {
+                                public void mouseEntered(java.awt.event.MouseEvent evt) { visualizzaDocButton.setBackground(btnHoverColor);}
+                                public void mouseExited(java.awt.event.MouseEvent evt) { visualizzaDocButton.setBackground(btnColor);}
+                            });
                             visualizzaDocButton.addActionListener(ev -> {
                                 try {
                                     Desktop.getDesktop().open(doc.getFile());
@@ -362,21 +467,34 @@ public class AreaPartecipante {
                                 }
                             });
                             rigaPanel.add(nomeDocLabel);
+                            rigaPanel.add(Box.createRigidArea(new Dimension(10, 0)));
                             rigaPanel.add(visualizzaDocButton);
+
                             docPanel.add(rigaPanel);
+
+                            JPanel commentiPanel = new JPanel();
+                            commentiPanel.setLayout(new BoxLayout(commentiPanel, BoxLayout.Y_AXIS));
+                            commentiPanel.setBackground(bgColor);
+                            commentiPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
                             List<CommentoGiudice> commenti = doc.getCommentiGiudici();
                             if (commenti == null || commenti.isEmpty()) {
                                 JLabel nessunCommento = new JLabel("Nessun commento dai giudici.");
-                                docPanel.add(nessunCommento);
+                                nessunCommento.setFont(fieldFont);
+                                nessunCommento.setAlignmentX(Component.LEFT_ALIGNMENT);
+                                commentiPanel.add(nessunCommento);
                             } else {
                                 for (CommentoGiudice c : commenti) {
                                     JLabel commentoLabel = new JLabel(c.getGiudice() + ": " + c.getTesto());
-                                    commentoLabel.setFont(commentoLabel.getFont().deriveFont(Font.PLAIN));
-                                    docPanel.add(commentoLabel);
+                                    commentoLabel.setFont(fieldFont);
+                                    commentoLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+                                    commentiPanel.add(commentoLabel);
                                 }
                             }
+                            docPanel.add(commentiPanel);
+                            docPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
                             documentiPanel.add(docPanel);
+                            documentiPanel.add(Box.createVerticalStrut(8));
                         }
                     }
                     documentiPanel.revalidate();
