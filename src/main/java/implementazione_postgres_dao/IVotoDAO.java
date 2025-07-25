@@ -100,29 +100,6 @@ public class IVotoDAO implements VotoDAO {
     }
 
     /**
-     * Aggiunge un voto assegnato da un giudice ad un team per un evento.
-     * @param voto voto da aggiungere
-     * @param eventoId identificativo dell'evento
-     * @return true se l'inserimento ha successo, false altrimenti
-     */
-    @Override
-    public boolean aggiungiVoto(Voto voto, int eventoId) {
-        String sql = "INSERT INTO voto (giudice_login, team_nome, evento_id, votazione) VALUES (?, ?, ?, ?)";
-        try (PreparedStatement ps = connection.prepareStatement(sql)) {
-            ps.setString(1, voto.getGiudice().getLogin());
-            ps.setString(2, voto.getTeam().getNomeTeam());
-            ps.setInt(3, eventoId); // supponendo che ogni team abbia almeno un partecipante con almeno un evento
-            ps.setInt(4, voto.getVotazione());
-            ps.executeUpdate();
-            return true;
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
-
-
-    /**
      * Aggiorna il valore di un voto.
      * @param voto voto aggiornato
      * @param id identificativo del voto da aggiornare
