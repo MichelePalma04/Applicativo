@@ -160,7 +160,7 @@ public class AreaOrganizzatore {
         });
 
         creaEventiButton.addActionListener(e -> {
-            CreazioneEventi nuovaGUI = new CreazioneEventi(controller, frameOrganizzatore, organizzatore, frameAccessi, frameInviti);
+            CreazioneEventi nuovaGUI = new CreazioneEventi(controller, organizzatore, frameAccessi, frameInviti);
             nuovaGUI.getFrameCreazioneEventi().setVisible(true);
             frameOrganizzatore.setVisible(false);
         });

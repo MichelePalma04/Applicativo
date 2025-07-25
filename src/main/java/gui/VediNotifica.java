@@ -4,7 +4,6 @@ import controller.Controller;
 import model.Evento;
 
 import model.InvitoGiudice;
-import model.Utente;
 
 import javax.swing.*;
 import java.awt.*;
@@ -53,7 +52,6 @@ public class VediNotifica {
         });
     }
     private void aggiornaInviti() {
-        Utente utente = controller.getUtenteDaDB(loginUtente);
         panelInviti.removeAll();
 
         List<InvitoGiudice> inviti = controller.getInvitiPendentiUtente(loginUtente);

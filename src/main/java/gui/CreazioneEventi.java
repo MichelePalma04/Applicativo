@@ -6,8 +6,7 @@ import model.Organizzatore;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 
@@ -23,26 +22,24 @@ public class CreazioneEventi {
     private JTextField dimensioneField;
     private JTextField inizoRegField;
     private JTextField fineRegField;
-    private JLabel titolo;
-    private JLabel sede;
-    private JLabel dataInizio;
-    private JLabel dataFine;
-    private JLabel maxIscritti;
-    private JLabel dimMax;
-    private JLabel inizioReg;
-    private JLabel fineReg;
+    private JLabel titoloLabel;
+    private JLabel sedeLabel;
+    private JLabel dataInizioLabel;
+    private JLabel dataFineLabel;
+    private JLabel maxIscrittiLabel;
+    private JLabel dimMaxLabel;
+    private JLabel inizioRegLabel;
+    private JLabel fineRegLabel;
     private JButton backButton;
     private Controller controller;
     private JFrame frameCreazioneEventi;
-    private JFrame frameOrganizzatore;
     private JFrame frameAccesso;
     private JFrame frameInviti;
     private Organizzatore organizzatore;
 
-    public CreazioneEventi(Controller controller, JFrame frameAreaOrganizzatore, Organizzatore organizzatore, JFrame frameAreaAccesso, JFrame frameAreaInvito) {
+    public CreazioneEventi(Controller controller, Organizzatore organizzatore, JFrame frameAreaAccesso, JFrame frameAreaInvito) {
         this.controller = controller;
         this.organizzatore = organizzatore;
-        frameOrganizzatore = frameAreaOrganizzatore;
         frameAccesso = frameAreaAccesso;
         frameInviti = frameAreaInvito;
         frameCreazioneEventi = new JFrame("Creazione Eventi");
@@ -65,14 +62,14 @@ public class CreazioneEventi {
 
         // Label styling
         benvenuto.setFont(labelFont);
-        titolo.setFont(labelFont);
-        sede.setFont(labelFont);
-        dataInizio.setFont(labelFont);
-        dataFine.setFont(labelFont);
-        maxIscritti.setFont(labelFont);
-        dimMax.setFont(labelFont);
-        inizioReg.setFont(labelFont);
-        fineReg.setFont(labelFont);
+        titoloLabel.setFont(labelFont);
+        sedeLabel.setFont(labelFont);
+        dataInizioLabel.setFont(labelFont);
+        dataFineLabel.setFont(labelFont);
+        maxIscrittiLabel.setFont(labelFont);
+        dimMaxLabel.setFont(labelFont);
+        inizioRegLabel.setFont(labelFont);
+        fineRegLabel.setFont(labelFont);
 
 
         // Field styling
@@ -98,82 +95,65 @@ public class CreazioneEventi {
 
         // Effetto hover pulsanti
         creaEventoButton.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) { creaEventoButton.setBackground(btnHoverColor);}
-            public void mouseExited(java.awt.event.MouseEvent evt) { creaEventoButton.setBackground(btnColor);}
+            @Override
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                creaEventoButton.setBackground(btnHoverColor);
+            }
+            @Override
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                creaEventoButton.setBackground(btnColor);
+            }
         });
         backButton.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) { backButton.setBackground(btnHoverColor);}
-            public void mouseExited(java.awt.event.MouseEvent evt) { backButton.setBackground(btnColor);}
+            @Override
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                backButton.setBackground(btnHoverColor);
+            }
+            @Override
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                backButton.setBackground(btnColor);
+            }
         });
 
         benvenuto.setText("Benvenuto!");
 
-        backButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
+        backButton.addActionListener(e -> {
+            frameCreazioneEventi.dispose();
+            AreaOrganizzatore nuovaGUI = new AreaOrganizzatore(controller, organizzatore, frameInviti, frameAccesso);
+            nuovaGUI.getFrameOrganizzatore().setVisible(true);
+        });
+
+        creaEventoButton.addActionListener(e -> {
+            String titolo = titoloField.getText();
+            String sede = sedeField.getText();
+
+            // Controlli di validità e parsing sicuro!
+            LocalDate dataInizio;
+            LocalDate dataFine;
+            LocalDate inizioReg;
+            LocalDate fineReg;
+            int maxIscritti;
+            int dimensione;
+            try {
+                dataInizio = LocalDate.parse(dataInizioField.getText());
+                dataFine = LocalDate.parse(dataFineField.getText());
+                inizioReg = LocalDate.parse(inizoRegField.getText());
+                fineReg = LocalDate.parse(fineRegField.getText());
+                maxIscritti = Integer.parseInt(maxIscrittiField.getText());
+                dimensione = Integer.parseInt(dimensioneField.getText());
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(frameCreazioneEventi, "Controlla i campi: errore di formato.", "Errore", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            Evento nuovoEvento = new Evento(titolo, sede, dataInizio, dataFine, maxIscritti, dimensione, inizioReg, fineReg, organizzatore, new ArrayList<>(), new ArrayList<>());
+            Evento eventoCreato = controller.creaEvento(nuovoEvento);
+            if(eventoCreato != null) {
+                JOptionPane.showMessageDialog(frameCreazioneEventi , "Evento creato con successo");
                 frameCreazioneEventi.dispose();
-                AreaOrganizzatore nuovaGUI = new AreaOrganizzatore(controller, organizzatore, frameInviti, frameAccesso);
+                AreaOrganizzatore nuovaGUI = new AreaOrganizzatore(controller, organizzatore, frameAreaInvito , frameAreaAccesso);
                 nuovaGUI.getFrameOrganizzatore().setVisible(true);
-            }
-        });
-
-       /* creaEventoButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String titolo = titoloField.getText();
-                String sede = sedeField.getText();
-                LocalDate dataInizio = LocalDate.parse(dataInizioField.getText());
-                LocalDate dataFine = LocalDate.parse(dataFineField.getText());
-                int maxIscritti = Integer.parseInt(maxIscrittiField.getText());
-                int dimensione = Integer.parseInt(dimensioneField.getText());
-                LocalDate inizioReg = LocalDate.parse(inizoRegField.getText());
-                LocalDate fineReg = LocalDate.parse(fineRegField.getText());
-
-                Evento nuovoEvento = controller.creaEvento(titolo, sede, dataInizio, dataFine, maxIscritti, dimensione, inizioReg, fineReg, organizzatore);
-                if(nuovoEvento != null) {
-                    JOptionPane.showMessageDialog(frameCreazioneEventi , "Evento creato con successo");
-                    frameCreazioneEventi.dispose();
-                    AreaOrganizzatore nuovaGUI = new AreaOrganizzatore(controller, organizzatore, frameI, frameA);
-                    nuovaGUI.frameOrganizzatore.setVisible(true);
-                }else{
-                    JOptionPane.showMessageDialog(frameCreazioneEventi, "Errore nella creazione evento", "Error", JOptionPane.ERROR_MESSAGE);
-                }
-            }
-        });
-        */
-
-        creaEventoButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String titolo = titoloField.getText();
-                String sede = sedeField.getText();
-
-                // Controlli di validità e parsing sicuro!
-                LocalDate dataInizio, dataFine, inizioReg, fineReg;
-                int maxIscritti, dimensione;
-                try {
-                    dataInizio = LocalDate.parse(dataInizioField.getText());
-                    dataFine = LocalDate.parse(dataFineField.getText());
-                    inizioReg = LocalDate.parse(inizoRegField.getText());
-                    fineReg = LocalDate.parse(fineRegField.getText());
-                    maxIscritti = Integer.parseInt(maxIscrittiField.getText());
-                    dimensione = Integer.parseInt(dimensioneField.getText());
-                } catch (Exception ex) {
-                    JOptionPane.showMessageDialog(frameCreazioneEventi, "Controlla i campi: errore di formato.", "Errore", JOptionPane.ERROR_MESSAGE);
-                    return;
-                }
-
-                Evento nuovoEvento = new Evento(titolo, sede, dataInizio, dataFine, maxIscritti, dimensione, inizioReg, fineReg, organizzatore, new ArrayList<>(), new ArrayList<>());
-
-                Evento eventoCreato = controller.creaEvento(nuovoEvento);
-                if(eventoCreato != null) {
-                    JOptionPane.showMessageDialog(frameCreazioneEventi , "Evento creato con successo");
-                    frameCreazioneEventi.dispose();
-                    AreaOrganizzatore nuovaGUI = new AreaOrganizzatore(controller, organizzatore, frameAreaInvito , frameAreaAccesso);
-                    nuovaGUI.getFrameOrganizzatore().setVisible(true);
-                } else {
-                    JOptionPane.showMessageDialog(frameCreazioneEventi, "Errore nella creazione evento", "Error", JOptionPane.ERROR_MESSAGE);
-                }
+            } else {
+                JOptionPane.showMessageDialog(frameCreazioneEventi, "Errore nella creazione evento", "Error", JOptionPane.ERROR_MESSAGE);
             }
         });
     }

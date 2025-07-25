@@ -5,8 +5,7 @@ import model.*;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+
 import java.util.List;
 
 
@@ -50,12 +49,9 @@ public class Classifica {
             panelVoti.add(riga);
         }
 
-        backButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                frameClassifica.dispose();
-                frameEventi.setVisible(true);
-            }
+        backButton.addActionListener(e -> {
+            frameClassifica.dispose();
+            frameEventi.setVisible(true);
         });
     }
     public JFrame getFrameClassifica() {

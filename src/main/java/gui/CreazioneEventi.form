@@ -16,7 +16,7 @@
           <text value="Label"/>
         </properties>
       </component>
-      <component id="54b5c" class="javax.swing.JLabel" binding="titolo">
+      <component id="54b5c" class="javax.swing.JLabel" binding="titoloLabel">
         <constraints>
           <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
@@ -32,7 +32,7 @@
         </constraints>
         <properties/>
       </component>
-      <component id="6bee8" class="javax.swing.JLabel" binding="sede">
+      <component id="6bee8" class="javax.swing.JLabel" binding="sedeLabel">
         <constraints>
           <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
@@ -48,7 +48,7 @@
         </constraints>
         <properties/>
       </component>
-      <component id="3c7d1" class="javax.swing.JLabel" binding="dataInizio">
+      <component id="3c7d1" class="javax.swing.JLabel" binding="dataInizioLabel">
         <constraints>
           <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
@@ -56,7 +56,7 @@
           <text value="Data Inizio: "/>
         </properties>
       </component>
-      <component id="dc27" class="javax.swing.JLabel" binding="dataFine">
+      <component id="dc27" class="javax.swing.JLabel" binding="dataFineLabel">
         <constraints>
           <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
@@ -64,7 +64,7 @@
           <text value="Data Fine: "/>
         </properties>
       </component>
-      <component id="1d67c" class="javax.swing.JLabel" binding="maxIscritti">
+      <component id="1d67c" class="javax.swing.JLabel" binding="maxIscrittiLabel">
         <constraints>
           <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
@@ -72,7 +72,7 @@
           <text value="N° massimo iscritti: "/>
         </properties>
       </component>
-      <component id="434b0" class="javax.swing.JLabel" binding="dimMax">
+      <component id="434b0" class="javax.swing.JLabel" binding="dimMaxLabel">
         <constraints>
           <grid row="6" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
@@ -80,7 +80,7 @@
           <text value="Dimensione massima team: "/>
         </properties>
       </component>
-      <component id="a3122" class="javax.swing.JLabel" binding="inizioReg">
+      <component id="a3122" class="javax.swing.JLabel" binding="inizioRegLabel">
         <constraints>
           <grid row="7" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
@@ -88,7 +88,7 @@
           <text value="Inizio registrazioni: "/>
         </properties>
       </component>
-      <component id="80ff4" class="javax.swing.JLabel" binding="fineReg">
+      <component id="80ff4" class="javax.swing.JLabel" binding="fineRegLabel">
         <constraints>
           <grid row="8" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
