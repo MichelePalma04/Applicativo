@@ -107,8 +107,10 @@ public class VediNotifica {
         } else {
             for (InvitoGiudice invito : inviti) {
                 Evento evento = invito.getEvento();
-                JPanel riga = new JPanel(new FlowLayout(FlowLayout.LEFT,  10, 8));
+                JPanel riga = new JPanel(new FlowLayout(FlowLayout.LEFT,  10, 4));
                 riga.setOpaque(false);
+                riga.setMaximumSize(new Dimension(Integer.MAX_VALUE, 42));
+                riga.setAlignmentX(Component.LEFT_ALIGNMENT);
                 JLabel infoLabel = new JLabel(
                         "<html>Sei stato invitato da <b>" + evento.getOrganizzatore().getLogin() + "</b> per l'evento <b>" + evento.getTitolo() + "</b></html>"
                 );
