@@ -9,7 +9,7 @@ public class ConnessioneDatabase {
     public Connection connection = null;
     private String nome = "postgres";
     private String password = "altalena0789";
-    private String url = "jdbc:postgresql://localhost:5432/Hackaton";
+    private String url = "jdbc:postgresql://localhost:5432/Hackaton1";
     private String driver = "org.postgresql.Driver";
 
     private ConnessioneDatabase() throws SQLException {
