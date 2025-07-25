@@ -1,5 +1,4 @@
 package gui;
-
 import controller.Controller;
 import model.*;
 
@@ -9,31 +8,83 @@ import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
 
 import java.util.List;
 
-
+/**
+ * GUI per la visualizzazione della classifica finale di un evento nell'applicazione Hackaton.
+ * <p>
+ * Mostra la lista dei team partecipanti ordinati per media dei voti ricevuti,
+ * visualizzando posizione, nome del team e media dei voti.
+ * <p>
+ * L'organizzazione della classifica è dinamica: la lista è ordinata in tempo reale
+ * in base alla media dei voti calcolata per ciascun team.
+ * <p>
+ * Include un bottone per tornare all'area eventi.
+ *
+ * <ul>
+ *   <li>Visualizza titolo dell'evento e classifica finale</li>
+ *   <li>Ordina i team per media voti decrescente</li>
+ *   <li>Gestisce lo stile grafico e l'effetto hover sui bottoni</li>
+ *   <li>Permette di tornare indietro alla schermata eventi</li>
+ * </ul>
+ */
 public class Classifica {
+
+    /** Pannello principale della GUI classifica. */
     private JPanel mainPanel;
+
+    /** Label di ingresso/titolo. */
     private JLabel ingresso;
+
+    /** ScrollPane per scorrere tra i team. */
     private JScrollPane scroll;
+
+    /** Pannello che contiene le righe dei voti e dei team. */
     private JPanel panelVoti;
+
+    /** Bottone per tornare all'area eventi. */
     private JButton backButton;
+
+    /** Controller logico dell'applicazione. */
     private Controller controller;
+
+    /** Frame principale della classifica. */
     private JFrame frameClassifica;
+
+    /** Frame dell'area eventi per il ritorno. */
     private JFrame frameEventi;
+
+    /** Identificativo dell'evento visualizzato. */
     private int eventoId;
 
+    /** Nome del font da utilizzare per le componenti grafiche. */
     private static final String FONT_FAMILY = "SansSerif";
-    private static final Color BG_COLOR = new Color(240, 248, 255);      // chiaro azzurrino
+
+    /** Colore di sfondo principale dell'interfaccia (azzurro molto chiaro). */
+    private static final Color BG_COLOR = new Color(240, 248, 255);
+
+    /** Colore di sfondo dei pulsanti. */
     private static final Color BTN_COLOR = new Color(30, 144, 255);
+
+    /** Colore di sfondo dei pulsanti quando il mouse è sopra (hover). */
     private static final Color BTN_HOVER_COLOR = new Color(65, 105, 225);
-    private static final Color RIGA_COLOR = new Color(225, 235, 245);    // leggermente diverso per le righe
+
+    /** Colore di sfondo alternativo per le righe (leggermente diverso per evidenziare le righe). */
+    private static final Color RIGA_COLOR = new Color(225, 235, 245);
+
+    /** Colore dei bordi utilizzati nei campi e nei pannelli. */
     private static final Color BORDER_COLOR = new Color(210, 210, 210);
 
+    /**
+     * Costruisce la GUI della classifica per uno specifico evento, popolando la lista dei team ordinata per media voti.
+     *
+     * @param idEvento identificativo dell'evento
+     * @param controller Controller logico dell'applicazione
+     * @param frameAreaEventi frame dell'area eventi per il ritorno
+     */
     public Classifica(int idEvento, Controller controller, JFrame frameAreaEventi) {
         this.controller = controller;
         this.frameEventi = frameAreaEventi;
         this.eventoId = idEvento;
 
-        // Stili
         Font titleFont = new Font(FONT_FAMILY, Font.BOLD, 16);
         Font teamFont = new Font(FONT_FAMILY, Font.PLAIN, 15);
         Font btnFont = new Font(FONT_FAMILY, Font.BOLD, 14);
@@ -50,14 +101,12 @@ public class Classifica {
             panelVoti.setBackground(BG_COLOR);
         }
 
-        // Scroll stile coerente
         if (scroll != null) {
             scroll.getVerticalScrollBar().setUnitIncrement(20);
             scroll.setBorder(BorderFactory.createEmptyBorder());
             scroll.getViewport().setBackground(BG_COLOR);
         }
 
-        // Titolo ingresso
         Evento evento = controller.getEventoById(eventoId);
         if (ingresso != null) {
             ingresso.setText("Classifica finale di " + evento.getTitolo());
@@ -65,7 +114,6 @@ public class Classifica {
             ingresso.setHorizontalAlignment(SwingConstants.CENTER);
         }
 
-        // --- Popola classifica ---
         List<Team> teams = controller.getTeamsEvento(eventoId);
         teams.sort((t1, t2) -> Double.compare(t2.mediaVoti(), t1.mediaVoti()));
         int posizione = 1;
@@ -96,7 +144,6 @@ public class Classifica {
             panelVoti.add(riga);
         }
 
-        // --- Bottone back stile coerente ---
         if (backButton != null) {
             backButton.setBackground(BTN_COLOR);
             backButton.setForeground(Color.WHITE);
@@ -112,6 +159,13 @@ public class Classifica {
         }
     }
 
+    /**
+     * Applica l'effetto hover al bottone.
+     *
+     * @param btn bottone da modificare
+     * @param normal colore normale
+     * @param hover colore in hover
+     */
     private void setButtonHover(JButton btn, Color normal, Color hover) {
         btn.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
@@ -121,6 +175,11 @@ public class Classifica {
         });
     }
 
+    /**
+     * Restituisce il frame della classifica.
+     *
+     * @return frame della classifica
+     */
     public JFrame getFrameClassifica() {
         return frameClassifica;
     }

@@ -1,5 +1,4 @@
 package gui;
-
 import controller.Controller;
 import model.*;
 
@@ -9,30 +8,82 @@ import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
 
 import java.util.List;
 
+/**
+ * GUI per l'area riservata ai giudici all'interno dell'applicazione Hackaton.
+ * <p>
+ * Permette ai giudici di:
+ * <ul>
+ *   <li>Visualizzare il benvenuto personalizzato</li>
+ *   <li>Gestire la descrizione del problema dell'evento (se responsabili)</li>
+ *   <li>Visualizzare i documenti caricati dai team</li>
+ *   <li>Votare i team alla fine dell'evento</li>
+ *   <li>Visualizzare dettagli documenti e commentare</li>
+ * </ul>
+ * <p>
+ * L'interfaccia si adatta dinamicamente in base al ruolo del giudice e allo stato dell'evento.
+ * Tutti gli stili e le interazioni sono gestiti localmente per un'esperienza utente coerente.
+ */
 public class AreaGiudice {
+
+    /** Pannello principale della GUI. */
     private JPanel mainPanel;
+
+    /** Label di benvenuto per il giudice. */
     private JLabel benvenuto;
+
+    /** ScrollPane per visualizzare l'elenco dei team e documenti. */
     private JScrollPane scroll;
+
+    /** Pannello interno dove vengono aggiunti i componenti dinamici. */
     private JPanel panel;
+
+    /** Bottone per tornare indietro. */
     private JButton back;
+
+    /** Finestra della GUI per il giudice. */
     private JFrame frameGiudice;
 
+    /** Finestra della GUI degli eventi (per tornare indietro). */
     private JFrame frameEventi;
+
+    /** Login del giudice attualmente loggato. */
     private String loginGiudice;
+
+    /** Identificativo dell'evento visualizzato. */
     private int eventoId;
 
+    /** Nome del font da utilizzare per le componenti grafiche. */
     private static final String FONT_FAMILY = "SansSerif";
+
+    /** Stringa di chiusura per i contenuti HTML, utile per formattare testi in JLabel/JEditorPane. */
     private static final String HTML_END = "</html>";
 
+    /** Controller logico dell'applicazione. */
     private Controller controller;
 
-    // --- Stili globali ---
-    private final Color bgColor = new Color(240, 248, 255); // chiaro azzurrino
+    /** Colore di sfondo principale (azzurrino chiaro). */
+    private final Color bgColor = new Color(240, 248, 255);
+
+    /** Colore dei bottoni. */
     private final Color btnColor = new Color(30, 144, 255);
+
+    /** Colore dei bottoni in hover. */
     private final Color btnHoverColor = new Color(65, 105, 225);
+
+    /** Font per le label. */
     private final Font labelFont = new Font(FONT_FAMILY, Font.BOLD, 16);
+
+    /** Font per i campi di testo. */
     private final Font fieldFont = new Font(FONT_FAMILY, Font.PLAIN, 15);
 
+    /**
+     * Costruisce l'area giudice, inizializzando la GUI e i dati relativi al giudice e all'evento.
+     *
+     * @param controller Controller dell'applicazione per la gestione logica
+     * @param giudiceLogin login del giudice attualmente loggato
+     * @param idEvento identificativo dell'evento associato
+     * @param frameAreaEventi frame della GUI eventi, per gestire il ritorno indietro
+     */
     public AreaGiudice(Controller controller, String giudiceLogin, int idEvento, JFrame frameAreaEventi) {
         this.controller = controller;
         this.loginGiudice = giudiceLogin;
@@ -57,6 +108,9 @@ public class AreaGiudice {
         setupListeners();
     }
 
+    /**
+     * Applica gli stili grafici a pannelli, bottoni e scrollbar.
+     */
     private void setupStile() {
         if (mainPanel != null) mainPanel.setBackground(bgColor);
         if (panel != null) panel.setBackground(bgColor);
@@ -79,6 +133,13 @@ public class AreaGiudice {
         }
     }
 
+    /**
+     * Imposta l'effetto hover per i bottoni.
+     *
+     * @param button bottone su cui applicare l'effetto
+     * @param color colore normale del bottone
+     * @param hoverColor colore del bottone durante l'hover
+     */
     private void setButtonHover(JButton button, Color color, Color hoverColor) {
         button.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
@@ -92,6 +153,11 @@ public class AreaGiudice {
         });
     }
 
+    /**
+     * Imposta la sezione della descrizione del problema dell'evento.
+     * Se il giudice è responsabile, permette di caricare la descrizione;
+     * altrimenti mostra la descrizione se già presente.
+     */
     private void setupProblema() {
         String problema = controller.getProblemaEvento(eventoId);
         Giudice responsabile = controller.getGiudiceDescrizione(eventoId);
@@ -156,6 +222,10 @@ public class AreaGiudice {
         }
     }
 
+    /**
+     * Imposta la sezione documenti, mostrando i documenti caricati dai team e permettendo
+     * la visualizzazione o la votazione in base allo stato dell'evento.
+     */
     private void setupDocumenti() {
         List<Team> teams = controller.getTeamsEvento(eventoId);
         boolean almenoUno = false;
@@ -182,6 +252,12 @@ public class AreaGiudice {
         }
     }
 
+    /**
+     * Aggiunge una riga per un team, permettendo la visualizzazione dei documenti
+     * o la votazione in base allo stato dell'evento.
+     *
+     * @param t team da visualizzare o votare
+     */
     private void aggiungiRigaTeam(Team t) {
         JLabel nomeTeam = new JLabel(t.getNomeTeam());
         nomeTeam.setFont(fieldFont);
@@ -199,7 +275,6 @@ public class AreaGiudice {
         boolean haVotato = controller.giudiceHaVotatoTeam(loginGiudice, t.getNomeTeam(), eventoId);
 
         if (eventoFinito) {
-            // L'evento è finito: solo voto
             if (haVotato) {
                 int votoAssegnato = controller.getVotoDiGiudiceTeam(loginGiudice, t.getNomeTeam(), eventoId);
                 rigaTeam.add(Box.createHorizontalStrut(10));
@@ -248,9 +323,7 @@ public class AreaGiudice {
                     rigaTeam.repaint();
                 });
             }
-            // NON aggiungere il bottone visualizzaDocumenti
         } else {
-            // L'evento NON è finito: solo visualizza documenti
             rigaTeam.add(Box.createHorizontalStrut(10));
             rigaTeam.add(nomeTeam);
             rigaTeam.add(Box.createHorizontalStrut(8));
@@ -266,6 +339,12 @@ public class AreaGiudice {
         }
     }
 
+    /**
+     * Crea un bottone con stile personalizzato per la GUI.
+     *
+     * @param text testo da mostrare sul bottone
+     * @return bottone creato con stile applicato
+     */
     private JButton creaStyledButton(String text) {
         JButton btn = new JButton(text);
         btn.setBackground(btnColor);
@@ -277,6 +356,9 @@ public class AreaGiudice {
         return btn;
     }
 
+    /**
+     * Imposta i listener sui bottoni della GUI (al momento solo "back").
+     */
     private void setupListeners() {
         back.addActionListener(e -> {
             frameGiudice.dispose();
@@ -284,6 +366,11 @@ public class AreaGiudice {
         });
     }
 
+    /**
+     * Restituisce il frame della GUI dell'area giudice.
+     *
+     * @return frame dell'area giudice
+     */
     public JFrame getFrameGiudice() {
         return frameGiudice;
     }

@@ -1,5 +1,4 @@
 package gui;
-
 import controller.Controller;
 import model.Evento;
 import model.Giudice;
@@ -13,24 +12,78 @@ import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
 import java.time.LocalDate;
 import java.util.List;
 
+/**
+ * GUI per la visualizzazione e gestione degli eventi accessibili dall'utente nell'applicazione Hackaton.
+ * <p>
+ * Permette all'utente di:
+ * <ul>
+ *   <li>Visualizzare la lista degli eventi disponibili tramite card interattive</li>
+ *   <li>Iscriversi come partecipante ad un evento</li>
+ *   <li>Accedere alla propria area personale di partecipante o di giudice</li>
+ *   <li>Visualizzare la classifica finale dell'evento (se concluso)</li>
+ *   <li>Visualizzare le notifiche ricevute</li>
+ *   <li>Effettuare il logout</li>
+ * </ul>
+ * <p>
+ * Gli stili grafici e le interazioni sono definiti per coerenza con il resto dell'applicazione.
+ */
 public class ViewEvento {
+
+    /** Pannello principale della GUI eventi. */
     private JPanel mainPanel;
+
+    /** Pannello che contiene le card degli eventi. */
     private JPanel panelEventi;
+
+    /** ScrollPane per scorrere tra gli eventi. */
     private JScrollPane scroll;
+
+    /** Bottone per il logout. */
     private JButton logOutButton1;
+
+    /** Bottone per visualizzare le notifiche. */
     private JButton visualizzaButton;
+
+    /** Label per le notifiche. */
     private JLabel notifiche;
+
+    /** Pannello per i bottoni in alto. */
     private JPanel panelBottoni;
+
+    /** Controller logico dell'applicazione. */
     private Controller controller;
+
+    /** Login dell'utente attualmente loggato. */
     private String loginUtente;
+
+    /** Frame principale della schermata eventi. */
     private JFrame frameEventi;
+
+    /** Frame della schermata di accesso. */
     private JFrame frameAccedi;
+
+    /** Frame dell'area partecipante. */
     private JFrame frameAreaPartecipante;
+
+    /** Frame della schermata notifiche. */
     private JFrame frameNotifiche;
+
+    /** Frame dell'area giudice. */
     private JFrame frameGiudice;
 
+    /** Font di default per la GUI. */
     private static final String FONT_FAMILY = "SansSerif";
 
+    /**
+     * Costruisce la GUI per la visualizzazione degli eventi, inizializza gli stili, listeners e popola la schermata.
+     *
+     * @param controller Controller logico dell'applicazione
+     * @param loginUser login dell'utente che consulta gli eventi
+     * @param frameAreaAccesso frame della schermata di accesso
+     * @param framePartecipante frame dell'area partecipante
+     * @param frameAreaNotifiche frame notifiche
+     * @param frameAreaGiudice frame giudice
+     */
     public ViewEvento(Controller controller, String loginUser, JFrame frameAreaAccesso, JFrame framePartecipante, JFrame frameAreaNotifiche, JFrame frameAreaGiudice) {
         scroll.getVerticalScrollBar().setUnitIncrement(20);
         scroll.setBorder(BorderFactory.createEmptyBorder());
@@ -97,6 +150,12 @@ public class ViewEvento {
         });
     }
 
+    /**
+     * Imposta l'effetto hover sui bottoni.
+     * @param button bottone da modificare
+     * @param btnColor colore normale del bottone
+     * @param btnHoverColor colore del bottone in hover
+     */
     private void setButtonHover(JButton button, Color btnColor, Color btnHoverColor) {
         if (button != null) {
             button.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -112,6 +171,20 @@ public class ViewEvento {
         }
     }
 
+    /**
+     * Crea una card per la visualizzazione di un singolo evento.
+     * <p>
+     * La card mostra informazioni sull'evento e offre bottoni per iscrizione, area personale,
+     * classifica e visualizzazione info, in base allo stato dell'utente e dell'evento.
+     *
+     * @param ev evento da visualizzare
+     * @param btnColor colore base dei bottoni
+     * @param btnHoverColor colore dei bottoni in hover
+     * @param cardColor colore di sfondo della card
+     * @param borderColor colore bordo della card
+     * @param fieldFont font per le informazioni
+     * @return JPanel rappresentante la card dell'evento
+     */
     private JPanel creaEventoCard(Evento ev, Color btnColor, Color btnHoverColor, Color cardColor, Color borderColor, Font fieldFont) {
         JPanel eventoCard = new JPanel(new BorderLayout());
         eventoCard.setBackground(cardColor);
@@ -237,6 +310,12 @@ public class ViewEvento {
         return eventoCard;
     }
 
+    /**
+     * Crea una JLabel con font personalizzato.
+     * @param text testo della label
+     * @param font font da applicare
+     * @return JLabel personalizzata
+     */
     private JLabel creaLabel(String text, Font font) {
         JLabel label = new JLabel(text);
         label.setFont(font);
@@ -244,10 +323,18 @@ public class ViewEvento {
         return label;
     }
 
+    /**
+     * Restituisce il frame della schermata eventi.
+     * @return frame della schermata eventi
+     */
     public JFrame getFrameEventi() {
         return frameEventi;
     }
 
+    /**
+     * Restituisce il frame dell'area partecipante.
+     * @return frame dell'area partecipante
+     */
     public JFrame getFramePartecipante() {
         return frameAreaPartecipante;
     }

@@ -1,5 +1,4 @@
 package gui;
-
 import controller.Controller;
 import model.Evento;
 import model.Giudice;
@@ -11,22 +10,72 @@ import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
 
 import java.util.List;
 
+/**
+ * GUI per la gestione degli inviti ai giudici e dell'assegnazione del responsabile del problema
+ * nell'applicazione Hackaton, dedicata all'organizzatore di un evento.
+ * <p>
+ * Permette all'organizzatore di:
+ * <ul>
+ *   <li>Visualizzare l'elenco degli utenti invitabili come giudici</li>
+ *   <li>Invitare un utente come giudice tramite apposito bottone</li>
+ *   <li>Visualizzare la lista dei giudici già invitati</li>
+ *   <li>Assegnare il ruolo di responsabile della descrizione del problema ad un giudice</li>
+ *   <li>Tornare alla schermata precedente</li>
+ * </ul>
+ * <p>
+ * Tutti gli stili e le interazioni sono gestiti localmente per coerenza con il resto dell'applicazione.
+ */
 public class Invito {
+
+    /** Pannello principale della GUI inviti. */
     private JPanel panel;
+
+    /** ComboBox per la selezione dell'utente da invitare come giudice. */
     private JComboBox <Utente> comboBox1;
+
+    /** Label per l'invito. */
     private JLabel invitoLabel;
+
+    /** Bottone per invitare un utente come giudice. */
     private JButton invitaComeGiudiceButton;
+
+    /** Pannello secondario della GUI. */
     private JPanel panel2;
+
+    /** Label per il nome dell'evento. */
     private JLabel nomeEvento;
+
+    /** Bottone per tornare alla schermata organizzatore. */
     private JButton homeButton;
+
+    /** ScrollPane per la lista dei giudici. */
     private JScrollPane scrollgiudici;
+
+    /** Pannello che contiene la lista dei giudici. */
     private JPanel panelGiudici;
+
+    /** Frame principale della GUI invito. */
     private JFrame frameInvito;
+
+    /** Frame dell'area organizzatore per il ritorno. */
     private JFrame frameOrganizzatore;
+
+    /** Controller logico dell'applicazione. */
     private Controller controller;
+
+    /** Font di default per la GUI. */
     private static final String FONT_FAMILY = "SansSerif";
+
+    /** Identificativo dell'evento. */
     private int eventoID;
 
+    /**
+     * Costruisce la GUI per la gestione degli inviti dei giudici e dell'assegnazione del responsabile del problema.
+     *
+     * @param eventoID identificativo dell'evento gestito
+     * @param frameAreaOrganizzatore frame dell'area organizzatore per il ritorno
+     * @param controller controller logico dell'applicazione
+     */
     public Invito(int eventoID, JFrame frameAreaOrganizzatore, Controller controller) {
         this.controller = controller;
         this.eventoID = eventoID;
@@ -46,6 +95,9 @@ public class Invito {
         frameInvito.setVisible(true);
     }
 
+    /**
+     * Aggiorna la lista degli utenti invitabili nella ComboBox.
+     */
     private void aggiornaListaInvitabili() {
         comboBox1.removeAllItems();
         for (Utente u : controller.getUtentiInvitabili(eventoID)) {
@@ -53,11 +105,17 @@ public class Invito {
         }
     }
 
+    /**
+     * Restituisce il frame della GUI invito.
+     * @return frame della GUI invito
+     */
     public JFrame getFrameInvito() {
         return frameInvito;
     }
 
-    // --- METODO: Stili coerenti con AreaOrganizzatore/CreazioneEventi ---
+    /**
+     * Applica gli stili ai componenti della GUI per coerenza con il resto dell'applicazione.
+     */
     private void applicaStili() {
         Color bgColor = new Color(240, 248, 255);
         Color btnColor = new Color(30, 144, 255);
@@ -101,6 +159,12 @@ public class Invito {
         }
     }
 
+    /**
+     * Imposta l'effetto hover sui bottoni.
+     * @param button bottone da modificare
+     * @param normal colore normale del bottone
+     * @param hover colore del bottone in hover
+     */
     private void setButtonHover(JButton button, Color normal, Color hover) {
         button.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
@@ -114,7 +178,9 @@ public class Invito {
         });
     }
 
-    // --- METODO: Prepara dati evento ---
+    /**
+     * Prepara i dati dell'evento, impostando il nome nella GUI.
+     */
     private void preparaEvento() {
         Evento evento = controller.getEventoById(eventoID);
         if (nomeEvento != null && evento != null) {
@@ -122,7 +188,10 @@ public class Invito {
         }
     }
 
-    // --- METODO: Prepara panelGiudici ---
+    /**
+     * Prepara il pannello dei giudici, visualizzando la lista dei giudici già invitati
+     * e permettendo l'assegnazione del responsabile del problema.
+     */
     private void preparaPanelGiudici() {
         Color bgColor = new Color(240, 248, 255);
         Color btnColor = new Color(30, 144, 255);
@@ -141,6 +210,16 @@ public class Invito {
         }
     }
 
+    /**
+     * Crea la riga di visualizzazione per un giudice, con bottone di assegnazione o label di ruolo.
+     * @param g giudice da visualizzare
+     * @param bgColor colore di sfondo
+     * @param btnColor colore base bottone
+     * @param btnHoverColor colore bottone in hover
+     * @param fieldFont font da applicare
+     * @param responsabile giudice responsabile del problema
+     * @return JPanel rappresentante la riga del giudice
+     */
     private JPanel creaRigaGiudice(Giudice g, Color bgColor, Color btnColor, Color btnHoverColor, Font fieldFont, Giudice responsabile) {
         JPanel riga = new JPanel();
         riga.setBackground(bgColor);
@@ -179,6 +258,12 @@ public class Invito {
         return riga;
     }
 
+    /**
+     * Assegna il ruolo di responsabile della descrizione del problema al giudice selezionato,
+     * aggiornando la GUI e mostrando un messaggio di feedback.
+     * @param g giudice da assegnare
+     * @param ruolo label del ruolo da mostrare
+     */
     private void assegnaResponsabile(Giudice g, JLabel ruolo) {
         boolean ok = controller.assegnaGiudiceDescrizione(eventoID, g.getLogin());
         if (!ok) {
@@ -200,7 +285,9 @@ public class Invito {
         JOptionPane.showMessageDialog(frameInvito, g.getLogin() + " è stato assegnato come giudice responsabile della descrizione del problema.");
     }
 
-    // --- METODO: Setup listeners principali ---
+    /**
+     * Imposta i listener principali sui bottoni della GUI.
+     */
     private void setupListeners() {
         if (homeButton != null) {
             homeButton.addActionListener(e -> {
@@ -214,6 +301,10 @@ public class Invito {
         }
     }
 
+    /**
+     * Invita l'utente selezionato come giudice per l'evento.
+     * Aggiorna la lista degli invitabili e mostra un messaggio di feedback.
+     */
     private void invitaGiudice() {
         Utente daInvitare = (Utente) comboBox1.getSelectedItem();
         if (daInvitare != null) {
