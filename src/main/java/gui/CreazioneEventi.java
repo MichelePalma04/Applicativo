@@ -5,6 +5,7 @@ import model.Evento;
 import model.Organizzatore;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.time.LocalDate;
@@ -45,10 +46,66 @@ public class CreazioneEventi {
         frameAccesso = frameAreaAccesso;
         frameInviti = frameAreaInvito;
         frameCreazioneEventi = new JFrame("Creazione Eventi");
-        frameCreazioneEventi.setSize(500, 500);
-        frameCreazioneEventi.setContentPane(mainPanel);
         frameCreazioneEventi.pack();
+        frameCreazioneEventi.setSize(600, 600);
+        frameCreazioneEventi.setContentPane(mainPanel);
         frameCreazioneEventi.setLocationRelativeTo(null);
+        frameCreazioneEventi.setVisible(true);
+
+        // --- Stile coerente con AreaOrganizzatore ---
+        Color bgColor = new Color(240, 248, 255);      // chiaro azzurrino
+        Color btnColor = new Color(30, 144, 255);
+        Color btnHoverColor = new Color(65, 105, 225);
+        Color fieldBg = Color.WHITE;
+        Color fieldBorder = new Color(210, 210, 210);
+        Font labelFont = new Font("SansSerif", Font.BOLD, 16);
+        Font fieldFont = new Font("SansSerif", Font.PLAIN, 15);
+
+        mainPanel.setBackground(bgColor);
+
+        // Label styling
+        benvenuto.setFont(labelFont);
+        titolo.setFont(labelFont);
+        sede.setFont(labelFont);
+        dataInizio.setFont(labelFont);
+        dataFine.setFont(labelFont);
+        maxIscritti.setFont(labelFont);
+        dimMax.setFont(labelFont);
+        inizioReg.setFont(labelFont);
+        fineReg.setFont(labelFont);
+
+
+        // Field styling
+        JTextField[] allFields = {titoloField, sedeField, dataInizioField, dataFineField, maxIscrittiField, dimensioneField, inizoRegField, fineRegField};
+        for (JTextField field : allFields) {
+            field.setFont(fieldFont);
+            field.setBackground(fieldBg);
+            field.setBorder(BorderFactory.createCompoundBorder(
+                    BorderFactory.createLineBorder(fieldBorder, 1),
+                    BorderFactory.createEmptyBorder(8, 8, 8, 8)
+            ));
+        }
+
+        // Button styling
+        JButton[] allButtons = {creaEventoButton, backButton};
+        for (JButton btn : allButtons) {
+            btn.setBackground(btnColor);
+            btn.setForeground(Color.WHITE);
+            btn.setFocusPainted(false);
+            btn.setFont(labelFont);
+            btn.setBorder(BorderFactory.createEmptyBorder(10, 25, 10, 25));
+        }
+
+        // Effetto hover pulsanti
+        creaEventoButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) { creaEventoButton.setBackground(btnHoverColor);}
+            public void mouseExited(java.awt.event.MouseEvent evt) { creaEventoButton.setBackground(btnColor);}
+        });
+        backButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) { backButton.setBackground(btnHoverColor);}
+            public void mouseExited(java.awt.event.MouseEvent evt) { backButton.setBackground(btnColor);}
+        });
+
         benvenuto.setText("Benvenuto!");
 
         backButton.addActionListener(new ActionListener() {
