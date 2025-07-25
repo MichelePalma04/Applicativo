@@ -509,11 +509,12 @@ public class AreaPartecipante {
             JOptionPane.showMessageDialog(frameAreaPartecipante, "Sei già in un team.");
             return;
         }
-        if (controller.getDimTeam(teamSelected.getNomeTeam(), eventoId) >= controller.getEventoById(eventoId).getDMaxTeam()) {
-            JOptionPane.showMessageDialog(frameAreaPartecipante, "Il team " + teamSelected.getNomeTeam() + " è pieno.");
+        boolean successo = controller.unisciPartecipanteATeam(loginPartecipante, teamSelected.getNomeTeam(), eventoId);
+        if (!successo) {
+            JOptionPane.showMessageDialog(
+                    frameAreaPartecipante, "Il team " + teamSelected.getNomeTeam() + " è pieno!\nPuoi unirti ad un altro team oppure crearne uno nuovo.", "Team pieno", JOptionPane.WARNING_MESSAGE);
             return;
         }
-        controller.unisciPartecipanteATeam(loginPartecipante, teamSelected.getNomeTeam(), eventoId);
         Team nuovoTeamUtente = trovaTeamUtente(controller.getTeamsEvento(eventoId));
         aggiornaVisibilitaCampi(true, nuovoTeamUtente);
         mostraDocumenti(documentiPanel, nuovoTeamUtente);

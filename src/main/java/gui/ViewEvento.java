@@ -235,7 +235,8 @@ public class ViewEvento {
         boolean isGiudice = giudice != null;
         boolean isPartecipante = partecipante != null;
         boolean eventoFinito = ev.getDataFine().isBefore(LocalDate.now());
-
+        LocalDate oggi = LocalDate.now();
+        boolean iscrizioneAperta =  ((oggi.isEqual(ev.getInizioReg()) || oggi.isAfter(ev.getInizioReg())) && (oggi.isEqual(ev.getFineReg()) || oggi.isBefore(ev.getFineReg())));
         if (isGiudice) {
             iscrivitiButton.setVisible(false);
             visualizzaArea.setVisible(false);
@@ -244,7 +245,7 @@ public class ViewEvento {
             iscrivitiButton.setVisible(false);
             visualizzaArea.setVisible(true);
         } else {
-            iscrivitiButton.setVisible(true);
+            iscrivitiButton.setVisible(iscrizioneAperta);
             visualizzaArea.setVisible(false);
             areaGiudice.setVisible(false);
         }

@@ -132,7 +132,7 @@ public class ITeamDAO implements TeamDAO {
      */
     @Override
     public int getDimTeam(String nomeTeam, int eventoId) {
-        String sql = "SELECT COUNT(*) FROM partecipante WHERE team_nome = ? AND evento_id = ?";
+        String sql = "SELECT COUNT(*) FROM team_partecipante WHERE team_nome = ? AND evento_id = ?";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setString(1, nomeTeam);
             ps.setInt(2, eventoId);

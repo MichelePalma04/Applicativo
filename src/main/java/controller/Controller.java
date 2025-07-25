@@ -350,9 +350,16 @@ public class Controller {
      * @param loginPartecipante login del partecipante
      * @param nomeTeam nome del team
      * @param eventoId id dell'evento
+     * @return true se il partecipante è stato aggiunto con successo, false altrimenti
      */
-    public void unisciPartecipanteATeam (String loginPartecipante, String nomeTeam, int eventoId) {
+    public boolean unisciPartecipanteATeam(String loginPartecipante, String nomeTeam, int eventoId) {
+        int dimTeam = getDimTeam(nomeTeam, eventoId);
+        int maxTeam = getEventoById(eventoId).getDMaxTeam();
+        if (dimTeam >= maxTeam) {
+            return false; // Team pieno!
+        }
         teamDAO.unisciPartecipanteATeam(loginPartecipante, nomeTeam, eventoId);
+        return true;
     }
 
     /**
