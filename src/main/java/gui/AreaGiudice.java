@@ -20,16 +20,14 @@ public class AreaGiudice {
     private JFrame frameAccesso;
     private JFrame frameEventi;
     private String loginGiudice;
-    private String loginPartecipante;
     private int eventoId;
 
     private Controller controller;
 
-    public AreaGiudice(Controller controller, String loginGiudice, int eventoId, JFrame frameAreaAccesso, JFrame frameAreaEventi, String loginPartecipante) {
+    public AreaGiudice(Controller controller, String giudiceLogin, int idEvento, JFrame frameAreaAccesso, JFrame frameAreaEventi) {
         this.controller = controller;
-        this.loginGiudice = loginGiudice;
-        this.loginPartecipante = loginPartecipante;
-        this.eventoId = eventoId;
+        this.loginGiudice = giudiceLogin;
+        this.eventoId = idEvento;
         frameAccesso = frameAreaAccesso;
         frameEventi = frameAreaEventi;
 
