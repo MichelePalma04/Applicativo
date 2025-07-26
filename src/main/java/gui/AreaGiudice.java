@@ -172,9 +172,7 @@ public class AreaGiudice {
                 descrizioneProblema.setLineWrap(true);
                 descrizioneProblema.setWrapStyleWord(true);
 
-                JScrollPane scrollProblema = new JScrollPane(descrizioneProblema,
-                        ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
-                        ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+                JScrollPane scrollProblema = new JScrollPane(descrizioneProblema, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
                 scrollProblema.getVerticalScrollBar().setUnitIncrement(20);
 
                 JButton carica = creaStyledButton("Carica problema");
