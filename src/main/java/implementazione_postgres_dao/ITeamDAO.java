@@ -188,7 +188,7 @@ public class ITeamDAO implements TeamDAO {
 
     /**
      * Imposta il DAO per la gestione dei voti.
-     * @param votoDAO implementazione del DAO voto
+     * @param votoDAO istanza di VotoDAO
      */
     @Override
     public void setVotoDAO(VotoDAO votoDAO) {
@@ -197,7 +197,7 @@ public class ITeamDAO implements TeamDAO {
 
     /**
      * Imposta il DAO per la gestione dei partecipanti.
-     * @param partecipanteDAO implementazione del DAO partecipante
+     * @param partecipanteDAO istanza di PartecipanteDAO
      */
     @Override
     public void setPartecipanteDAO(PartecipanteDAO partecipanteDAO) {

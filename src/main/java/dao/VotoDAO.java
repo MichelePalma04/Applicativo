@@ -48,7 +48,7 @@ public interface VotoDAO {
 
     /**
      * Imposta il DAO per la gestione dei giudici.
-     * @param giudiceDAO implementazione del DAO giudice
+     * @param giudiceDAO istanza di GiudiceDAO
      */
     void setGiudiceDAO (GiudiceDAO giudiceDAO);
 

@@ -272,7 +272,7 @@ public class IDocumentoDAO implements DocumentoDAO {
 
     /**
      * Imposta il DAO per la gestione dei team.
-     * @param teamDAO implementazione del TeamDAO
+     * @param teamDAO istanza di TeamDAO
      */
     @Override
     public void setTeamDAO (TeamDAO teamDAO){
@@ -281,7 +281,7 @@ public class IDocumentoDAO implements DocumentoDAO {
 
     /**
      * Imposta il DAO per la gestione dei giudici.
-     * @param giudiceDAO implementazione del GiudiceDAO
+     * @param giudiceDAO istanza di GiudiceDAO
      */
     @Override
     public void setGiudiceDAO (GiudiceDAO giudiceDAO){
@@ -290,7 +290,7 @@ public class IDocumentoDAO implements DocumentoDAO {
 
     /**
      * Imposta il DAO per la gestione dei documenti (self-reference).
-     * @param documentoDAO implementazione del DocumentoDAO
+     * @param documentoDAO istanza di DocumentoDAO
      */
     @Override
     public void setDocumentoDAO(DocumentoDAO documentoDAO){

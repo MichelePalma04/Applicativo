@@ -62,7 +62,7 @@ public interface DocumentoDAO {
 
     /**
      * Imposta il DAO per la gestione dei team.
-     * @param teamDAO implementazione del TeamDAO
+     * @param teamDAO istanza di TeamDAO
      */
     void setTeamDAO (TeamDAO teamDAO);
 
@@ -86,13 +86,13 @@ public interface DocumentoDAO {
 
     /**
      * Imposta il DAO per la gestione dei giudici.
-     * @param giudiceDAO implementazione del GiudiceDAO
+     * @param giudiceDAO istanza di GiudiceDAO
      */
     void setGiudiceDAO (GiudiceDAO giudiceDAO);
 
     /**
      * Imposta il DAO per la gestione dei documenti (self-reference).
-     * @param documentoDAO implementazione del DocumentoDAO
+     * @param documentoDAO istanza di DocumentoDAO
      */
     void setDocumentoDAO (DocumentoDAO documentoDAO);
 }

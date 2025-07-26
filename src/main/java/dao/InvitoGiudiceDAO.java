@@ -55,13 +55,13 @@ public interface InvitoGiudiceDAO {
 
     /**
      * Imposta il DAO per la gestione degli utenti.
-     * @param utenteDAO implementazione del DAO utente
+     * @param utenteDAO istanza di UtenteDAO
      */
     void setUtenteDAO(UtenteDAO utenteDAO);
 
     /**
      * Imposta il DAO per la gestione degli eventi.
-     * @param eventoDAO implementazione del DAO evento
+     * @param eventoDAO istanza di EventoDAO
      */
     void setEventoDAO(EventoDAO eventoDAO);
 }

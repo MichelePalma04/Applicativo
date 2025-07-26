@@ -59,13 +59,13 @@ public interface TeamDAO {
 
     /**
      * Imposta il DAO per la gestione dei voti.
-     * @param votoDAO implementazione del DAO voto
+     * @param votoDAO istanza di VotoDAO
      */
     void setVotoDAO(VotoDAO votoDAO);
 
     /**
      * Imposta il DAO per la gestione dei partecipanti.
-     * @param partecipanteDAO implementazione del DAO partecipante
+     * @param partecipanteDAO istanza di PartecipanteDAO
      */
     void setPartecipanteDAO(PartecipanteDAO partecipanteDAO);
 

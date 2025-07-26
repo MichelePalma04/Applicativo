@@ -1,5 +1,5 @@
 package dao;
-import implementazione_postgres_dao.IUtenteDAO;
+
 import model.Organizzatore;
 import java.util.List;
 
@@ -48,7 +48,7 @@ public interface OrganizzatoreDAO {
 
     /**
      * Imposta il DAO per la gestione degli utenti.
-     * @param utenteDAO implementazione del DAO utente
+     * @param utenteDAO istanza di UtenteDAO
      */
     void setUtenteDAO(UtenteDAO utenteDAO);
 }

@@ -199,7 +199,7 @@ public class IVotoDAO implements VotoDAO {
 
     /**
      * Imposta il DAO per la gestione dei giudici.
-     * @param giudiceDAO implementazione del DAO giudice
+     * @param giudiceDAO istanza di GiudiceDAO
      */
     @Override
     public void setGiudiceDAO(GiudiceDAO giudiceDAO) {

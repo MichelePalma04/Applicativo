@@ -306,7 +306,7 @@ public class IEventoDAO implements EventoDAO {
 
     /**
      * Imposta il DAO per la gestione degli organizzatori.
-     * @param organizzatoreDAO implementazione del DAO organizzatore
+     * @param organizzatoreDAO istanza di OrganizzatoreDAO
      */
     @Override
     public void setOrganizzatoreDAO(OrganizzatoreDAO organizzatoreDAO) {

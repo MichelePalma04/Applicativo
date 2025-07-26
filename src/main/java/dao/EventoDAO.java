@@ -58,7 +58,7 @@ public interface EventoDAO {
 
     /**
      * Imposta il DAO per la gestione degli organizzatori.
-     * @param organizzatoreDAO implementazione del DAO organizzatore
+     * @param organizzatoreDAO istanza di OrganizzatoreDAO
      */
     void setOrganizzatoreDAO (OrganizzatoreDAO organizzatoreDAO);
 

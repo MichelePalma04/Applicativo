@@ -202,7 +202,7 @@ public class IPartecipanteDAO implements PartecipanteDAO{
 
     /**
      * Imposta il DAO per la gestione degli utenti.
-     * @param utenteDAO implementazione del DAO utente
+     * @param utenteDAO istanza di UtenteDAO
      */
     @Override
     public void setUtenteDAO (UtenteDAO utenteDAO) {

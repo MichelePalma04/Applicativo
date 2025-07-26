@@ -24,15 +24,16 @@ public class Controller {
 
     /**
      * Costruttore che inizializza tutte le dipendenze necessarie tramite i DAO.
-     * @param utenteDAO implementazione per la gestione degli utenti
-     * @param organizzatoreDAO implementazione per la gestione degli organizzatori
-     * @param partecipanteDAO implementazione per la gestione dei partecipanti
-     * @param giudiceDAO implementazione per la gestione dei giudici
-     * @param eventoDAO implementazione per la gestione degli eventi
-     * @param teamDAO implementazione per la gestione dei team
-     * @param invitoGiudiceDAO implementazione per la gestione degli inviti ai giudici
-     * @param documentoDAO implementazione per la gestione dei documenti
-     * @param votoDAO implementazione per la gestione dei voti
+     *
+     * @param utenteDAO istanza di UtenteDAO per la gestione degli utenti
+     * @param organizzatoreDAO istanza di OrganizzatoreDAO per la gestione degli organizzatori
+     * @param partecipanteDAO istanza di PartecipanteDAO per la gestione dei partecipanti
+     * @param giudiceDAO istanza di GiudiceDAO per la gestione dei giudici
+     * @param eventoDAO istanza di EventoDAO per la gestione degli eventi
+     * @param teamDAO istanza di TeamDAO per la gestione dei team
+     * @param invitoGiudiceDAO istanza di InvitoGiudiceDAO per la gestione degli inviti ai giudici
+     * @param documentoDAO istanza di DocumentoDAO per la gestione dei documenti
+     * @param votoDAO istanza di VotoDAO per la gestione dei voti
      */
 
     public Controller(UtenteDAO utenteDAO, OrganizzatoreDAO organizzatoreDAO, PartecipanteDAO partecipanteDAO, GiudiceDAO giudiceDAO, EventoDAO eventoDAO, TeamDAO teamDAO, InvitoGiudiceDAO invitoGiudiceDAO, DocumentoDAO documentoDAO, VotoDAO votoDAO) {
