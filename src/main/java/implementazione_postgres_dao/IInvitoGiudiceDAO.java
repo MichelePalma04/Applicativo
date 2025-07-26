@@ -1,6 +1,8 @@
 package implementazione_postgres_dao;
 
+import dao.EventoDAO;
 import dao.InvitoGiudiceDAO;
+import dao.UtenteDAO;
 import database.ConnessioneDatabase;
 import model.Evento;
 import model.InvitoGiudice;
@@ -22,10 +24,10 @@ public class IInvitoGiudiceDAO implements InvitoGiudiceDAO {
     private Connection connection;
 
     /** DAO per la gestione degli eventi. */
-    private  IEventoDAO eventoDAO;
+    private EventoDAO eventoDAO;
 
     /** DAO per la gestione degli utenti. */
-    private IUtenteDAO utenteDAO;
+    private UtenteDAO utenteDAO;
 
     /** Nome della colonna evento_id nella tabella invito_giudice. */
     private static final String EVENTOID_COLUMN = "evento_id";
@@ -171,7 +173,7 @@ public class IInvitoGiudiceDAO implements InvitoGiudiceDAO {
      * @param utenteDAO implementazione del DAO utente
      */
     @Override
-    public void setUtenteDAO(IUtenteDAO utenteDAO) {
+    public void setUtenteDAO(UtenteDAO utenteDAO) {
         this.utenteDAO = utenteDAO;
     }
 
@@ -180,7 +182,7 @@ public class IInvitoGiudiceDAO implements InvitoGiudiceDAO {
      * @param eventoDAO implementazione del DAO evento
      */
     @Override
-    public void setEventoDAO(IEventoDAO eventoDAO){
+    public void setEventoDAO(EventoDAO eventoDAO){
         this.eventoDAO = eventoDAO;
     }
 

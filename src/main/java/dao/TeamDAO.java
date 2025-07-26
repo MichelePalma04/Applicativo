@@ -1,6 +1,5 @@
 package dao;
-import implementazione_postgres_dao.IPartecipanteDAO;
-import implementazione_postgres_dao.IVotoDAO;
+
 import model.Team;
 import java.util.List;
 
@@ -62,13 +61,13 @@ public interface TeamDAO {
      * Imposta il DAO per la gestione dei voti.
      * @param votoDAO implementazione del DAO voto
      */
-    void setVotoDAO(IVotoDAO votoDAO);
+    void setVotoDAO(VotoDAO votoDAO);
 
     /**
      * Imposta il DAO per la gestione dei partecipanti.
      * @param partecipanteDAO implementazione del DAO partecipante
      */
-    void setPartecipanteDAO(IPartecipanteDAO partecipanteDAO);
+    void setPartecipanteDAO(PartecipanteDAO partecipanteDAO);
 
     /**
      * Aggiunge un partecipante ad un team.

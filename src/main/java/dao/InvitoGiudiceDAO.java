@@ -1,7 +1,6 @@
 package dao;
 
-import implementazione_postgres_dao.IEventoDAO;
-import implementazione_postgres_dao.IUtenteDAO;
+
 import model.InvitoGiudice;
 
 import java.util.List;
@@ -58,11 +57,11 @@ public interface InvitoGiudiceDAO {
      * Imposta il DAO per la gestione degli utenti.
      * @param utenteDAO implementazione del DAO utente
      */
-    void setUtenteDAO(IUtenteDAO utenteDAO);
+    void setUtenteDAO(UtenteDAO utenteDAO);
 
     /**
      * Imposta il DAO per la gestione degli eventi.
      * @param eventoDAO implementazione del DAO evento
      */
-    void setEventoDAO(IEventoDAO eventoDAO);
+    void setEventoDAO(EventoDAO eventoDAO);
 }

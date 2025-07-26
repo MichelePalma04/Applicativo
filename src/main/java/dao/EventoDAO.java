@@ -1,6 +1,5 @@
 package dao;
 
-import implementazione_postgres_dao.IOrganizzatoreDAO;
 import model.Evento;
 import java.util.List;
 
@@ -61,7 +60,7 @@ public interface EventoDAO {
      * Imposta il DAO per la gestione degli organizzatori.
      * @param organizzatoreDAO implementazione del DAO organizzatore
      */
-    void setOrganizzatoreDAO (IOrganizzatoreDAO organizzatoreDAO);
+    void setOrganizzatoreDAO (OrganizzatoreDAO organizzatoreDAO);
 
     /**
      * Restituisce la descrizione del problema proposto per uno specifico evento.

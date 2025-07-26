@@ -45,6 +45,18 @@ public class Controller {
         this.invitoGiudiceDAO = invitoGiudiceDAO;
         this.documentoDAO = documentoDAO;
         this.votoDAO = votoDAO;
+        organizzatoreDAO.setUtenteDAO(utenteDAO);
+        partecipanteDAO.setUtenteDAO(utenteDAO);
+        eventoDAO.setOrganizzatoreDAO(organizzatoreDAO);
+        teamDAO.setPartecipanteDAO(partecipanteDAO);
+        teamDAO.setVotoDAO(votoDAO);
+        giudiceDAO.setUtenteDAO(utenteDAO);
+        votoDAO.setGiudiceDAO(giudiceDAO);
+        invitoGiudiceDAO.setUtenteDAO(utenteDAO);
+        invitoGiudiceDAO.setEventoDAO(eventoDAO);
+        documentoDAO.setTeamDAO(teamDAO);
+        documentoDAO.setDocumentoDAO(documentoDAO);
+        documentoDAO.setGiudiceDAO(giudiceDAO);
     }
 
     /**

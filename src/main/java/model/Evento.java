@@ -364,6 +364,10 @@ public class Evento {
                 && fineRegistrazioni.isBefore(dataInizio)
                 && dataInizio.isBefore(dataFine))) {
             throw new IllegalArgumentException("Le date non rispettano l'ordine logico richiesto.");
+        } // 3. Nessuna data nel passato
+        if (inizioRegistrazioni.isBefore(oggi) || fineRegistrazioni.isBefore(oggi) ||
+                dataInizio.isBefore(oggi) || dataFine.isBefore(oggi)) {
+            throw new IllegalArgumentException("Le date non possono essere nel passato.");
         }
         // 4. La fine registrazione deve essere prima dell'inizio evento
         if (!fineRegistrazioni.isBefore(dataInizio)) {

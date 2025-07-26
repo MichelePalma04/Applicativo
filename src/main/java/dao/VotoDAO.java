@@ -1,6 +1,5 @@
 package dao;
 
-import implementazione_postgres_dao.IGiudiceDAO;
 import model.Voto;
 import java.util.List;
 
@@ -51,7 +50,7 @@ public interface VotoDAO {
      * Imposta il DAO per la gestione dei giudici.
      * @param giudiceDAO implementazione del DAO giudice
      */
-    void setGiudiceDAO (IGiudiceDAO giudiceDAO);
+    void setGiudiceDAO (GiudiceDAO giudiceDAO);
 
     /**
      * Verifica se un giudice ha già votato un team per uno specifico evento.

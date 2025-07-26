@@ -1,6 +1,6 @@
 package dao;
 
-import implementazione_postgres_dao.IUtenteDAO;
+
 import model.Giudice;
 import java.util.List;
 
@@ -45,6 +45,6 @@ public interface GiudiceDAO {
      * Imposta il DAO per la gestione degli utenti.
      * @param utenteDAO implementazione del DAO utente
      */
-    void setUtenteDAO(IUtenteDAO utenteDAO);
+    void setUtenteDAO(UtenteDAO utenteDAO);
 }
 

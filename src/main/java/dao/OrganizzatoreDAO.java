@@ -50,5 +50,5 @@ public interface OrganizzatoreDAO {
      * Imposta il DAO per la gestione degli utenti.
      * @param utenteDAO implementazione del DAO utente
      */
-    void setUtenteDAO(IUtenteDAO utenteDAO);
+    void setUtenteDAO(UtenteDAO utenteDAO);
 }

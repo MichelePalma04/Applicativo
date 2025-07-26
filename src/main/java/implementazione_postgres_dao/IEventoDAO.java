@@ -21,7 +21,7 @@ public class IEventoDAO implements EventoDAO {
     private Connection connection;
 
     /** DAO per la gestione degli organizzatori. */
-    private IOrganizzatoreDAO organizzatoreDAO;
+    private OrganizzatoreDAO organizzatoreDAO;
 
     /** Nome della colonna titolo nella tabella evento. */
     private static final String TITOLO_COLUMN = "titolo";
@@ -309,7 +309,7 @@ public class IEventoDAO implements EventoDAO {
      * @param organizzatoreDAO implementazione del DAO organizzatore
      */
     @Override
-    public void setOrganizzatoreDAO(IOrganizzatoreDAO organizzatoreDAO) {
+    public void setOrganizzatoreDAO(OrganizzatoreDAO organizzatoreDAO) {
         this.organizzatoreDAO = organizzatoreDAO;
     }
 

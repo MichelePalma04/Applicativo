@@ -1,5 +1,6 @@
 package implementazione_postgres_dao;
 import dao.PartecipanteDAO;
+import dao.UtenteDAO;
 import database.ConnessioneDatabase;
 import model.Partecipante;
 
@@ -19,7 +20,7 @@ public class IPartecipanteDAO implements PartecipanteDAO{
     private Connection connection;
 
     /** DAO per la gestione degli utenti. */
-    private IUtenteDAO utenteDAO;
+    private UtenteDAO utenteDAO;
 
     /**
      * Costruttore. Inizializza la connessione al database.
@@ -204,7 +205,7 @@ public class IPartecipanteDAO implements PartecipanteDAO{
      * @param utenteDAO implementazione del DAO utente
      */
     @Override
-    public void setUtenteDAO (IUtenteDAO utenteDAO) {
+    public void setUtenteDAO (UtenteDAO utenteDAO) {
         this.utenteDAO = utenteDAO;
     }
 

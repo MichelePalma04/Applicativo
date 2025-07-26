@@ -118,18 +118,6 @@ public class Login {
         IVotoDAO votoDAO = new IVotoDAO();
         IDocumentoDAO documentoDAO = new IDocumentoDAO();
         IInvitoGiudiceDAO invitoGiudiceDAO = new IInvitoGiudiceDAO();
-        organizzatoreDAO.setUtenteDAO(utenteDAO);
-        partecipanteDAO.setUtenteDAO(utenteDAO);
-        eventoDAO.setOrganizzatoreDAO(organizzatoreDAO);
-        teamDAO.setPartecipanteDAO(partecipanteDAO);
-        teamDAO.setVotoDAO(votoDAO);
-        giudiceDAO.setUtenteDAO(utenteDAO);
-        votoDAO.setGiudiceDAO(giudiceDAO);
-        invitoGiudiceDAO.setUtenteDAO(utenteDAO);
-        invitoGiudiceDAO.setEventoDAO(eventoDAO);
-        documentoDAO.setTeamDAO(teamDAO);
-        documentoDAO.setDocumentoDAO(documentoDAO);
-        documentoDAO.setGiudiceDAO(giudiceDAO);
         controller = new Controller(utenteDAO, organizzatoreDAO, partecipanteDAO, giudiceDAO, eventoDAO, teamDAO, invitoGiudiceDAO, documentoDAO, votoDAO);
 
         accediButton.addActionListener(e -> {

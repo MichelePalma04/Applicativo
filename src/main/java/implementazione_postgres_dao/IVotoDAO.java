@@ -1,5 +1,6 @@
 package implementazione_postgres_dao;
 
+import dao.GiudiceDAO;
 import dao.VotoDAO;
 import model.Voto;
 import model.Giudice;
@@ -19,7 +20,7 @@ public class IVotoDAO implements VotoDAO {
     private Connection connection;
 
     /** DAO per la gestione dei giudici. */
-    private IGiudiceDAO giudiceDAO;
+    private GiudiceDAO giudiceDAO;
 
     /**
      * Costruttore. Inizializza la connessione al database.
@@ -201,7 +202,7 @@ public class IVotoDAO implements VotoDAO {
      * @param giudiceDAO implementazione del DAO giudice
      */
     @Override
-    public void setGiudiceDAO(IGiudiceDAO giudiceDAO) {
+    public void setGiudiceDAO(GiudiceDAO giudiceDAO) {
         this.giudiceDAO = giudiceDAO;
     }
 

@@ -1,5 +1,7 @@
 package implementazione_postgres_dao;
+import dao.PartecipanteDAO;
 import dao.TeamDAO;
+import dao.VotoDAO;
 import model.Partecipante;
 import model.Team;
 import database.ConnessioneDatabase;
@@ -19,10 +21,10 @@ public class ITeamDAO implements TeamDAO {
     private Connection connection;
 
     /** DAO per la gestione dei partecipanti. */
-    private IPartecipanteDAO partecipanteDAO;
+    private PartecipanteDAO partecipanteDAO;
 
     /** DAO per la gestione dei voti. */
-    private IVotoDAO votoDAO;
+    private VotoDAO votoDAO;
 
     /**
      * Costruttore. Inizializza la connessione al database.
@@ -189,7 +191,7 @@ public class ITeamDAO implements TeamDAO {
      * @param votoDAO implementazione del DAO voto
      */
     @Override
-    public void setVotoDAO(IVotoDAO votoDAO) {
+    public void setVotoDAO(VotoDAO votoDAO) {
         this.votoDAO = votoDAO;
     }
 
@@ -198,7 +200,7 @@ public class ITeamDAO implements TeamDAO {
      * @param partecipanteDAO implementazione del DAO partecipante
      */
     @Override
-    public void setPartecipanteDAO(IPartecipanteDAO partecipanteDAO) {
+    public void setPartecipanteDAO(PartecipanteDAO partecipanteDAO) {
         this.partecipanteDAO = partecipanteDAO;
     }
 

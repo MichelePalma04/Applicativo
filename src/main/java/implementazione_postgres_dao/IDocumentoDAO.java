@@ -1,6 +1,8 @@
 package implementazione_postgres_dao;
 
 import dao.DocumentoDAO;
+import dao.GiudiceDAO;
+import dao.TeamDAO;
 import database.ConnessioneDatabase;
 import model.*;
 
@@ -22,13 +24,13 @@ public class IDocumentoDAO implements DocumentoDAO {
     private Connection connection;
 
     /** DAO per la gestione dei team. */
-    private ITeamDAO teamDAO;
+    private TeamDAO teamDAO;
 
     /** DAO per la gestione dei giudici. */
-    private IGiudiceDAO giudiceDAO;
+    private GiudiceDAO giudiceDAO;
 
     /** DAO per la gestione dei documenti (self-reference). */
-    private IDocumentoDAO documentoDAO;
+    private DocumentoDAO documentoDAO;
 
     /** Nome della colonna percorso file nella tabella documento. */
     private static final String PERCORSO_FILE_COLUMN = "percorso_file";
@@ -273,7 +275,7 @@ public class IDocumentoDAO implements DocumentoDAO {
      * @param teamDAO implementazione del TeamDAO
      */
     @Override
-    public void setTeamDAO (ITeamDAO teamDAO){
+    public void setTeamDAO (TeamDAO teamDAO){
         this.teamDAO = teamDAO;
     }
 
@@ -282,7 +284,7 @@ public class IDocumentoDAO implements DocumentoDAO {
      * @param giudiceDAO implementazione del GiudiceDAO
      */
     @Override
-    public void setGiudiceDAO (IGiudiceDAO giudiceDAO){
+    public void setGiudiceDAO (GiudiceDAO giudiceDAO){
         this.giudiceDAO = giudiceDAO;
     }
 
@@ -291,7 +293,7 @@ public class IDocumentoDAO implements DocumentoDAO {
      * @param documentoDAO implementazione del DocumentoDAO
      */
     @Override
-    public void setDocumentoDAO(IDocumentoDAO documentoDAO){
+    public void setDocumentoDAO(DocumentoDAO documentoDAO){
         this.documentoDAO = documentoDAO;
     }
 }

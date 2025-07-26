@@ -1,5 +1,6 @@
 package implementazione_postgres_dao;
 import dao.GiudiceDAO;
+import dao.UtenteDAO;
 import model.Giudice;
 import database.ConnessioneDatabase;
 
@@ -17,7 +18,7 @@ public class IGiudiceDAO implements GiudiceDAO {
     private Connection connection;
 
     /** DAO per la gestione degli utenti. */
-    private IUtenteDAO utenteDAO;
+    private UtenteDAO utenteDAO;
 
     /**
      * Costruttore. Inizializza la connessione al database.
@@ -118,7 +119,7 @@ public class IGiudiceDAO implements GiudiceDAO {
      * @param utenteDAO implementazione del DAO utente
      */
     @Override
-    public void setUtenteDAO(IUtenteDAO utenteDAO) {
+    public void setUtenteDAO(UtenteDAO utenteDAO) {
         this.utenteDAO = utenteDAO;
     }
 }

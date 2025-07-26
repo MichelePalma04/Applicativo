@@ -1,7 +1,5 @@
 package dao;
-import implementazione_postgres_dao.IDocumentoDAO;
-import implementazione_postgres_dao.IGiudiceDAO;
-import implementazione_postgres_dao.ITeamDAO;
+
 import model.CommentoGiudice;
 import model.Documento;
 
@@ -66,7 +64,7 @@ public interface DocumentoDAO {
      * Imposta il DAO per la gestione dei team.
      * @param teamDAO implementazione del TeamDAO
      */
-    void setTeamDAO (ITeamDAO teamDAO);
+    void setTeamDAO (TeamDAO teamDAO);
 
     /**
      * Restituisce la lista dei commenti dei giudici per un documento e un evento.
@@ -90,11 +88,11 @@ public interface DocumentoDAO {
      * Imposta il DAO per la gestione dei giudici.
      * @param giudiceDAO implementazione del GiudiceDAO
      */
-    void setGiudiceDAO (IGiudiceDAO giudiceDAO);
+    void setGiudiceDAO (GiudiceDAO giudiceDAO);
 
     /**
      * Imposta il DAO per la gestione dei documenti (self-reference).
      * @param documentoDAO implementazione del DocumentoDAO
      */
-    void setDocumentoDAO (IDocumentoDAO documentoDAO);
+    void setDocumentoDAO (DocumentoDAO documentoDAO);
 }

@@ -1,5 +1,5 @@
 package dao;
-import implementazione_postgres_dao.IUtenteDAO;
+
 import model.Partecipante;
 import java.util.List;
 
@@ -68,7 +68,7 @@ public interface PartecipanteDAO {
      * Imposta il DAO per la gestione degli utenti.
      * @param utenteDAO implementazione del DAO utente
      */
-    void setUtenteDAO (IUtenteDAO utenteDAO);
+    void setUtenteDAO (UtenteDAO utenteDAO);
 
     /**
      * Assegna un partecipante ad un team per l'evento specificato.

@@ -1,5 +1,6 @@
 package implementazione_postgres_dao;
 import dao.OrganizzatoreDAO;
+import dao.UtenteDAO;
 import model.Organizzatore;
 import database.ConnessioneDatabase;
 
@@ -17,7 +18,7 @@ public class IOrganizzatoreDAO implements OrganizzatoreDAO {
     private Connection connection;
 
     /** DAO per la gestione degli utenti. */
-    private IUtenteDAO utenteDAO;
+    private UtenteDAO utenteDAO;
 
     /**
      * Costruttore. Inizializza la connessione al database.
@@ -134,7 +135,7 @@ public class IOrganizzatoreDAO implements OrganizzatoreDAO {
      * @param utenteDAO implementazione del DAO utente
      */
     @Override
-    public void setUtenteDAO(IUtenteDAO utenteDAO) {
+    public void setUtenteDAO(UtenteDAO utenteDAO) {
         this.utenteDAO = utenteDAO;
     }
 }
