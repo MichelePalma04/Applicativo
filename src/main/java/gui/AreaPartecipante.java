@@ -106,7 +106,7 @@ public class AreaPartecipante {
     private static final String DOCUMENTO_CARICATO_LABEL = "Documento caricato: ";
 
     /** Messaggio mostrato se il team non ha caricato documenti. */
-    private static final String NESSUN_DOCUMENTO_LABEL = "Nessun documento caricato dal tuo team.";
+    private static final String NESSUN_DOCUMENTO_LABEL = "Nessun documento caricato.";
 
     /** Messaggio mostrato se non ci sono commenti dei giudici. */
     private static final String COMMENTO_GIUDICE_LABEL = "Nessun commento dai giudici.";
@@ -264,7 +264,7 @@ public class AreaPartecipante {
         frameAreaPartecipante = new JFrame("Area Personale " + loginPartecipante);
         frameAreaPartecipante.setContentPane(panel);
         frameAreaPartecipante.pack();
-        frameAreaPartecipante.setSize(600, 600);
+        frameAreaPartecipante.setSize(700, 700);
         frameAreaPartecipante.setLocationRelativeTo(null);
         frameAreaPartecipante.setDefaultCloseOperation(EXIT_ON_CLOSE);
 
